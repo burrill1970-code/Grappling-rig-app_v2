@@ -2,4 +2,3 @@ __pycache__/
 *.pyc
 .pytest_cache/
 *.pt
-outputs/raw_dets.npz
