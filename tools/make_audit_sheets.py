@@ -13,8 +13,6 @@ for key in ("lost", "colour_conflict", "low_conf"):
     for i in "AB":
         for a, b in stats[key][i]:
             flag.update(range(a, b + 1))
-base = set(range(offset, 535, 3))
-sets = {"regular": sorted(base), "flagged": sorted(flag - base)}
 cap = cv2.VideoCapture(f"{src}/annotated.mp4")
 frames = []
 while True:
@@ -22,6 +20,8 @@ while True:
     if not ok:
         break
     frames.append(f)
+base = set(range(offset, len(frames), 3))
+sets = {"regular": sorted(base), "flagged": sorted(f for f in flag - base if f < len(frames))}
 index = {}
 for name, idxs in sets.items():
     sheets = []
