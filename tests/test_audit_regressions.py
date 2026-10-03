@@ -68,3 +68,10 @@ def test_audit_lost_but_visible_frames_recovered(tracked):
     for f, who in ((142, "B"), (143, "B"), (143, "A"), (464, "A"), (464, "B"), (309, "A"), (310, "A"), (311, "A"),
                    (312, "A"), (313, "A"), (308, "A")):
         assert res[f][who]["box"] is not None, f"frame {f}: {who} lost"
+
+
+def test_airborne_white_athlete_is_boxed_in_the_throw(tracked):
+    """Targeted re-check: A at 140 and 142 (blurred throw) was lost-but-visible; it now has a (partial) box."""
+    res, _ = tracked
+    for f in (140, 142):
+        assert res[f]["A"]["box"] is not None, f"frame {f}: A lost"

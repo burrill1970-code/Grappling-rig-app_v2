@@ -58,11 +58,12 @@ if final:
         "* The evidence for quality is **vision audits**: model reviewers judged contact sheets of the annotated video and a second round of "
         "skeptic reviewers tried to refute every serious finding. That is an independent look, not ground truth, and the reviewers are language models. "
         "Results are in the Audits section.\n"
-        f"* Latest audit ({final_key[-1]}, {fr} of {n} frames sampled): {wrong} wrong_body verdicts; "
+        f"* Latest random-sample audit ({final_key[-1]}, {fr} of {n} frames sampled; the table below says which build it measured, and later targeted re-checks are in the audit notes): {wrong} wrong_body verdicts; "
         f"A judged correct on {v['A'].get('correct', 0)} and B on {v['B'].get('correct', 0)} of {fr} frames "
         f"({100 * v['A'].get('correct', 0) / fr:.0f}% / {100 * v['B'].get('correct', 0) / fr:.0f}%); the remaining verdicts are partial boxes "
-        f"({v['A'].get('partial', 0)} A, {v['B'].get('partial', 0)} B) and lost-but-visible "
-        f"({v['A'].get('lost_but_visible', 0)} A, {v['B'].get('lost_but_visible', 0)} B). Sampling means this is an estimate, not a count over all frames.\n")
+        f"({v['A'].get('partial', 0)} A, {v['B'].get('partial', 0)} B), lost-but-visible "
+        f"({v['A'].get('lost_but_visible', 0)} A, {v['B'].get('lost_but_visible', 0)} B) and unclear "
+        f"({v['A'].get('unclear', 0)} A, {v['B'].get('unclear', 0)} B). Sampling means this is an estimate, not a count over all frames.\n")
 else:
     audit_bullets = ("* **No vision audit has been run on this clip**: the numbers below are tracker statistics, not a quality check. "
                      "Treat every colour-derived frame as unverified.\n")
@@ -89,7 +90,7 @@ Clip: `{args.clip}`, {n} frames, ~{fps:.1f} fps, {n / fps:.1f}s. Identity labels
 * Shot cuts detected at frames: {fmt([(x, x) for x in cuts])} ({len(cuts)} cut{'s' if len(cuts) != 1 else ''}; colour-histogram jump > 0.6, so soft cuts and dissolves may be missed).
   Motion state resets at each cut. Gi colour cannot tell *people* apart across a cut: A/B keep the same colour labels but may be different athletes.
 * Phone screen recording of a YouTube player: player chrome is cropped away (rows {meta['crop_y'][0]}-{meta['crop_y'][1]}); a pause/skip overlay can appear over the picture.
-* The referee is meant to be excluded by colour (torso mostly dark, no gi colour) and position, the crowd by position and size. This works for a black suit and **fails when the suit reads as blue** (a navy suit, see the audit); it would also fail for a referee in white.
+* The referee is excluded by colour (torso mostly dark, no gi colour) and position, the crowd by position and size. A suit that reads as gi colour (clip 2's navy suit) is caught by a referee appearance gallery learned online from the unambiguous dark detections; that needs the referee to have been seen unambiguously first, and it would fail for a referee in white or for one never seen that way.
 {clip_notes}
 
 ## Method
@@ -99,7 +100,9 @@ Per frame, athlete candidates are matched to A/B by Hungarian assignment. Primar
 reference plus a white/blue class prior (class taken from all gi pixels in the box). Secondary cost: distance to the constant-velocity predicted
 box. Motion state resets at shot cuts. When one box covers both athletes, or an athlete is missed, that athlete's box is the bounding box of its
 gi colour inside the person mask (referee's upper body removed; colour boxes must sit on the mat and be at least 40x30 px). If the segmenter
-missed a person, the detector box stands in for the mask. The search widens in steps (near last box, other athlete's surroundings, whole mat).
+missed a person, the detector box stands in for the mask. The search widens in steps (near last box, other athlete's surroundings, whole mat); white blobs wholly enclosed by the blue gi (back patches) are not counted as A, and a last fallback unions all blobs of an athlete's colour in the region.
+The referee is a third, hidden identity: his appearance is learned online from strict-dark detections and any candidate that matches that gallery clearly better than A or B is set aside before assignment.
+Appearance markers beyond colour (gradients/HOG, texture, colour profile, part-based colour, pose shape, a pretrained re-ID embedding, motion/context) were evaluated and none beat the colour histogram; see `outputs/marker_study/REPORT.md`.
 This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly two athletes and a colour cue it was simpler to constrain directly.
 
 ## Per-athlete status counts

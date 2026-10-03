@@ -1,1 +1,2 @@
-{"audit1": "build as delivered by the first run on this clip (no clip-specific tuning); nothing was changed after the audit"}
+{"audit1": "first run on this clip (tuned on clip 1 only; no referee identity)",
+ "audit2": "after the referee became a third learned identity; the delivered build differs from it in 16 athlete-frames (patch-aware A search), re-checked in a targeted audit (see notes)"}

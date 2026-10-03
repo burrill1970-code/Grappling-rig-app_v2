@@ -1867,7 +1867,7 @@
   ]
  },
  "audit3": {
-  "build": "delivered build, except A at frames 308-309 (changed after the audit: 308 lost -> small low-confidence box)",
+  "build": "delivered build as of that audit; since then A changed at frames 116, 118, 140, 142, 272, 273, 278, 308, 309 (patch-aware A search, union fallback, widened recovery), re-checked in a targeted audit (see notes)",
   "frames": 210,
   "verdicts": {
    "2": {

@@ -48,3 +48,16 @@ def test_referee_is_not_tracked_as_an_athlete(data, frame, who):
         dark = color_fractions(torso_hsv(frames[frame], d))["dark"]
         if aspect < 0.5 and dark >= 0.5:
             assert _iou(box, d[:4]) < 0.8, f"frame {frame}: {who} box is the standing dark-suited person"
+
+
+# --- open failure, pinned as strict xfail -----------------------------------------------------------------------
+# B is lost while the blue athlete is clearly visible (audit-confirmed twice, targeted re-check included). In the second
+# match he is behind the white athlete and the person segmenter returns only the white athlete's silhouette.
+B_LOST_WHILE_VISIBLE = [137, 439, 440, 441, 442, 443, 450, 451, 452]
+
+
+@pytest.mark.xfail(strict=True, reason="open bug: B lost while visible, hidden athlete not segmented (audit-confirmed)")
+@pytest.mark.parametrize("frame", B_LOST_WHILE_VISIBLE)
+def test_b_is_not_lost_while_visible(data, frame):
+    _, _, tracks = data
+    assert tracks[frame]["athletes"]["B"]["box"] is not None

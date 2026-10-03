@@ -1,6 +1,6 @@
 {
  "audit1": {
-  "build": "build as delivered by the first run on this clip (no clip-specific tuning); nothing was changed after the audit",
+  "build": "first run on this clip (tuned on clip 1 only; no referee identity)",
   "frames": 165,
   "verdicts": {
    "0": {
@@ -776,6 +776,766 @@
     "frame": 452,
     "athlete": "B",
     "type": "lost_but_visible"
+   }
+  ]
+ },
+ "audit2": {
+  "build": "after the referee became a third learned identity; the delivered build differs from it in 16 athlete-frames (patch-aware A search), re-checked in a targeted audit (see notes)",
+  "frames": 170,
+  "verdicts": {
+   "1": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "4": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "7": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "10": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "13": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "16": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "19": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "22": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "25": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "28": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "31": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "34": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "37": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "40": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "43": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "46": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "49": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "52": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "55": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "58": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "61": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "64": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "67": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "70": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "73": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "76": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "79": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "82": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "85": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "88": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "91": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "94": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "97": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "100": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "103": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "106": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "109": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "112": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "115": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "118": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "121": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "124": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "127": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "130": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "133": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "136": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "139": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "142": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "145": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "148": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "151": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "154": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "157": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "160": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "163": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "166": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "169": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "172": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "175": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "178": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "181": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "184": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "187": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "190": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "193": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "196": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "199": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "202": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "205": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "208": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "211": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "214": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "217": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "220": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "223": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "226": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "229": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "232": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "235": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "238": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "241": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "244": {
+    "A": "unclear",
+    "B": "correct"
+   },
+   "247": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "250": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "253": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "256": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "259": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "262": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "265": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "268": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "271": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "274": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "277": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "280": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "283": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "286": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "289": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "292": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "295": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "298": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "301": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "304": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "307": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "310": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "313": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "316": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "319": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "322": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "325": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "328": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "331": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "334": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "337": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "340": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "343": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "346": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "349": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "352": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "355": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "358": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "361": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "364": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "367": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "370": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "373": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "376": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "379": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "382": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "385": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "388": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "391": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "394": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "397": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "400": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "403": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "406": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "409": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "412": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "415": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "418": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "421": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "424": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "427": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "430": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "433": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "436": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "439": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "442": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "445": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "448": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "451": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "81": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "137": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "156": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "216": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "312": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "345": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "347": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "348": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "350": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "351": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "363": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "395": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "428": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "437": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "440": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "441": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "443": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "450": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "452": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   }
+  },
+  "per_frame": {
+   "A": {
+    "correct": 164,
+    "wrong_body": 2,
+    "partial": 3,
+    "unclear": 1
+   },
+   "B": {
+    "correct": 156,
+    "partial": 5,
+    "lost_but_visible": 9
+   }
+  },
+  "serious_claimed": 11,
+  "serious_confirmed": 11,
+  "serious_refuted": 0,
+  "serious_split": 0,
+  "confirmed": [
+   {
+    "frame": 49,
+    "athlete": "A",
+    "type": "box_on_wrong_body"
+   },
+   {
+    "frame": 137,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 216,
+    "athlete": "A",
+    "type": "box_on_wrong_body"
+   },
+   {
+    "frame": 439,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 440,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 441,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 442,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 443,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 450,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 451,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 452,
+    "athlete": "B",
+    "type": "other"
    }
   ]
  }
