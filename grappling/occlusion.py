@@ -25,8 +25,9 @@ def colour_masks(hsv, white_v=150, white_s=55):
 GAP_PX = 60  # blobs farther than this from the main body are separate things (scoreboard, spectators)
 
 
-def _bbox(mask):
-    """Bounding box of the largest same-colour blob plus nearby blobs (jacket/trousers, split by a belt)."""
+def _bbox(mask, union_all=False):
+    """Bounding box of the largest same-colour blob plus nearby blobs (jacket/trousers, split by a belt).
+    union_all (fallback tier): also join blobs farther away, e.g. an athlete's legs on both sides of the other athlete."""
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, KERNEL)
     n, lab, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
     if n <= 1:
@@ -52,7 +53,7 @@ def _bbox(mask):
             x1, y1, x2, y2 = bb(k)
             gap_x = max(0, max(x1 - union[2], union[0] - x2))
             gap_y = max(0, max(y1 - union[3], union[1] - y2))
-            if max(gap_x, gap_y) <= GAP_PX:
+            if union_all or max(gap_x, gap_y) <= GAP_PX:
                 keep.append(k)
                 union = [min(union[0], x1), min(union[1], y1), max(union[2], x2), max(union[3], y2)]
                 changed = True
@@ -121,24 +122,50 @@ MIN_BOTTOM_FRAC = 0.5
 LOOSE_WHITE_S = 80  # motion blur / shadow desaturates white towards the other gi's colour; used only as a fallback
 
 
-def locate(frame, person, ident, region, min_px=MIN_PX, exclude=()):
+def _drop_enclosed(white, blue):
+    """Remove white blobs that sit wholly inside the blue silhouette: a white patch on a blue gi (collar, back label,
+    sponsor panel) is not the white athlete, whose visible parts touch the outside of the blue athlete."""
+    if int(blue.sum()) < 1500:
+        return white
+    closed = cv2.morphologyEx(blue, cv2.MORPH_CLOSE, np.ones((21, 21), np.uint8))
+    cnts, _ = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    filled = np.zeros_like(blue)
+    cv2.drawContours(filled, cnts, -1, 1, -1)
+    area_blue = max(int(filled.sum()), 1)
+    n, lab, stats, _ = cv2.connectedComponentsWithStats(white, connectivity=8)
+    out = white.copy()
+    for k in range(1, n):
+        comp = (lab == k).astype(np.uint8)
+        grown = cv2.dilate(comp, np.ones((7, 7), np.uint8))
+        if int((grown & (1 - filled)).sum()) == 0 and stats[k, cv2.CC_STAT_AREA] < 0.5 * area_blue:
+            out[lab == k] = 0
+    return out
+
+
+def locate(frame, person, ident, region, min_px=MIN_PX, exclude=(), union_fallback=False):
     """Bounding box of `ident`'s gi colour (A=white, B=blue) among person pixels inside `region`.
     -> (box|None, pixel_count) in full-frame coordinates. For A inside a person mask a looser white
-    (S<80) is tried when the strict one yields no valid box."""
+    (S<80) is tried when the strict one yields no valid box, and white blobs enclosed by the blue gi are dropped.
+    union_fallback: last tier, join all blobs in the region (an athlete mostly hidden behind the other)."""
     rx1, ry1, rx2, ry2 = region
     if rx2 - rx1 < 8 or ry2 - ry1 < 8:
         return None, 0
     hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
-    tries = [55, LOOSE_WHITE_S] if (ident == "A" and person is not None) else [55]
+    tries = [(55, False), (LOOSE_WHITE_S, False)] if (ident == "A" and person is not None) else [(55, False)]
+    if union_fallback:
+        tries = tries + [(ws, True) for ws, _ in tries]
     px = 0
-    for ws in tries:
+    for ws, union_all in tries:
         white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V if person is not None else 150, white_s=ws)
+        if ident == "A" and person is not None:
+            pmk = person[ry1:ry2, rx1:rx2].astype(np.uint8)
+            white = _drop_enclosed(white & pmk, blue & pmk)
         m = white if ident == "A" else blue
         if person is not None:
             m = m & person[ry1:ry2, rx1:rx2].astype(np.uint8)
         for ex1, ey1, ex2, ey2 in exclude:  # e.g. referee boxes
             m[max(0, int(ey1) - ry1):max(0, int(ey2) - ry1), max(0, int(ex1) - rx1):max(0, int(ex2) - rx1)] = 0
-        b, px = _bbox(m)
+        b, px = _bbox(m, union_all=union_all)
         if b is None or px < min_px:
             continue
         box = (b[0] + rx1, b[1] + ry1, b[2] + rx1, b[3] + ry1)

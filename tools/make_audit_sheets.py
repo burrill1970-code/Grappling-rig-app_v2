@@ -1,5 +1,5 @@
 """Contact sheets of the annotated video for visual audit.
-Usage: python tools/make_audit_sheets.py SHEETDIR [OFFSET_MOD_3] [TRACKING_OUT_DIR] [EXTRA_FRAMES_COMMA_SEPARATED]"""
+Usage: python tools/make_audit_sheets.py SHEETDIR [OFFSET_MOD_3 (or -1 = targeted frames only)] [TRACKING_OUT_DIR] [EXTRA_FRAMES_COMMA_SEPARATED]"""
 import json, sys
 import cv2, numpy as np
 
@@ -21,7 +21,7 @@ while True:
     if not ok:
         break
     frames.append(f)
-base = set(range(offset, len(frames), 3))
+base = set(range(offset, len(frames), 3)) if offset >= 0 else set()  # offset < 0: no regular sample, only flagged + extra frames
 sets = {"regular": sorted(base), "flagged": sorted(f for f in (flag | extra) - base if f < len(frames))}
 index = {}
 for name, idxs in sets.items():

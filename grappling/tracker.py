@@ -172,7 +172,7 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                 merged = c
         if merged is not None:
             for i in IDS:
-                box, px = locate(frame, pm_nr, i, region_of(merged["box"], frame.shape))
+                box, px = locate(frame, pm_nr, i, region_of(merged["box"], frame.shape), union_fallback=True)
                 if box is None:
                     rec[i] = dict(status="lost", box=None, conf=0.0, cand=merged["idx"], note="occluded in merged box")
                     continue
