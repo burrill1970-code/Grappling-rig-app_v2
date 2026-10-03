@@ -9,6 +9,9 @@ out = {}
 BUILD = {"audit1": "first full pipeline, before audit fixes",
          "audit2": "after round-1 audit fixes (crowd/referee/311-313/lost), before 2nd segmenter + loose-white fallback",
          "audit3": "delivered build, except A at frames 308-309 (changed after the audit: 308 lost -> small low-confidence box)"}
+import os
+if os.path.exists(f"{OUT}/audit_builds.json"):
+    BUILD.update(json.load(open(f"{OUT}/audit_builds.json")))  # per-clip labels override the clip-1 ones
 for name, path in (("audit1", f"{OUT}/audit_results.json"), ("audit2", f"{OUT}/audit2_results.json"),
                    ("audit3", f"{OUT}/audit3_results.json")):
     try:

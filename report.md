@@ -4,7 +4,7 @@ Clip: `test_clips/clip.mp4`, 535 frames, ~31.6 fps, 16.9s. Identity labels: **A 
 
 ## Verdict (read this first)
 
-* Two tracks, A and B, exist on **every one of the 535 frames**, A always white and B always blue.
+* Two tracks, A (white gi) and B (blue gi), exist on **every one of the 535 frames**. That says nothing about whether each track sits on the right person; the audits below measure that.
   Only 77 frames (14%) are *clear* (both athletes directly detected and not overlapping):
   frames 0-11, 17-80, 145. **Only on those frames is identity independently verifiable by separation.**
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~72% of the clip each athlete's box is
@@ -22,7 +22,7 @@ Clip: `test_clips/clip.mp4`, 535 frames, ~31.6 fps, 16.9s. Identity labels: **A 
 * Shot cuts detected at frames: 12 (1 cut; colour-histogram jump > 0.6, so soft cuts and dissolves may be missed).
   Motion state resets at each cut. Gi colour cannot tell *people* apart across a cut: A/B keep the same colour labels but may be different athletes.
 * Phone screen recording of a YouTube player: player chrome is cropped away (rows 346-954); a pause/skip overlay can appear over the picture.
-* The referee (dark suit) is excluded by colour and position, the crowd by position and size. This would fail for a referee in white or blue.
+* The referee is meant to be excluded by colour (torso mostly dark, no gi colour) and position, the crowd by position and size. This works for a black suit and **fails when the suit reads as blue** (a navy suit, see the audit); it would also fail for a referee in white.
 * It is **judo**, not BJJ (judogi, referee in a black suit and blue shirt, tatami, Budapest 2016 boards).
 * The shot cut at frame 12 separates two different matches: frames 0-11 show a white athlete standing and a blue athlete on the mat; from frame 12 the Budapest match. A/B in frames 0-11 carry the same colour labels but are different people.
 * From about frame 80 to the end the athletes are in contact (standing grips, a throw at about 136-144, then ground work).
@@ -51,7 +51,7 @@ Pose: A 371 frames (224 from colour-filtered shared detections), B 424 frames (2
 
 ## Audits (vision, model-based; not ground truth)
 
-Each audit: 12 reviewers over contact sheets (every third frame at a different offset, plus the frames this report flags), each tile judged for A and B
+Each audit: reviewers over contact sheets (every third frame, at a different offset per audit, plus the frames this report flags), each tile judged for A and B
 as correct / partial / wrong_body / lost_but_visible; every high-severity claim then went to two skeptics (visual lens and temporal lens) working from the raw frames,
 who were told to refute by default. Columns are correct / partial / wrong_body / lost_but_visible.
 
@@ -102,7 +102,7 @@ Of these 8 frames, the latest audit sampled 8 and judged 0 wrong-body (none). Th
 ## Tests
 
 `python -m pytest tests`: what they do and do not prove:
-* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Clip 2 runs the generic checks in `tests/test_generic.py`.
+* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Every clip also runs the generic checks in `tests/test_generic.py` (counts, `lost` flagging, boxes on the mat, poses inside their box), which cannot see a referee being tracked as an athlete. Known open failures are pinned as strict-xfail tests (clip 2: `tests/test_clip2_known_failures.py`).
 * No swaps in clear segments: passes, but covers only the 77 clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate (59% of frames) and colour-box quality (14/155 bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.

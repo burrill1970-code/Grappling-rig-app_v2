@@ -1,0 +1,782 @@
+{
+ "audit1": {
+  "build": "build as delivered by the first run on this clip (no clip-specific tuning); nothing was changed after the audit",
+  "frames": 165,
+  "verdicts": {
+   "0": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "3": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "6": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "9": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "12": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "15": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "18": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "21": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "24": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "27": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "30": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "33": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "36": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "39": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "42": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "45": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "48": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "51": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "54": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "57": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "60": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "63": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "66": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "69": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "72": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "75": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "78": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "81": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "84": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "87": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "90": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "93": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "96": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "99": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "102": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "105": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "108": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "111": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "114": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "117": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "120": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "123": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "126": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "129": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "132": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "135": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "138": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "141": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "144": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "147": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "150": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "153": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "156": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "159": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "162": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "165": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "168": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "171": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "174": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "177": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "180": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "183": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "186": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "189": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "192": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "195": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "198": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "201": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "204": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "207": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "210": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "213": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "216": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "219": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "222": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "225": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "228": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "231": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "234": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "237": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "240": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "243": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "246": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "249": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "252": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "255": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "258": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "261": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "264": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "267": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "270": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "273": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "276": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "279": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "282": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "285": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "288": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "291": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "294": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "297": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "300": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "303": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "306": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "309": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "312": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "315": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "318": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "321": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "324": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "327": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "330": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "333": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "336": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "339": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "342": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "345": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "348": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "351": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "354": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "357": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "360": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "363": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "366": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "369": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "372": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "375": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "378": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "381": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "384": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "387": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "390": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "393": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "396": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "399": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "402": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "405": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "408": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "411": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "414": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "417": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "420": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "423": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "426": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "429": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "432": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "435": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "438": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "441": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "444": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "447": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "450": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "137": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "344": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "346": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "347": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "349": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "395": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "428": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "437": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "439": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "440": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "442": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "443": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "451": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   },
+   "452": {
+    "A": "correct",
+    "B": "lost_but_visible"
+   }
+  },
+  "per_frame": {
+   "A": {
+    "correct": 157,
+    "wrong_body": 3,
+    "partial": 5
+   },
+   "B": {
+    "correct": 146,
+    "wrong_body": 7,
+    "partial": 3,
+    "lost_but_visible": 9
+   }
+  },
+  "serious_claimed": 20,
+  "serious_confirmed": 19,
+  "serious_refuted": 1,
+  "serious_split": 0,
+  "confirmed": [
+   {
+    "frame": 81,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 137,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 156,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 216,
+    "athlete": "A",
+    "type": "box_on_wrong_body"
+   },
+   {
+    "frame": 312,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 347,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 347,
+    "athlete": "A",
+    "type": "pose_on_wrong_athlete"
+   },
+   {
+    "frame": 348,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 349,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 351,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 363,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 439,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 440,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 441,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 442,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 443,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 450,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 451,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 452,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   }
+  ]
+ }
+}

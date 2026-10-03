@@ -73,7 +73,7 @@ Clip: `{args.clip}`, {n} frames, ~{fps:.1f} fps, {n / fps:.1f}s. Identity labels
 
 ## Verdict (read this first)
 
-* Two tracks, A and B, exist on **every one of the {n} frames**, A always white and B always blue.
+* Two tracks, A (white gi) and B (blue gi), exist on **every one of the {n} frames**. That says nothing about whether each track sits on the right person; the audits below measure that.
   Only {s['clear_n']} frames ({100 * s['clear_n'] / n:.0f}%) are *clear* (both athletes directly detected and not overlapping):
   frames {fmt(s['clear'])}. **Only on those frames is identity independently verifiable by separation.**
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~{colour_pct:.0f}% of the clip each athlete's box is
@@ -89,7 +89,7 @@ Clip: `{args.clip}`, {n} frames, ~{fps:.1f} fps, {n / fps:.1f}s. Identity labels
 * Shot cuts detected at frames: {fmt([(x, x) for x in cuts])} ({len(cuts)} cut{'s' if len(cuts) != 1 else ''}; colour-histogram jump > 0.6, so soft cuts and dissolves may be missed).
   Motion state resets at each cut. Gi colour cannot tell *people* apart across a cut: A/B keep the same colour labels but may be different athletes.
 * Phone screen recording of a YouTube player: player chrome is cropped away (rows {meta['crop_y'][0]}-{meta['crop_y'][1]}); a pause/skip overlay can appear over the picture.
-* The referee (dark suit) is excluded by colour and position, the crowd by position and size. This would fail for a referee in white or blue.
+* The referee is meant to be excluded by colour (torso mostly dark, no gi colour) and position, the crowd by position and size. This works for a black suit and **fails when the suit reads as blue** (a navy suit, see the audit); it would also fail for a referee in white.
 {clip_notes}
 
 ## Method
@@ -118,7 +118,7 @@ Pose: A {s['pose']['A']} frames ({s['pose_shared']['A']} from colour-filtered sh
 if aud:
     L.append("""## Audits (vision, model-based; not ground truth)
 
-Each audit: 12 reviewers over contact sheets (every third frame at a different offset, plus the frames this report flags), each tile judged for A and B
+Each audit: reviewers over contact sheets (every third frame, at a different offset per audit, plus the frames this report flags), each tile judged for A and B
 as correct / partial / wrong_body / lost_but_visible; every high-severity claim then went to two skeptics (visual lens and temporal lens) working from the raw frames,
 who were told to refute by default. Columns are correct / partial / wrong_body / lost_but_visible.
 
@@ -181,7 +181,7 @@ L.append(f"""
 ## Tests
 
 `python -m pytest tests`: what they do and do not prove:
-* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Clip 2 runs the generic checks in `tests/test_generic.py`.
+* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Every clip also runs the generic checks in `tests/test_generic.py` (counts, `lost` flagging, boxes on the mat, poses inside their box), which cannot see a referee being tracked as an athlete. Known open failures are pinned as strict-xfail tests (clip 2: `tests/test_clip2_known_failures.py`).
 * No swaps in clear segments: passes, but covers only the {s['clear_n']} clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate ({100 * s['two_athlete_frac']:.0f}% of frames) and colour-box quality ({s.get('colour_box_bad', '?')}/{s.get('colour_box_total', '?')} bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.
