@@ -15,9 +15,9 @@ KERNEL = np.ones((7, 7), np.uint8)
 KP_SAMPLE = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]  # no face: skin/hair carry no gi colour
 
 
-def colour_masks(hsv, white_v=150):
+def colour_masks(hsv, white_v=150, white_s=55):
     h, s, v = hsv[..., 0], hsv[..., 1], hsv[..., 2]
-    white = ((s < 55) & (v > white_v)).astype(np.uint8)
+    white = ((s < white_s) & (v > white_v)).astype(np.uint8)
     blue = ((h >= 95) & (h <= 135) & (s > 90) & (v > 35)).astype(np.uint8)
     return white, blue
 
@@ -118,26 +118,34 @@ MIN_PX = 600
 MIN_BOTTOM_FRAC = 0.5
 
 
+LOOSE_WHITE_S = 80  # motion blur / shadow desaturates white towards the other gi's colour; used only as a fallback
+
+
 def locate(frame, person, ident, region, min_px=MIN_PX, exclude=()):
     """Bounding box of `ident`'s gi colour (A=white, B=blue) among person pixels inside `region`.
-    -> (box|None, pixel_count) in full-frame coordinates."""
+    -> (box|None, pixel_count) in full-frame coordinates. For A inside a person mask a looser white
+    (S<80) is tried when the strict one yields no valid box."""
     rx1, ry1, rx2, ry2 = region
     if rx2 - rx1 < 8 or ry2 - ry1 < 8:
         return None, 0
     hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
-    white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V if person is not None else 150)
-    m = white if ident == "A" else blue
-    if person is not None:
-        m = m & person[ry1:ry2, rx1:rx2].astype(np.uint8)
-    for ex1, ey1, ex2, ey2 in exclude:  # e.g. referee boxes
-        m[max(0, int(ey1) - ry1):max(0, int(ey2) - ry1), max(0, int(ex1) - rx1):max(0, int(ex2) - rx1)] = 0
-    b, px = _bbox(m)
-    if b is None or px < min_px:
-        return None, px
-    box = (b[0] + rx1, b[1] + ry1, b[2] + rx1, b[3] + ry1)
-    if box[3] < MIN_BOTTOM_FRAC * frame.shape[0] or box[3] - box[1] < 30 or box[2] - box[0] < 40:  # athletes are on the mat, not the crowd/scoreboard
-        return None, px
-    return box, px
+    tries = [55, LOOSE_WHITE_S] if (ident == "A" and person is not None) else [55]
+    px = 0
+    for ws in tries:
+        white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V if person is not None else 150, white_s=ws)
+        m = white if ident == "A" else blue
+        if person is not None:
+            m = m & person[ry1:ry2, rx1:rx2].astype(np.uint8)
+        for ex1, ey1, ex2, ey2 in exclude:  # e.g. referee boxes
+            m[max(0, int(ey1) - ry1):max(0, int(ey2) - ry1), max(0, int(ex1) - rx1):max(0, int(ex2) - rx1)] = 0
+        b, px = _bbox(m)
+        if b is None or px < min_px:
+            continue
+        box = (b[0] + rx1, b[1] + ry1, b[2] + rx1, b[3] + ry1)
+        if box[3] < MIN_BOTTOM_FRAC * frame.shape[0] or box[3] - box[1] < 30 or box[2] - box[0] < 40:
+            continue  # athletes are on the mat, not the crowd/scoreboard
+        return box, px
+    return None, px
 
 
 def grow(box, shape, frac, y_floor_frac=0.30):

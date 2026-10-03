@@ -5,6 +5,7 @@ import numpy as np
 from grappling.video import read_frames, video_info, detect_cuts, CROP_Y0, CROP_Y1
 from grappling.detect import run_detector
 from grappling.segment import run_segmenter
+from grappling.segment_x import run_segmenter_x, combine
 from grappling.tracker import track_video
 from grappling.pose import attach_keypoints, KP_NAMES
 from grappling.render import write_video
@@ -16,7 +17,8 @@ info = video_info(CLIP)
 fps = 535 / 16.923689  # stream is variable-rate; nb_frames / duration from ffprobe
 cuts = detect_cuts(frames)
 raw = run_detector(frames, cache="outputs/raw_dets.npz")
-pm = run_segmenter(frames, cache="outputs/person_masks.npz")
+pm = combine(run_segmenter(frames, cache="outputs/person_masks.npz"),
+             run_segmenter_x(frames, cache="outputs/person_masks_x.npz"))
 res = attach_keypoints(track_video(frames, raw, cuts, pm), raw, frames, pm)
 
 write_video("outputs/_tmp_annotated.mp4", frames, res, set(cuts), fps)

@@ -19,7 +19,9 @@ def raw_dets():
 @pytest.fixture(scope="session")
 def person_masks():
     from grappling.segment import run_segmenter
-    return run_segmenter(None, cache="outputs/person_masks.npz")
+    from grappling.segment_x import run_segmenter_x, combine
+    return combine(run_segmenter(None, cache="outputs/person_masks.npz"),
+                   run_segmenter_x(None, cache="outputs/person_masks_x.npz"))
 
 
 @pytest.fixture(scope="session")

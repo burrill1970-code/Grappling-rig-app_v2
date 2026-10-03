@@ -8,12 +8,12 @@ Clip: `test_clips/clip.mp4`, 535 frames, ~31.6 fps, 16.9s. Identity labels: **A 
   Only 77 frames (14%) are *clear* (both athletes directly detected and not overlapping):
   frames 0-11, 17-80, 145. **Identity is only independently verifiable by separation on those frames.**
 * From about frame 80 to the end the athletes are in contact (standing grips, throw, ground). The detector returns one
-  box for the pair on most of those frames, so for ~71% of the clip each athlete's box is
+  box for the pair on most of those frames, so for ~72% of the clip each athlete's box is
   **not a detection**: it is the bounding box of that athlete's gi-coloured pixels inside a person mask. Those boxes are
   often too small or wrap around the other athlete. They are labelled `color_split` / `color_recovered`, confidence capped at 0.40.
 * Identity during contact therefore rests on **gi colour alone**. The A/B label follows the gi colour, so a motion-style
   ID swap is unlikely, but a box can still sit on the wrong body or cover only part of one, and I have no ground truth to prove otherwise.
-* Pose is partial: 367/535 frames have a skeleton for A and 420/535 for B. On colour-split frames only
+* Pose is partial: 371/535 frames have a skeleton for A and 424/535 for B. On colour-split frames only
   the keypoints whose own pixels match the athlete's gi colour are kept, so skeletons are fragments.
 * Some failures I found by eye and could not fix (listed below). `ground_truth.md` does **not** exist in the repo, so no ground-truth checks were run (nothing is reported as passed).
 
@@ -39,12 +39,12 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 
 | status | A (white) | B (blue) | meaning |
 |---|---|---|---|
-| detected | 149 | 136 | own detector box and pose |
-| color_split | 364 | 371 | detector merged the pair; box from gi-colour pixels (conf <= 0.40) |
-| color_recovered | 15 | 28 | detector missed the athlete; box from gi-colour pixels (conf <= 0.40) |
-| lost | 7 | 0 | nothing usable; box and keypoints are null |
+| detected | 147 | 135 | own detector box and pose |
+| color_split | 371 | 374 | detector merged the pair; box from gi-colour pixels (conf <= 0.40) |
+| color_recovered | 14 | 26 | detector missed the athlete; box from gi-colour pixels (conf <= 0.40) |
+| lost | 3 | 0 | nothing usable; box and keypoints are null |
 
-Pose: A 367 frames (218 from colour-filtered shared detections), B 420 frames (284).
+Pose: A 371 frames (224 from colour-filtered shared detections), B 424 frames (289).
 
 ## Frame ranges to distrust
 
@@ -53,18 +53,18 @@ Pose: A 367 frames (218 from colour-filtered shared detections), B 420 frames (2
 (a few dozen frames sampled across the clip), but I did not inspect them all and I have no ground truth.
 
 **Track lost (box null), listed in full.**
-* A: 125, 136, 138-142 (7 frames)
+* A: 140, 142, 308 (3 frames)
 * B: none (0 frames)
 * Runs longer than N=5 frames: A none, B none. Every lost frame carries status `lost` in the JSON and in the video HUD.
 * In frames 142-143, 309-313 (A) and 464 an athlete is clearly visible and still marked lost. At 142-143 and 464 *both* athletes are lost (motion blur / too few gi pixels). These are tracker failures, not real occlusions.
 
 **Identity from colour only (`color_split` / `color_recovered`).**
-* A: 90-91, 95, 98, 102-118, 120-124, 126-129, 131-135, 137, 143-144, 152-153, 156-160, 162-181, 185, 188, 191-309, 311-344, 346-397, 399-412, 423-434, 439-443, 445-462, 465-472, 482, 484-488, 490-502, 504-534
-* B: 90-91, 95, 98, 102-118, 120-129, 131-144, 152-153, 156-160, 162-181, 185, 188, 191-307, 309-344, 346-397, 399-412, 415-416, 419-434, 439-443, 445-450, 453-462, 464-474, 476-482, 484-488, 490-502, 504-534
+* A: 90-91, 95, 98, 102-118, 120-129, 131-139, 141, 143-144, 152-153, 156-160, 162-181, 185, 188, 191-307, 309, 311-344, 346-397, 399-412, 421-434, 439-443, 445-462, 465-472, 482, 484-488, 490-502, 504-534
+* B: 90-91, 95, 98, 102-118, 120-129, 131-144, 152-153, 156-160, 162-181, 185, 188, 191-344, 346-397, 399-412, 415-416, 419-434, 439-443, 445-450, 453-462, 464-474, 476-482, 484-488, 490-502, 504-534
 
 **Confidence dropped (direct detections with detector confidence < 0.5).**
 * A: 84-85, 145, 147, 154-155, 184, 186-187, 189-190, 310, 413, 416-417, 436-438, 463-464, 473-474, 479, 481, 483, 503
-* B: 1, 5, 9, 308, 413-414, 417-418, 435-436, 444, 451, 463, 475, 483, 489, 503
+* B: 1, 5, 9, 413-414, 417-418, 435-436, 444, 451, 463, 475, 483, 489, 503
 
 **Colour disagreement on direct detections** (torso colour says the other gi; automatic check):
 A 84-85, 89, 92-94, 96-97, B none.
@@ -72,7 +72,7 @@ I looked at 84, 90, 94, 97, 187, 472 and 490. In 84-97, 187 and 490 IDs are corr
 
 ## Known failures and limits (not fixed)
 
-1. The detector merges tangled athletes into one box on most contact frames (only 149 A / 136 B frames are direct detections).
+1. The detector merges tangled athletes into one box on most contact frames (only 147 A / 135 B frames are direct detections).
 2. Colour-derived boxes are bounding boxes of gi pixels. They miss heads, limbs and skin, and wrap around the other athlete: in a sample of colour-derived boxes, about 13% contained more of the other athlete's colour than their own (checked by `tests/test_milestone4.py`).
 3. A is often mostly hidden under B. Little white is visible there, so A's box can be small.
 4. Poses on tangled bodies are poor. Keypoints from the detector are unreliable when bodies overlap, and the colour filter only drops keypoints it can attribute, it does not make the rest correct.
