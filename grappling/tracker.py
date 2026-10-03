@@ -166,7 +166,7 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                 if c["cls"] == CLS_OF[i] and c["hist"] is not None and len(cands) >= 2 and \
                         all(iou(c["box"], o["box"]) < 0.1 for o in cands if o is not c):
                     tracks[i].update_ref(c["hist"])
-        if merged is None and person_masks is not None:
+        if person_masks is not None:
             for i in IDS:
                 t = tracks[i]
                 if rec[i]["status"] == "lost" and t.box is not None and fi - t.last_seen <= 30:

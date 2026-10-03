@@ -62,8 +62,9 @@ def test_audit_swap_frames_311_313(tracked):
 
 
 def test_audit_lost_but_visible_frames_recovered(tracked):
-    """Audit: both athletes marked lost while clearly visible at 142-143 and 464; A lost at 309-313."""
+    """Audit: both athletes marked lost while clearly visible at 142-143 and 464; A lost at 309-313 and 308.
+    (A is still lost at 140 and 142 — motion-blurred throw — and is reported as a failure, not tested as fixed.)"""
     res, _ = tracked
     for f, who in ((142, "B"), (143, "B"), (143, "A"), (464, "A"), (464, "B"), (309, "A"), (310, "A"), (311, "A"),
-                   (312, "A"), (313, "A")):
+                   (312, "A"), (313, "A"), (308, "A")):
         assert res[f][who]["box"] is not None, f"frame {f}: {who} lost"

@@ -15,7 +15,8 @@ Clip: `test_clips/clip.mp4`, 535 frames, ~31.6 fps, 16.9s. Identity labels: **A 
   is not in the repo), so none of the checks below is a ground-truth check.
 * The evidence for quality is **three vision audits**: model reviewers judged contact sheets of the annotated video
   and a second round of skeptic reviewers tried to refute every serious finding. That is an independent look, not ground truth, and the
-  reviewers are language models. Results are in the Audits section; the audits found real bugs which are fixed.
+  reviewers are language models. Results are in the Audits section; the audits found real bugs, all fixed except the ones listed under lost frames.
+* Audit of the delivered build (audit 3, 210 of 535 frames sampled): no ID swap, wrong-body box or crowd/referee label was found (0 wrong_body verdicts); A judged correct on 199 and B on 199 of 210 frames (95% / 95%); the remaining verdicts are partial boxes (8 A, 11 B) and A lost while visible (3 frames). Audit sampling means this is an estimate, not a count over all frames.
 * Pose is partial: 371/535 frames carry a skeleton for A and 424/535 for B. On colour-derived frames only
   keypoints whose own pixels carry that athlete's gi colour and that lie inside the athlete's box are kept, so skeletons are fragments.
 
@@ -44,8 +45,8 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 |---|---|---|---|
 | detected | 147 | 135 | own detector box and pose |
 | color_split | 371 | 374 | detector merged the pair; box from gi-colour pixels (conf <= 0.40) |
-| color_recovered | 14 | 26 | detector missed the athlete; box from gi-colour pixels (conf <= 0.40) |
-| lost | 3 | 0 | nothing usable; box and keypoints are null |
+| color_recovered | 15 | 26 | detector missed the athlete; box from gi-colour pixels (conf <= 0.40) |
+| lost | 2 | 0 | nothing usable; box and keypoints are null |
 
 Pose: A 371 frames (224 from colour-filtered shared detections), B 424 frames (289).
 
@@ -59,11 +60,15 @@ who were told to refute by default. Columns are correct / partial / wrong_body /
 |---|---|---|---|---|---|
 | 1 | first full pipeline, before audit fixes | 208 | 189 / 9 / 2 / 8 of 208 | 189 / 10 / 6 / 3 of 208 | 23 / 3 / 1 |
 | 2 | after round-1 audit fixes (crowd/referee/311-313/lost), before 2nd segmenter + loose-white fallback | 209 | 190 / 12 / 0 / 7 of 209 | 202 / 7 / 0 / 0 of 209 | 7 / 0 / 0 |
+| 3 | delivered build, except A at frames 308-309 (changed after the audit: 308 lost -> small low-confidence box) | 210 | 199 / 8 / 0 / 3 of 210 | 199 / 11 / 0 / 0 of 210 | 3 / 0 / 0 |
 
-Only audit 3 describes the build delivered here. Audits 1 and 2 are kept because they found the bugs that were fixed.
+Only audit 3 describes (almost exactly) the build delivered here: the delivered output differs from the audited one only in A at frames 308-309. Audits 1 and 2 are kept because they found the bugs that were fixed.
+
+**Audit 3 (delivered build) confirmed errors** (3): 140 A lost_but_visible, 142 A lost_but_visible, 308 A lost_but_visible.
+Frame 308 (A) was lost in the audited output and now has a small, low-confidence `color_recovered` box; it was not re-audited. Audit 3 covered 210 of 535 frames; frames not sampled are unaudited.
 
 Bugs the audits found that I had missed by eye, now fixed and pinned by `tests/test_audit_regressions.py`: crowd members and the referee labelled as A/B (frames 456-525, 479, 481);
-B's solid box and skeleton on the white athlete at 311-313 and 472; both athletes marked lost while clearly visible at 142-143 and 464, and A at 309-313.
+B's solid box and skeleton on the white athlete at 311-313 and 472; both athletes marked lost while clearly visible at 142-143 and 464, and A at 308-313. All fixed except A at 140 and 142 (the motion-blurred throw), which are still lost.
 
 ## Frame ranges to distrust
 
@@ -71,13 +76,13 @@ B's solid box and skeleton on the white athlete at 311-313 and 472; both athlete
 12-16, 81-144, 146-534 (458 frames). On these frames A/B come from colour only.
 
 **Track lost (box null), listed in full.**
-* A: 140, 142, 308 (3 frames)
+* A: 140, 142 (2 frames)
 * B: none (0 frames)
 * Runs longer than N=5 frames: A none, B none. Every lost frame carries status `lost` in the JSON and the video HUD.
 * These are tracker failures, not real occlusions, when the athlete is visible: the white athlete's gi is motion-blurred and desaturated in the throw (about 136-144), and audits 1 and 2 confirmed A visible on the lost frames they sampled (earlier builds).
 
 **Identity from colour only (`color_split` / `color_recovered`).**
-* A: 90-91, 95, 98, 102-118, 120-129, 131-139, 141, 143-144, 152-153, 156-160, 162-181, 185, 188, 191-307, 309, 311-344, 346-397, 399-412, 421-434, 439-443, 445-462, 465-472, 482, 484-488, 490-502, 504-534
+* A: 90-91, 95, 98, 102-118, 120-129, 131-139, 141, 143-144, 152-153, 156-160, 162-181, 185, 188, 191-309, 311-344, 346-397, 399-412, 421-434, 439-443, 445-462, 465-472, 482, 484-488, 490-502, 504-534
 * B: 90-91, 95, 98, 102-118, 120-129, 131-144, 152-153, 156-160, 162-181, 185, 188, 191-344, 346-397, 399-412, 415-416, 419-434, 439-443, 445-450, 453-462, 464-474, 476-482, 484-488, 490-502, 504-534
 
 **Confidence dropped (direct detections with detector confidence < 0.5).**
@@ -85,10 +90,11 @@ B's solid box and skeleton on the white athlete at 311-313 and 472; both athlete
 * B: 1, 5, 9, 413-414, 417-418, 435-436, 444, 451, 463, 475, 483, 489, 503
 
 **Colour disagreement on direct detections** (automatic torso-colour check says the other gi): A 84-85, 89, 92-94, 96-97, B none.
+Of these 8 frames, audit 3 sampled 8 and judged 0 of them wrong-body (none). This check fired on correct IDs when an overlapping box captured the other athlete's sleeve, so it flags contamination as well as errors.
 
 ## Known failures and limits (not fixed)
 
-1. The detector merges tangled athletes into one box on most contact frames (only 147 A / 135 B frames are direct detections; two athlete candidates exist on 59% of frames).
+1. The detector merges tangled athletes into one box on most contact frames (only 147 A / 135 B frames are direct detections; two athlete-like detector boxes exist on 59% of frames, and some of those are duplicate boxes on the same pair).
 2. Colour-derived boxes are bounding boxes of gi pixels. They miss heads, limbs and skin and can wrap around the other athlete: 14 of 155 sampled colour boxes (9%) contain more of the other athlete's colour than their own. The audits also rate a number of colour boxes `partial`.
 3. A is often mostly hidden under B, so A's box can be small.
 4. Poses on tangled bodies are poor and fragmentary; the colour filter only drops keypoints it can attribute, it does not make the rest correct. Audits rate some poses garbage on tangled frames.
@@ -104,7 +110,7 @@ B's solid box and skeleton on the white athlete at 311-313 and 472; both athlete
 * Exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and the audit-found errors pinned to specific frames: pass.
 * No swaps in clear segments: passes, but covers only the 77 clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
-* Two-athlete detection rate (59% of frames) and colour-box quality (14/155 bad, floor 25%) are **measured regression floors, not success claims**.
+* Two-athlete-box rate (59% of frames) and colour-box quality (14/155 bad, floor 25%) are **measured regression floors, not success claims**.
 * Ground truth: ground_truth.md not found; the test is skipped, not passed.
 
 ## Outputs

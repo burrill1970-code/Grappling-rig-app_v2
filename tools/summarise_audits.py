@@ -4,7 +4,7 @@ import collections, json
 out = {}
 BUILD = {"audit1": "first full pipeline, before audit fixes",
          "audit2": "after round-1 audit fixes (crowd/referee/311-313/lost), before 2nd segmenter + loose-white fallback",
-         "audit3": "final build"}
+         "audit3": "delivered build, except A at frames 308-309 (changed after the audit: 308 lost -> small low-confidence box)"}
 for name, path in (("audit1", "outputs/audit_results.json"), ("audit2", "outputs/audit2_results.json"),
                    ("audit3", "outputs/audit3_results.json")):
     try:
