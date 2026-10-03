@@ -13,9 +13,9 @@ Statuses per athlete per frame:
 """
 import numpy as np
 from scipy.optimize import linear_sum_assignment
-from .athletes import candidates
+from .athletes import candidates, referee_boxes
 from .color import bhatta
-from .occlusion import locate, grow, region_of
+from .occlusion import locate, grow, region_of, MIN_PX
 
 IDS = ("A", "B")
 CLS_OF = {"A": "white", "B": "blue"}
@@ -74,6 +74,28 @@ def _cost(cand, tr, use_motion):
     return col + prior + W_MOTION * mot
 
 
+def _patch_mask(mask, boxes, min_cov=0.15):
+    """OR a candidate's box into the person mask where the mask covers < min_cov of it."""
+    out = mask
+    for x1, y1, x2, y2 in boxes:
+        x1, y1, x2, y2 = max(0, int(x1)), max(0, int(y1)), int(x2), int(y2)
+        area = max((x2 - x1) * (y2 - y1), 1)
+        if mask[y1:y2, x1:x2].sum() / area < min_cov:
+            if out is mask:
+                out = mask.copy()
+            out[y1:y2, x1:x2] = True
+    return out
+
+
+def _without_boxes(mask, boxes):
+    if mask is None or not boxes:
+        return mask
+    m = mask.copy()
+    for x1, y1, x2, y2 in boxes:
+        m[max(0, int(y1)):int(y2), max(0, int(x1)):int(x2)] = False
+    return m
+
+
 def track_video(frames, raw_dets, cuts=(), person_masks=None):
     tracks = {i: Track(i) for i in IDS}
     cutset = set(cuts)
@@ -83,7 +105,16 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
         if new_shot:
             for t in tracks.values():
                 t.reset_motion()
-        cands = candidates(frame, dets)
+        pmask = None if person_masks is None else person_masks[fi]
+        cands = candidates(frame, dets, pmask)
+        if pmask is not None:
+            patched = _patch_mask(pmask, [c["box"] for c in cands])  # segmenter missed an athlete: use the detector box
+            if patched is not pmask:
+                pmask = patched
+                cands = candidates(frame, dets, pmask)
+        refs = referee_boxes(frame, dets)
+        # remove only the referee's upper body (shirt/tie carry blue and white); legs may overlap a lying athlete
+        pm_nr = _without_boxes(pmask, [(x1, y1, x2, y1 + 0.6 * (y2 - y1)) for x1, y1, x2, y2 in refs])
         rec = {i: dict(status="lost", box=None, conf=0.0, cand=None) for i in IDS}
 
         # seed / re-seed colour references from rule classes when a clean pair is visible
@@ -100,9 +131,10 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
             for c in sorted(cands, key=lambda c: -c["conf"]):
                 standalone = [o for o in cands if o is not c and containment(o["box"], c["box"]) < 0.6
                               and iou(o["box"], c["box"]) < 0.5]
-                if (containment(tracks["A"].box, c["box"]) > 0.6 and
-                        containment(tracks["B"].box, c["box"]) > 0.6 and
-                        not standalone):
+                if (not standalone and (
+                        (containment(tracks["A"].box, c["box"]) > 0.6 and containment(tracks["B"].box, c["box"]) > 0.6) or
+                        (c["cls"] == "mixed" and (containment(tracks["A"].box, c["box"]) > 0.3 or
+                                                  containment(tracks["B"].box, c["box"]) > 0.3)))):
                     merged = c
                     break
         # single candidate when we were not overlapping before: still ambiguous if it is
@@ -115,8 +147,7 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                 merged = c
         if merged is not None:
             for i in IDS:
-                person = None if person_masks is None else person_masks[fi]
-                box, px = locate(frame, person, i, region_of(merged["box"], frame.shape))
+                box, px = locate(frame, pm_nr, i, region_of(merged["box"], frame.shape))
                 if box is None:
                     rec[i] = dict(status="lost", box=None, conf=0.0, cand=merged["idx"], note="occluded in merged box")
                     continue
@@ -139,10 +170,37 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
             for i in IDS:
                 t = tracks[i]
                 if rec[i]["status"] == "lost" and t.box is not None and fi - t.last_seen <= 30:
-                    box, px = locate(frame, person_masks[fi], i, grow(t.box, frame.shape, 1.0))
+                    # search near the last box and inside any candidate box that overlaps it
+                    regions = [grow(t.box, frame.shape, 1.0)]
+                    regions += [grow(c["box"], frame.shape, 0.1) for c in cands if iou(c["box"], t.box) > 0.05
+                                or containment(t.box, c["box"]) > 0.3]
+                    region = (min(r[0] for r in regions), min(r[1] for r in regions),
+                              max(r[2] for r in regions), max(r[3] for r in regions))
+                    box, px = locate(frame, pm_nr, i, region)
+                    note = None
+                    if box is None:
+                        # stale/tiny last box: widen to its surroundings plus the other athlete's neighbourhood
+                        other = rec["B" if i == "A" else "A"]
+                        wide = [grow(t.box, frame.shape, 2.0)]
+                        if other["box"] is not None:
+                            wide.append(grow(np.array(other["box"]), frame.shape, 1.0))
+                        region = (min(r[0] for r in wide), min(r[1] for r in wide),
+                                  max(r[2] for r in wide), max(r[3] for r in wide))
+                        box, px = locate(frame, pm_nr, i, region)
+                        note = "widened search" if box is not None else None
+                    if box is None:
+                        # last resort inside the person mask: the whole mat (still needs >= 1.5x the usual pixels)
+                        box, px = locate(frame, pm_nr, i, (0, int(0.3 * frame.shape[0]), frame.shape[1], frame.shape[0]),
+                                         min_px=int(1.5 * MIN_PX))
+                        note = "mat-wide search" if box is not None else None
+                    if box is None:
+                        # person mask may be missing this athlete entirely: retry on the mat without it
+                        box, px = locate(frame, None, i, (region[0], max(region[1], int(0.5 * frame.shape[0])),
+                                                           region[2], region[3]), min_px=1000, exclude=[(x1, y1, x2, y1 + 0.6 * (y2 - y1)) for x1, y1, x2, y2 in refs])
+                        note = "no person mask: mat-only colour search"
                     if box is not None:
                         rec[i] = dict(status="color_recovered", box=[float(v) for v in box],
-                                      conf=0.4 * min(1.0, px / 3000), cand=None, px=px)
+                                      conf=(0.4 if note is None else 0.3 if note == "widened search" else 0.25 if note == "mat-wide search" else 0.2) * min(1.0, px / 3000), cand=None, px=px, note=note)
                         t.update(np.array(box, float), fi)
         results.append(rec)
     return results

@@ -22,20 +22,41 @@ def colour_masks(hsv, white_v=150):
     return white, blue
 
 
+GAP_PX = 60  # blobs farther than this from the main body are separate things (scoreboard, spectators)
+
+
 def _bbox(mask):
+    """Bounding box of the largest same-colour blob plus nearby blobs (jacket/trousers, split by a belt)."""
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, KERNEL)
     n, lab, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
     if n <= 1:
         return None, 0
     areas = stats[1:, cv2.CC_STAT_AREA]
-    keep = [k + 1 for k, a in enumerate(areas) if a >= max(MIN_MASK_PX, MIN_AREA_FRAC * areas.max())]
-    if not keep:
+    big = int(np.argmax(areas)) + 1
+    cand = [k + 1 for k, a in enumerate(areas) if a >= max(MIN_MASK_PX, MIN_AREA_FRAC * areas.max())]
+    if big not in cand:
         return None, 0
-    x1 = min(stats[k, cv2.CC_STAT_LEFT] for k in keep)
-    y1 = min(stats[k, cv2.CC_STAT_TOP] for k in keep)
-    x2 = max(stats[k, cv2.CC_STAT_LEFT] + stats[k, cv2.CC_STAT_WIDTH] for k in keep)
-    y2 = max(stats[k, cv2.CC_STAT_TOP] + stats[k, cv2.CC_STAT_HEIGHT] for k in keep)
-    return (x1, y1, x2, y2), int(sum(stats[k, cv2.CC_STAT_AREA] for k in keep))
+
+    def bb(k):
+        return (stats[k, cv2.CC_STAT_LEFT], stats[k, cv2.CC_STAT_TOP],
+                stats[k, cv2.CC_STAT_LEFT] + stats[k, cv2.CC_STAT_WIDTH],
+                stats[k, cv2.CC_STAT_TOP] + stats[k, cv2.CC_STAT_HEIGHT])
+
+    keep, union = [big], list(bb(big))
+    changed = True
+    while changed:
+        changed = False
+        for k in cand:
+            if k in keep:
+                continue
+            x1, y1, x2, y2 = bb(k)
+            gap_x = max(0, max(x1 - union[2], union[0] - x2))
+            gap_y = max(0, max(y1 - union[3], union[1] - y2))
+            if max(gap_x, gap_y) <= GAP_PX:
+                keep.append(k)
+                union = [min(union[0], x1), min(union[1], y1), max(union[2], x2), max(union[3], y2)]
+                changed = True
+    return tuple(int(v) for v in union), int(sum(stats[k, cv2.CC_STAT_AREA] for k in keep))
 
 
 def region_of(box, shape, y_floor_frac=0.30):
@@ -94,9 +115,10 @@ def pose_owner(frame, kp, patch=4):
 
 
 MIN_PX = 600
+MIN_BOTTOM_FRAC = 0.5
 
 
-def locate(frame, person, ident, region):
+def locate(frame, person, ident, region, min_px=MIN_PX, exclude=()):
     """Bounding box of `ident`'s gi colour (A=white, B=blue) among person pixels inside `region`.
     -> (box|None, pixel_count) in full-frame coordinates."""
     rx1, ry1, rx2, ry2 = region
@@ -107,10 +129,15 @@ def locate(frame, person, ident, region):
     m = white if ident == "A" else blue
     if person is not None:
         m = m & person[ry1:ry2, rx1:rx2].astype(np.uint8)
+    for ex1, ey1, ex2, ey2 in exclude:  # e.g. referee boxes
+        m[max(0, int(ey1) - ry1):max(0, int(ey2) - ry1), max(0, int(ex1) - rx1):max(0, int(ex2) - rx1)] = 0
     b, px = _bbox(m)
-    if b is None or px < MIN_PX:
+    if b is None or px < min_px:
         return None, px
-    return (b[0] + rx1, b[1] + ry1, b[2] + rx1, b[3] + ry1), px
+    box = (b[0] + rx1, b[1] + ry1, b[2] + rx1, b[3] + ry1)
+    if box[3] < MIN_BOTTOM_FRAC * frame.shape[0] or box[3] - box[1] < 30 or box[2] - box[0] < 40:  # athletes are on the mat, not the crowd/scoreboard
+        return None, px
+    return box, px
 
 
 def grow(box, shape, frac, y_floor_frac=0.30):

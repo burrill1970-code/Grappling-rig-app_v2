@@ -24,6 +24,7 @@ def attach_keypoints(results, raw_dets, frames=None, person_masks=None):
     expected; a pose is never copied wholesale onto an athlete.
     """
     from .occlusion import keypoint_owners
+    from .athletes import candidates
     for fi, rec in enumerate(results):
         claimed = set()
         for r in rec.values():
@@ -35,15 +36,21 @@ def attach_keypoints(results, raw_dets, frames=None, person_masks=None):
         if frames is None:
             continue
         pm = None if person_masks is None else person_masks[fi]
+        donors = {c["idx"] for c in candidates(frames[fi], raw_dets[fi], pm)}  # athletes only: no crowd/referee poses
         for ident, r in rec.items():
             if r["status"] not in ("color_split", "color_recovered") or r["box"] is None:
                 continue
             best = None
             for j, d in enumerate(raw_dets[fi]):
-                if j in claimed or d[4] < 0.2:
+                if j in claimed or j not in donors:
                     continue
                 kp = keypoints_of(d)
                 own = np.array([o == ident for o in keypoint_owners(frames[fi], kp, pm)])
+                # the other gi has white/blue patches too (collar, back label): a keypoint also has to lie inside
+                # this athlete's own colour box (grown 25%)
+                x1, y1, x2, y2 = r["box"]
+                gw, gh = 0.25 * (x2 - x1), 0.25 * (y2 - y1)
+                own &= (kp[:, 0] >= x1 - gw) & (kp[:, 0] <= x2 + gw) & (kp[:, 1] >= y1 - gh) & (kp[:, 1] <= y2 + gh)
                 if own.sum() < MIN_OWNED_KP:
                     continue
                 if best is None or own.sum() > best[0]:
