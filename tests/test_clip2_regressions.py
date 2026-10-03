@@ -1,7 +1,8 @@
-"""Open, audit-confirmed failures on clip 2 (outputs/clip2/audit_results.json), kept as STRICT xfail.
+"""Audit-confirmed failures on clip 2 (outputs/clip2/audit_results.json), pinned as regression tests.
 
-They document bugs that exist today. When the bug is fixed the test starts passing and strict xfail turns that
-into a failure, which is the signal to delete the xfail marker and keep the test as a regression test.
+History: these eight frames were pinned as STRICT xfail while the bug was open (the dark-suited referee was tracked
+as an athlete). After the tracker learned a referee identity (grappling/tracker.py, REF_MARGIN) they started passing,
+strict xfail flagged that, and the marker was removed. Frames were also checked by eye and re-audited.
 """
 import json
 from pathlib import Path
@@ -34,7 +35,6 @@ def data():
     return frames, raw, tracks
 
 
-@pytest.mark.xfail(strict=True, reason="open bug: a dark-suited referee is tracked as an athlete (audit-confirmed)")
 @pytest.mark.parametrize("frame,who", REFEREE_AS_ATHLETE)
 def test_referee_is_not_tracked_as_an_athlete(data, frame, who):
     """The referee is a standing, narrow (aspect < 0.5), mostly dark-clothed person. An athlete's box must not

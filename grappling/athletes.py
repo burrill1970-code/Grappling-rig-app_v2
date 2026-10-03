@@ -56,6 +56,21 @@ def referee_boxes(frame, dets):
     return out
 
 
+def referee_candidates(frame, dets):
+    """Strict referee detections (black/dark suit, no gi colour) with their torso histogram, so the tracker can
+    learn the referee's appearance online."""
+    H, W = frame.shape[:2]
+    out = []
+    for d in dets:
+        x1, y1, x2, y2, c = [float(v) for v in d[:5]]
+        if c < 0.3 or y2 < MIN_BOTTOM * H or (x2 - x1) < 40:
+            continue
+        hsv = torso_hsv(frame, d)
+        if classify(color_fractions(hsv)) == "dark":
+            out.append(dict(box=np.array([x1, y1, x2, y2]), hist=hist(hsv), conf=c))
+    return out
+
+
 def candidates(frame, dets, person=None):
     """Return list of dicts for plausible athletes in one frame; each keeps the raw detection.
     With a person mask, the colour class comes from all gi pixels in the box (torso class is the fallback)."""

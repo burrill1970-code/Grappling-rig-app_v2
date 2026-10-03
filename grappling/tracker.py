@@ -13,11 +13,13 @@ Statuses per athlete per frame:
 """
 import numpy as np
 from scipy.optimize import linear_sum_assignment
-from .athletes import candidates, referee_boxes
+from .athletes import candidates, referee_boxes, referee_candidates
 from .color import bhatta
 from .occlusion import locate, grow, region_of, MIN_PX
 
 IDS = ("A", "B")
+REF_MARGIN = 0.10   # a candidate is referee-like if it matches the referee gallery this much better than both athletes
+REF_MAX_DIST = 0.5
 CLS_OF = {"A": "white", "B": "blue"}
 W_MOTION = 0.25
 GATE = 0.95
@@ -98,6 +100,7 @@ def _without_boxes(mask, boxes):
 
 def track_video(frames, raw_dets, cuts=(), person_masks=None):
     tracks = {i: Track(i) for i in IDS}
+    referee = Track("R")  # third identity: learned online, never reported, only used to keep the referee out of A/B
     cutset = set(cuts)
     results = []
     for fi, (frame, dets) in enumerate(zip(frames, raw_dets)):
@@ -105,6 +108,7 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
         if new_shot:
             for t in tracks.values():
                 t.reset_motion()
+            referee.ref = None  # a new shot may show a different referee
         pmask = None if person_masks is None else person_masks[fi]
         cands = candidates(frame, dets, pmask)
         if pmask is not None:
@@ -113,6 +117,27 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                 pmask = patched
                 cands = candidates(frame, dets, pmask)
         refs = referee_boxes(frame, dets)
+        # --- referee identity: learn his appearance from strict-dark detections, then set aside any athlete
+        # candidate that matches that gallery clearly better than it matches A or B (e.g. a navy suit that reads blue)
+        for rc in referee_candidates(frame, dets):
+            if rc["hist"] is not None:
+                referee.update_ref(rc["hist"])
+        soft_ref = []
+        if referee.ref is not None:
+            keep = []
+            for c in cands:
+                if c["hist"] is None or tracks["A"].ref is None or tracks["B"].ref is None:
+                    keep.append(c)
+                    continue
+                dR = bhatta(c["hist"], referee.ref)
+                dAB = min(bhatta(c["hist"], tracks["A"].ref), bhatta(c["hist"], tracks["B"].ref))
+                if dR < REF_MAX_DIST and dR + REF_MARGIN < dAB:
+                    soft_ref.append(c)
+                    referee.update_ref(c["hist"])
+                else:
+                    keep.append(c)
+            cands = keep
+            refs = refs + [tuple(c["box"]) for c in soft_ref]
         # remove only the referee's upper body (shirt/tie carry blue and white); legs may overlap a lying athlete
         pm_nr = _without_boxes(pmask, [(x1, y1, x2, y1 + 0.6 * (y2 - y1)) for x1, y1, x2, y2 in refs])
         rec = {i: dict(status="lost", box=None, conf=0.0, cand=None) for i in IDS}

@@ -1,11 +1,12 @@
 """Contact sheets of the annotated video for visual audit.
-Usage: python tools/make_audit_sheets.py SHEETDIR [OFFSET_MOD_3] [TRACKING_OUT_DIR]"""
+Usage: python tools/make_audit_sheets.py SHEETDIR [OFFSET_MOD_3] [TRACKING_OUT_DIR] [EXTRA_FRAMES_COMMA_SEPARATED]"""
 import json, sys
 import cv2, numpy as np
 
 out = sys.argv[1]
 offset = int(sys.argv[2]) if len(sys.argv) > 2 else 0  # sample frames offset, mod 3
 src = sys.argv[3] if len(sys.argv) > 3 else "outputs"
+extra = {int(x) for x in sys.argv[4].split(",")} if len(sys.argv) > 4 else set()  # frames to force into the flagged sheets
 import os; os.makedirs(out, exist_ok=True)
 stats = json.load(open(f"{src}/stats.json"))
 flag = set()
@@ -21,7 +22,7 @@ while True:
         break
     frames.append(f)
 base = set(range(offset, len(frames), 3))
-sets = {"regular": sorted(base), "flagged": sorted(f for f in flag - base if f < len(frames))}
+sets = {"regular": sorted(base), "flagged": sorted(f for f in (flag | extra) - base if f < len(frames))}
 index = {}
 for name, idxs in sets.items():
     sheets = []
