@@ -3,6 +3,7 @@ import json, sys
 import cv2, numpy as np
 
 out = sys.argv[1]
+offset = int(sys.argv[2]) if len(sys.argv) > 2 else 0  # sample frames offset, mod 3
 import os; os.makedirs(out, exist_ok=True)
 stats = json.load(open("outputs/stats.json"))
 flag = set()
@@ -10,7 +11,7 @@ for key in ("lost", "colour_conflict", "low_conf"):
     for i in "AB":
         for a, b in stats[key][i]:
             flag.update(range(a, b + 1))
-base = set(range(0, 535, 3))
+base = set(range(offset, 535, 3))
 sets = {"regular": sorted(base), "flagged": sorted(flag - base)}
 cap = cv2.VideoCapture("outputs/annotated.mp4")
 frames = []
