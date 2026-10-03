@@ -1,11 +1,13 @@
-"""Contact sheets of the annotated video for visual audit. Usage: python tools/make_audit_sheets.py OUTDIR"""
+"""Contact sheets of the annotated video for visual audit.
+Usage: python tools/make_audit_sheets.py SHEETDIR [OFFSET_MOD_3] [TRACKING_OUT_DIR]"""
 import json, sys
 import cv2, numpy as np
 
 out = sys.argv[1]
 offset = int(sys.argv[2]) if len(sys.argv) > 2 else 0  # sample frames offset, mod 3
+src = sys.argv[3] if len(sys.argv) > 3 else "outputs"
 import os; os.makedirs(out, exist_ok=True)
-stats = json.load(open("outputs/stats.json"))
+stats = json.load(open(f"{src}/stats.json"))
 flag = set()
 for key in ("lost", "colour_conflict", "low_conf"):
     for i in "AB":
@@ -13,7 +15,7 @@ for key in ("lost", "colour_conflict", "low_conf"):
             flag.update(range(a, b + 1))
 base = set(range(offset, 535, 3))
 sets = {"regular": sorted(base), "flagged": sorted(flag - base)}
-cap = cv2.VideoCapture("outputs/annotated.mp4")
+cap = cv2.VideoCapture(f"{src}/annotated.mp4")
 frames = []
 while True:
     ok, f = cap.read()

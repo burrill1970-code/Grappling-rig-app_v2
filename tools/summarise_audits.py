@@ -1,12 +1,16 @@
-"""Summarise the vision audits (outputs/audit_results.json, audit2_results.json) into outputs/audit_summary.json."""
-import collections, json
+"""Summarise the vision audits (<out>/audit_results.json, audit2/audit3_results.json) into <out>/audit_summary.json."""
+import argparse, collections, json
+
+ap = argparse.ArgumentParser()
+ap.add_argument("--out", default="outputs")
+OUT = ap.parse_args().out
 
 out = {}
 BUILD = {"audit1": "first full pipeline, before audit fixes",
          "audit2": "after round-1 audit fixes (crowd/referee/311-313/lost), before 2nd segmenter + loose-white fallback",
          "audit3": "delivered build, except A at frames 308-309 (changed after the audit: 308 lost -> small low-confidence box)"}
-for name, path in (("audit1", "outputs/audit_results.json"), ("audit2", "outputs/audit2_results.json"),
-                   ("audit3", "outputs/audit3_results.json")):
+for name, path in (("audit1", f"{OUT}/audit_results.json"), ("audit2", f"{OUT}/audit2_results.json"),
+                   ("audit3", f"{OUT}/audit3_results.json")):
     try:
         data = json.load(open(path))
     except FileNotFoundError:
@@ -24,5 +28,5 @@ for name, path in (("audit1", "outputs/audit_results.json"), ("audit2", "outputs
         serious_split=sum(v["split"] for v in ver),
         confirmed=[dict(frame=v["frame"], athlete=v["athlete"], type=v["type"]) for v in sorted(ver, key=lambda v: v["frame"]) if v["confirmed"]],
     )
-json.dump(out, open("outputs/audit_summary.json", "w"), indent=1)
+json.dump(out, open(f"{OUT}/audit_summary.json", "w"), indent=1)
 print(json.dumps({k: {kk: vv for kk, vv in v.items() if kk != "confirmed"} for k, v in out.items()}, indent=1))

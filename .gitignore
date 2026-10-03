@@ -5,3 +5,4 @@ __pycache__/
 scratch_view.py
 outputs/seg.log
 outputs/segx.log
+outputs/clip2/run.log
