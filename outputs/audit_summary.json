@@ -1,0 +1,195 @@
+{
+ "audit1": {
+  "frames": 208,
+  "per_frame": {
+   "A": {
+    "correct": 189,
+    "partial": 9,
+    "wrong_body": 2,
+    "lost_but_visible": 8
+   },
+   "B": {
+    "correct": 189,
+    "wrong_body": 6,
+    "partial": 10,
+    "lost_but_visible": 3
+   }
+  },
+  "serious_claimed": 27,
+  "serious_confirmed": 23,
+  "serious_refuted": 3,
+  "serious_split": 1,
+  "confirmed": [
+   {
+    "frame": 142,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 142,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 143,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 143,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 309,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 310,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 311,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 312,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 312,
+    "athlete": "B",
+    "type": "box_on_wrong_body"
+   },
+   {
+    "frame": 313,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 313,
+    "athlete": "B",
+    "type": "box_on_wrong_body"
+   },
+   {
+    "frame": 456,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 459,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 464,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 464,
+    "athlete": "B",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 472,
+    "athlete": "B",
+    "type": "pose_on_wrong_athlete"
+   },
+   {
+    "frame": 479,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 481,
+    "athlete": "B",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 483,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 495,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 504,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 522,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   },
+   {
+    "frame": 525,
+    "athlete": "A",
+    "type": "referee_or_crowd_labelled"
+   }
+  ]
+ },
+ "audit2": {
+  "frames": 209,
+  "per_frame": {
+   "A": {
+    "correct": 190,
+    "lost_but_visible": 7,
+    "partial": 12
+   },
+   "B": {
+    "correct": 202,
+    "partial": 7
+   }
+  },
+  "serious_claimed": 7,
+  "serious_confirmed": 7,
+  "serious_refuted": 0,
+  "serious_split": 0,
+  "confirmed": [
+   {
+    "frame": 125,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 136,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 138,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 139,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 140,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 141,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   },
+   {
+    "frame": 142,
+    "athlete": "A",
+    "type": "lost_but_visible"
+   }
+  ]
+ }
+}
