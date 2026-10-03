@@ -17,7 +17,7 @@ def runs(mask):
     return out
 
 
-def analyse(results, frames, raw_dets, cuts):
+def analyse(results, frames, raw_dets, cuts, person_masks=None):
     from .color import torso_hsv, color_fractions
     n = len(results)
     st = {i: np.array([r[i]["status"] for r in results]) for i in IDS}
@@ -52,4 +52,24 @@ def analyse(results, frames, raw_dets, cuts):
                 conflict[i][f] = fr[want[i]] < fr[other] - 0.05
     out["colour_conflict"] = {i: runs(conflict[i]) for i in IDS}
     out["colour_conflict_n"] = {i: int(conflict[i].sum()) for i in IDS}
+    # measured quality numbers quoted in report.md (also regression floors in the tests)
+    from .athletes import candidates
+    out["two_athlete_frac"] = float(np.mean([len(candidates(frames[f], raw_dets[f])) >= 2 for f in range(n)]))
+    if person_masks is not None:
+        import cv2
+        from .occlusion import colour_masks, SHADOW_WHITE_V
+        bad = tot = 0
+        for f in range(0, n, 5):
+            for i in IDS:
+                r = results[f][i]
+                if r["status"] not in ("color_split", "color_recovered"):
+                    continue
+                x1, y1, x2, y2 = [int(v) for v in r["box"]]
+                w, b = colour_masks(cv2.cvtColor(frames[f][y1:y2, x1:x2], cv2.COLOR_BGR2HSV), white_v=SHADOW_WHITE_V)
+                pm = person_masks[f][y1:y2, x1:x2]
+                nw, nb = int((w.astype(bool) & pm).sum()), int((b.astype(bool) & pm).sum())
+                own, other = (nw, nb) if i == "A" else (nb, nw)
+                tot += 1
+                bad += own < other
+        out["colour_box_bad"], out["colour_box_total"] = bad, tot
     return out

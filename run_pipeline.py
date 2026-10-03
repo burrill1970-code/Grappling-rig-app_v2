@@ -47,6 +47,6 @@ for fi, rec in enumerate(res):
                       pose_source=r["pose_source"], note=r.get("note"))
     out["frames"].append(dict(frame=fi, t=round(fi / fps, 3), shot=int(shot[fi]), athletes=ath))
 json.dump(out, open("outputs/tracks.json", "w"))
-stats = analyse(res, frames, raw, cuts)
+stats = analyse(res, frames, raw, cuts, pm)
 json.dump(stats, open("outputs/stats.json", "w"), default=lambda o: o.tolist() if hasattr(o, "tolist") else str(o))
 print({k: stats[k] for k in ("counts", "pose", "clear_n", "colour_conflict_n", "lost_long")})

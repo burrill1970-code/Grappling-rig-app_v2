@@ -2,7 +2,11 @@
 import collections, json
 
 out = {}
-for name, path in (("audit1", "outputs/audit_results.json"), ("audit2", "outputs/audit2_results.json")):
+BUILD = {"audit1": "first full pipeline, before audit fixes",
+         "audit2": "after round-1 audit fixes (crowd/referee/311-313/lost), before 2nd segmenter + loose-white fallback",
+         "audit3": "final build"}
+for name, path in (("audit1", "outputs/audit_results.json"), ("audit2", "outputs/audit2_results.json"),
+                   ("audit3", "outputs/audit3_results.json")):
     try:
         data = json.load(open(path))
     except FileNotFoundError:
@@ -10,7 +14,9 @@ for name, path in (("audit1", "outputs/audit_results.json"), ("audit2", "outputs
     pf = [p for g in data for p in g["audit"]["per_frame"]]
     ver = [v for g in data for v in g["verified"]]
     out[name] = dict(
+        build=BUILD[name],
         frames=len(pf),
+        verdicts={str(p["frame"]): dict(A=p["A"], B=p["B"]) for p in pf},
         per_frame={a: dict(collections.Counter(p[a] for p in pf)) for a in "AB"},
         serious_claimed=len(ver),
         serious_confirmed=sum(v["confirmed"] for v in ver),

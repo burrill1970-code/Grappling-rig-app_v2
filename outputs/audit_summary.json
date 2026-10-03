@@ -1,6 +1,841 @@
 {
  "audit1": {
+  "build": "first full pipeline, before audit fixes",
   "frames": 208,
+  "verdicts": {
+   "0": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "3": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "6": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "9": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "12": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "15": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "18": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "21": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "24": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "27": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "30": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "33": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "36": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "39": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "42": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "45": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "48": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "51": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "54": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "57": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "60": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "63": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "66": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "69": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "72": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "75": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "78": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "81": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "84": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "87": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "90": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "93": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "96": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "99": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "102": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "105": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "108": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "111": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "114": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "117": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "120": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "123": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "126": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "129": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "132": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "135": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "138": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "141": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "144": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "147": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "150": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "153": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "156": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "159": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "162": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "165": {
+    "A": "wrong_body",
+    "B": "correct"
+   },
+   "168": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "171": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "174": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "177": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "180": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "183": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "186": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "189": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "192": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "195": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "198": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "201": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "204": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "207": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "210": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "213": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "216": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "219": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "222": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "225": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "228": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "231": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "234": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "237": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "240": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "243": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "246": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "249": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "252": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "255": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "258": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "261": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "264": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "267": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "270": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "273": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "276": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "279": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "282": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "285": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "288": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "291": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "294": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "297": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "300": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "303": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "306": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "309": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "312": {
+    "A": "lost_but_visible",
+    "B": "wrong_body"
+   },
+   "315": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "318": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "321": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "324": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "327": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "330": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "333": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "336": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "339": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "342": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "345": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "348": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "351": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "354": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "357": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "360": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "363": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "366": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "369": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "372": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "375": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "378": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "381": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "384": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "387": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "390": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "393": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "396": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "399": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "402": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "405": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "408": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "411": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "414": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "417": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "420": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "423": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "426": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "429": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "432": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "435": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "438": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "441": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "444": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "447": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "450": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "453": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "456": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "459": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "462": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "465": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "468": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "471": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "474": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "477": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "480": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "483": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "486": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "489": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "492": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "495": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "498": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "501": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "504": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "507": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "510": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "513": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "516": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "519": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "522": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "525": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "528": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "531": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "534": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "1": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "5": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "85": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "89": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "92": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "94": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "95": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "97": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "142": {
+    "A": "lost_but_visible",
+    "B": "lost_but_visible"
+   },
+   "143": {
+    "A": "lost_but_visible",
+    "B": "lost_but_visible"
+   },
+   "184": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "187": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "190": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "310": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "311": {
+    "A": "lost_but_visible",
+    "B": "wrong_body"
+   },
+   "313": {
+    "A": "lost_but_visible",
+    "B": "wrong_body"
+   },
+   "413": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "416": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "418": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "434": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "436": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "437": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "451": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "463": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "464": {
+    "A": "lost_but_visible",
+    "B": "lost_but_visible"
+   },
+   "472": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "479": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "481": {
+    "A": "correct",
+    "B": "wrong_body"
+   },
+   "490": {
+    "A": "correct",
+    "B": "correct"
+   }
+  },
   "per_frame": {
    "A": {
     "correct": 189,
@@ -138,7 +973,846 @@
   ]
  },
  "audit2": {
+  "build": "after round-1 audit fixes (crowd/referee/311-313/lost), before 2nd segmenter + loose-white fallback",
   "frames": 209,
+  "verdicts": {
+   "1": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "4": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "7": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "10": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "13": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "16": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "19": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "22": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "25": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "28": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "31": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "34": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "37": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "40": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "43": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "46": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "49": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "52": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "55": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "58": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "61": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "64": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "67": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "70": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "73": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "76": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "79": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "82": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "85": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "88": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "91": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "94": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "97": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "100": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "103": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "106": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "109": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "112": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "115": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "118": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "121": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "124": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "127": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "130": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "133": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "136": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "139": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "142": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "145": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "148": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "151": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "154": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "157": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "160": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "163": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "166": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "169": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "172": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "175": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "178": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "181": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "184": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "187": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "190": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "193": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "196": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "199": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "202": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "205": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "208": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "211": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "214": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "217": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "220": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "223": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "226": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "229": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "232": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "235": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "238": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "241": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "244": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "247": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "250": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "253": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "256": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "259": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "262": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "265": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "268": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "271": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "274": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "277": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "280": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "283": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "286": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "289": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "292": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "295": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "298": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "301": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "304": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "307": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "310": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "313": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "316": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "319": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "322": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "325": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "328": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "331": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "334": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "337": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "340": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "343": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "346": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "349": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "352": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "355": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "358": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "361": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "364": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "367": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "370": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "373": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "376": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "379": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "382": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "385": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "388": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "391": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "394": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "397": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "400": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "403": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "406": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "409": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "412": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "415": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "418": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "421": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "424": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "427": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "430": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "433": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "436": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "439": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "442": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "445": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "448": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "451": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "454": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "457": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "460": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "463": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "466": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "469": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "472": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "475": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "478": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "481": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "484": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "487": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "490": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "493": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "496": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "499": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "502": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "505": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "508": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "511": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "514": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "517": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "520": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "523": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "526": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "529": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "532": {
+    "A": "correct",
+    "B": "partial"
+   },
+   "5": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "9": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "84": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "89": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "92": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "93": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "96": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "125": {
+    "A": "lost_but_visible",
+    "B": "partial"
+   },
+   "138": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "140": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "141": {
+    "A": "lost_but_visible",
+    "B": "correct"
+   },
+   "147": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "155": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "186": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "189": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "308": {
+    "A": "partial",
+    "B": "correct"
+   },
+   "413": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "414": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "416": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "417": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "435": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "437": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "438": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "444": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "464": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "473": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "474": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "479": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "483": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "489": {
+    "A": "correct",
+    "B": "correct"
+   },
+   "503": {
+    "A": "correct",
+    "B": "correct"
+   }
+  },
   "per_frame": {
    "A": {
     "correct": 190,
