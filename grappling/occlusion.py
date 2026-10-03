@@ -7,7 +7,7 @@ These are weaker than direct detections and are labelled 'color_split' / low con
 import cv2
 import numpy as np
 
-EXPAND = 0.25
+EXPAND = 0.15
 MIN_AREA_FRAC = 0.10  # component kept if >= this fraction of the largest same-colour component
 MIN_MASK_PX = 400
 KERNEL = np.ones((7, 7), np.uint8)
@@ -45,11 +45,14 @@ def region_of(box, shape, y_floor_frac=0.30):
             int(min(W, x2 + EXPAND * w)), int(min(H, y2 + EXPAND * h)))
 
 
-def split_by_colour(frame, merged_box):
+def split_by_colour(frame, merged_box, person=None):
     """-> {'A': (box|None, px), 'B': (box|None, px)} in full-frame coordinates."""
     rx1, ry1, rx2, ry2 = region_of(merged_box, frame.shape)
     hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
     white, blue = colour_masks(hsv)
+    if person is not None:  # drop same-coloured background (ad boards, scoreboard)
+        pm = person[ry1:ry2, rx1:rx2].astype(np.uint8)
+        white, blue = white & pm, blue & pm
     out = {}
     for ident, m in (("A", white), ("B", blue)):
         b, px = _bbox(m)
@@ -87,3 +90,31 @@ def pose_owner(frame, kp, patch=4):
         return None, 0.5, n
     share = w / (w + b)
     return ("A" if share > 0.65 else "B" if share < 0.35 else None), float(share), n
+
+
+MIN_PX = 600
+
+
+def locate(frame, person, ident, region):
+    """Bounding box of `ident`'s gi colour (A=white, B=blue) among person pixels inside `region`.
+    -> (box|None, pixel_count) in full-frame coordinates."""
+    rx1, ry1, rx2, ry2 = region
+    if rx2 - rx1 < 8 or ry2 - ry1 < 8:
+        return None, 0
+    hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
+    white, blue = colour_masks(hsv)
+    m = white if ident == "A" else blue
+    if person is not None:
+        m = m & person[ry1:ry2, rx1:rx2].astype(np.uint8)
+    b, px = _bbox(m)
+    if b is None or px < MIN_PX:
+        return None, px
+    return (b[0] + rx1, b[1] + ry1, b[2] + rx1, b[3] + ry1), px
+
+
+def grow(box, shape, frac, y_floor_frac=0.30):
+    H, W = shape[:2]
+    x1, y1, x2, y2 = box
+    w, h = x2 - x1, y2 - y1
+    return (int(max(0, x1 - frac * w)), int(max(y_floor_frac * H, y1 - frac * h)),
+            int(min(W, x2 + frac * w)), int(min(H, y2 + frac * h)))

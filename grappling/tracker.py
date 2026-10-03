@@ -7,13 +7,15 @@ Motion state is reset at shot cuts; colour references persist (and re-seed per s
 
 Statuses per athlete per frame:
   detected  own box, matched by colour+motion
-  merged    one detection covers both athletes (their boxes cannot be separated by the detector)
-  lost      no usable detection for this identity
+  color_split      one detection covers both athletes; box = that athlete's gi-colour pixels (low conf)
+  color_recovered  detector missed this athlete; box = gi-colour pixels near its last position (low conf)
+  lost             nothing usable for this identity
 """
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from .athletes import candidates
 from .color import bhatta
+from .occlusion import locate, grow, region_of
 
 IDS = ("A", "B")
 CLS_OF = {"A": "white", "B": "blue"}
@@ -72,7 +74,7 @@ def _cost(cand, tr, use_motion):
     return col + prior + W_MOTION * mot
 
 
-def track_video(frames, raw_dets, cuts=()):
+def track_video(frames, raw_dets, cuts=(), person_masks=None):
     tracks = {i: Track(i) for i in IDS}
     cutset = set(cuts)
     results = []
@@ -100,7 +102,7 @@ def track_video(frames, raw_dets, cuts=()):
                               and iou(o["box"], c["box"]) < 0.5]
                 if (containment(tracks["A"].box, c["box"]) > 0.6 and
                         containment(tracks["B"].box, c["box"]) > 0.6 and
-                        iou(tracks["A"].box, tracks["B"].box) > 0.15 and not standalone):
+                        not standalone):
                     merged = c
                     break
         # single candidate when we were not overlapping before: still ambiguous if it is
@@ -113,9 +115,14 @@ def track_video(frames, raw_dets, cuts=()):
                 merged = c
         if merged is not None:
             for i in IDS:
-                rec[i] = dict(status="merged", box=merged["box"].tolist(), conf=float(merged["conf"]) * 0.5,
-                              cand=merged["idx"])
-                tracks[i].update(merged["box"], fi)
+                person = None if person_masks is None else person_masks[fi]
+                box, px = locate(frame, person, i, region_of(merged["box"], frame.shape))
+                if box is None:
+                    rec[i] = dict(status="lost", box=None, conf=0.0, cand=merged["idx"], note="occluded in merged box")
+                    continue
+                rec[i] = dict(status="color_split", box=[float(v) for v in box],
+                              conf=0.4 * min(1.0, px / 3000), cand=merged["idx"], px=px)
+                tracks[i].update(np.array(box, float), fi)
         elif cands:
             use_motion = not new_shot
             C = np.array([[_cost(c, tracks[i], use_motion) for c in cands] for i in IDS])
@@ -128,5 +135,17 @@ def track_video(frames, raw_dets, cuts=()):
                 if c["cls"] == CLS_OF[i] and c["hist"] is not None and len(cands) >= 2 and \
                         all(iou(c["box"], o["box"]) < 0.1 for o in cands if o is not c):
                     tracks[i].update_ref(c["hist"])
+        if merged is None and person_masks is not None:
+            for i in IDS:
+                t = tracks[i]
+                if rec[i]["status"] == "lost" and t.box is not None and fi - t.last_seen <= 30:
+                    box, px = locate(frame, person_masks[fi], i, grow(t.box, frame.shape, 1.0))
+                    other = rec["B" if i == "A" else "A"]
+                    if box is not None and not (other["box"] is not None and other["status"] == "detected"
+                                                and containment(np.array(box, float), np.array(other["box"])) > 0.9):
+                        rec[i] = dict(status="color_recovered", box=[float(v) for v in box],
+                                      conf=0.4 * min(1.0, px / 3000), cand=None, px=px)
+                        t.update(np.array(box, float), fi)
         results.append(rec)
     return results
+

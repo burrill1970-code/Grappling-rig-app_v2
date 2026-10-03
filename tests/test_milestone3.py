@@ -3,7 +3,7 @@ from grappling.pose import attach_keypoints, SKELETON
 
 
 def test_detected_athletes_have_17_keypoints(tracked, raw_dets):
-    res = attach_keypoints([{k: dict(v) for k, v in r.items()} for r in tracked[0]], raw_dets)
+    res = tracked[0]
     n = 0
     for r in res:
         for a in r.values():
@@ -13,12 +13,14 @@ def test_detected_athletes_have_17_keypoints(tracked, raw_dets):
                 assert ((kp[:, 2] >= 0) & (kp[:, 2] <= 1)).all()
                 n += 1
             else:
-                assert a["kp"] is None  # no invented poses for merged/lost
+                assert a["kp"] is None or a["pose_source"] == "colour_assigned_shared_detection"
+                if a["status"] == "lost":
+                    assert a["kp"] is None  # no invented poses for lost athletes
     assert n > 250
 
 
 def test_confident_keypoints_fall_inside_the_athlete_box(tracked, raw_dets):
-    res = attach_keypoints([{k: dict(v) for k, v in r.items()} for r in tracked[0]], raw_dets)
+    res = tracked[0]
     inside = tot = 0
     for r in res:
         for a in r.values():

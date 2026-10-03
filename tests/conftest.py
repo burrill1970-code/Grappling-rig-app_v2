@@ -17,8 +17,15 @@ def raw_dets():
 
 
 @pytest.fixture(scope="session")
-def tracked(frames, raw_dets):
+def person_masks():
+    from grappling.segment import run_segmenter
+    return run_segmenter(None, cache="outputs/person_masks.npz")
+
+
+@pytest.fixture(scope="session")
+def tracked(frames, raw_dets, person_masks):
     from grappling.video import detect_cuts
     from grappling.tracker import track_video
+    from grappling.pose import attach_keypoints
     cuts = detect_cuts(frames)
-    return track_video(frames, raw_dets, cuts), cuts
+    return attach_keypoints(track_video(frames, raw_dets, cuts, person_masks), raw_dets, frames), cuts

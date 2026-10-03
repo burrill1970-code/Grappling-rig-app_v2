@@ -22,7 +22,7 @@ def test_every_missing_track_is_flagged(tracked):
             if r[i]["box"] is None:
                 assert r[i]["status"] == "lost", (fi, i)
             else:
-                assert r[i]["status"] in ("detected", "merged"), (fi, i)
+                assert r[i]["status"] in ("detected", "color_split", "color_recovered"), (fi, i)
 
 
 def test_no_swaps_in_clear_segments(tracked, frames, raw_dets):
