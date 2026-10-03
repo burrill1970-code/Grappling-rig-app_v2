@@ -12,14 +12,18 @@ def keypoints_of(det):
     return np.asarray(det[5:], np.float32).reshape(17, 3)
 
 
-def attach_keypoints(results, raw_dets, frames=None):
+MIN_OWNED_KP = 4
+
+
+def attach_keypoints(results, raw_dets, frames=None, person_masks=None):
     """Add 'kp' (17x3 list or None), 'pose_conf' and 'pose_source' to each athlete record.
 
-    'detected' records own their detection's pose. For colour-derived records (merged / recovered) a pose
-    from an unclaimed detection is given to the athlete only if its limb/torso keypoints sit on that
-    athlete's gi colour AND mostly inside that athlete's box. Otherwise kp stays None (never invented).
+    'detected' records own their detection's pose. For colour-derived records (merged / recovered) the
+    pose comes from an unclaimed detection, but only the keypoints whose own pixels carry this athlete's gi
+    colour are kept (others are zeroed), and the pose needs >= MIN_OWNED_KP of them. Partial skeletons are
+    expected; a pose is never copied wholesale onto an athlete.
     """
-    from .occlusion import pose_owner, grow
+    from .occlusion import keypoint_owners
     for fi, rec in enumerate(results):
         claimed = set()
         for r in rec.values():
@@ -30,28 +34,23 @@ def attach_keypoints(results, raw_dets, frames=None):
                 claimed.add(r["cand"])
         if frames is None:
             continue
+        pm = None if person_masks is None else person_masks[fi]
         for ident, r in rec.items():
             if r["status"] not in ("color_split", "color_recovered") or r["box"] is None:
                 continue
             best = None
-            region = grow(r["box"], frames[fi].shape, 0.25, y_floor_frac=0.0)
             for j, d in enumerate(raw_dets[fi]):
                 if j in claimed or d[4] < 0.2:
                     continue
                 kp = keypoints_of(d)
-                owner, share, n = pose_owner(frames[fi], kp)
-                if owner != ident:
+                own = np.array([o == ident for o in keypoint_owners(frames[fi], kp, pm)])
+                if own.sum() < MIN_OWNED_KP:
                     continue
-                conf = kp[:, 2] > 0.3
-                if conf.sum() < 4:
-                    continue
-                inside = ((kp[conf, 0] >= region[0]) & (kp[conf, 0] <= region[2]) &
-                          (kp[conf, 1] >= region[1]) & (kp[conf, 1] <= region[3])).mean()
-                if inside < 0.6:
-                    continue
-                score = float(kp[:, 2].mean())
-                if best is None or score > best[0]:
-                    best = (score, j, kp)
+                if best is None or own.sum() > best[0]:
+                    best = (int(own.sum()), kp, own)
             if best is not None:
-                r.update(kp=best[2].tolist(), pose_conf=best[0] * 0.5, pose_source="colour_assigned_shared_detection")
+                kp = best[1].copy()
+                kp[~best[2], 2] = 0.0
+                r.update(kp=kp.tolist(), pose_conf=float(kp[best[2], 2].mean()) * 0.5,
+                         pose_source="colour_assigned_shared_detection")
     return results

@@ -8,15 +8,16 @@ import cv2
 import numpy as np
 
 EXPAND = 0.15
+SHADOW_WHITE_V = 105  # shadowed white gi; safe only inside a person mask (no ad boards)
 MIN_AREA_FRAC = 0.10  # component kept if >= this fraction of the largest same-colour component
 MIN_MASK_PX = 400
 KERNEL = np.ones((7, 7), np.uint8)
 KP_SAMPLE = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]  # no face: skin/hair carry no gi colour
 
 
-def colour_masks(hsv):
+def colour_masks(hsv, white_v=150):
     h, s, v = hsv[..., 0], hsv[..., 1], hsv[..., 2]
-    white = ((s < 55) & (v > 150)).astype(np.uint8)
+    white = ((s < 55) & (v > white_v)).astype(np.uint8)
     blue = ((h >= 95) & (h <= 135) & (s > 90) & (v > 35)).astype(np.uint8)
     return white, blue
 
@@ -49,7 +50,7 @@ def split_by_colour(frame, merged_box, person=None):
     """-> {'A': (box|None, px), 'B': (box|None, px)} in full-frame coordinates."""
     rx1, ry1, rx2, ry2 = region_of(merged_box, frame.shape)
     hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
-    white, blue = colour_masks(hsv)
+    white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V if person is not None else 150)
     if person is not None:  # drop same-coloured background (ad boards, scoreboard)
         pm = person[ry1:ry2, rx1:rx2].astype(np.uint8)
         white, blue = white & pm, blue & pm
@@ -102,7 +103,7 @@ def locate(frame, person, ident, region):
     if rx2 - rx1 < 8 or ry2 - ry1 < 8:
         return None, 0
     hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
-    white, blue = colour_masks(hsv)
+    white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V if person is not None else 150)
     m = white if ident == "A" else blue
     if person is not None:
         m = m & person[ry1:ry2, rx1:rx2].astype(np.uint8)
@@ -118,3 +119,28 @@ def grow(box, shape, frac, y_floor_frac=0.30):
     w, h = x2 - x1, y2 - y1
     return (int(max(0, x1 - frac * w)), int(max(y_floor_frac * H, y1 - frac * h)),
             int(min(W, x2 + frac * w)), int(min(H, y2 + frac * h)))
+
+
+def keypoint_owners(frame, kp, person, patch=5, min_share=0.75):
+    """Per-keypoint gi-colour owner: 'A' (white), 'B' (blue) or None, from a small patch around each keypoint.
+
+    Only person pixels count. Skin keypoints (head, hands, feet) carry no gi colour and come back None."""
+    hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V)
+    if person is not None:
+        white, blue = white & person.astype(np.uint8), blue & person.astype(np.uint8)
+    H, W = white.shape
+    owners = []
+    for x, y, c in kp:
+        if c < 0.3:
+            owners.append(None)
+            continue
+        x, y = int(round(x)), int(round(y))
+        x1, x2, y1, y2 = max(0, x - patch), min(W, x + patch + 1), max(0, y - patch), min(H, y + patch + 1)
+        if x2 <= x1 or y2 <= y1:
+            owners.append(None)
+            continue
+        cw, cb = int(white[y1:y2, x1:x2].sum()), int(blue[y1:y2, x1:x2].sum())
+        tot = cw + cb
+        owners.append(None if tot < 8 else "A" if cw / tot >= min_share else "B" if cb / tot >= min_share else None)
+    return owners

@@ -140,9 +140,7 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                 t = tracks[i]
                 if rec[i]["status"] == "lost" and t.box is not None and fi - t.last_seen <= 30:
                     box, px = locate(frame, person_masks[fi], i, grow(t.box, frame.shape, 1.0))
-                    other = rec["B" if i == "A" else "A"]
-                    if box is not None and not (other["box"] is not None and other["status"] == "detected"
-                                                and containment(np.array(box, float), np.array(other["box"])) > 0.9):
+                    if box is not None:
                         rec[i] = dict(status="color_recovered", box=[float(v) for v in box],
                                       conf=0.4 * min(1.0, px / 3000), cand=None, px=px)
                         t.update(np.array(box, float), fi)

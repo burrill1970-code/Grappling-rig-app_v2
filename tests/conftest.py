@@ -28,4 +28,4 @@ def tracked(frames, raw_dets, person_masks):
     from grappling.tracker import track_video
     from grappling.pose import attach_keypoints
     cuts = detect_cuts(frames)
-    return attach_keypoints(track_video(frames, raw_dets, cuts, person_masks), raw_dets, frames), cuts
+    return attach_keypoints(track_video(frames, raw_dets, cuts, person_masks), raw_dets, frames, person_masks), cuts
