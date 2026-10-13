@@ -1,0 +1,11 @@
+# Python 3.11. CPU only is enough (no GPU needed). Versions are the ones this project was built and tested with.
+# Tip for a CPU-only machine: install torch/torchvision from the CPU index first to avoid the large CUDA wheels:
+#   pip install torch==2.14.1 torchvision==0.29.1 --index-url https://download.pytorch.org/whl/cpu
+ultralytics==8.4.171      # YOLO11 pose + segmentation (pretrained weights download on first use)
+torch==2.14.1
+torchvision==0.29.1
+opencv-python==5.0.0.93
+numpy==2.4.6
+scipy==1.17.1             # Hungarian assignment
+lap==0.5.13
+pytest==9.1.1
