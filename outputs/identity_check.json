@@ -1,0 +1,113 @@
+{
+ "video": "test_clips/clip.mp4",
+ "question": "is this track box on the named athlete?",
+ "answers": {
+  "right": "on that athlete",
+  "wrong": "on the other athlete",
+  "both": "covers both about equally"
+ },
+ "frames": {
+  "108": {
+   "A": "right"
+  },
+  "115": {
+   "B": "right"
+  },
+  "129": {
+   "A": "right",
+   "B": "right"
+  },
+  "140": {
+   "A": "right",
+   "B": "right"
+  },
+  "142": {
+   "A": "right"
+  },
+  "143": {
+   "A": "right"
+  },
+  "164": {
+   "A": "right"
+  },
+  "171": {
+   "A": "right"
+  },
+  "199": {
+   "B": "right"
+  },
+  "220": {
+   "B": "right"
+  },
+  "227": {
+   "B": "wrong"
+  },
+  "241": {
+   "B": "right"
+  },
+  "248": {
+   "A": "right"
+  },
+  "255": {
+   "B": "right"
+  },
+  "262": {
+   "A": "right",
+   "B": "right"
+  },
+  "269": {
+   "A": "right",
+   "B": "right"
+  },
+  "276": {
+   "B": "right"
+  },
+  "283": {
+   "A": "right",
+   "B": "right"
+  },
+  "290": {
+   "B": "right"
+  },
+  "297": {
+   "A": "right",
+   "B": "right"
+  },
+  "304": {
+   "A": "right"
+  },
+  "308": {
+   "A": "right"
+  },
+  "325": {
+   "A": "right"
+  },
+  "332": {
+   "A": "right"
+  },
+  "339": {
+   "A": "right"
+  },
+  "346": {
+   "A": "right"
+  },
+  "360": {
+   "A": "right"
+  },
+  "374": {
+   "A": "right"
+  },
+  "381": {
+   "A": "right"
+  },
+  "465": {
+   "B": "right"
+  },
+  "507": {
+   "B": "right"
+  },
+  "514": {
+   "B": "right"
+  }
+ }
+}

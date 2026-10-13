@@ -27,7 +27,16 @@ aud = json.load(open(OUT / "audit_summary.json")) if (OUT / "audit_summary.json"
 meta = json.load(open(OUT / "tracks.json"))["meta"]
 fps = meta["fps"]
 clip_notes, audit_notes = read(OUT / "clip_notes.md"), read(OUT / "audit_notes.md")
-gt = Path("ground_truth.md")
+gt = OUT / "ground_truth.json"
+ge = json.load(open(OUT / "gt_eval.json"))["summary"] if gt.exists() and (OUT / "gt_eval.json").exists() else None
+
+
+def pct(x):
+    return f"{100 * x:.0f}%"
+
+
+def ci(x):
+    return f"{100 * x[0]:.0f}-{100 * x[1]:.0f}%"
 
 
 def fmt(runs):
@@ -48,6 +57,18 @@ def pf(a, who):
     d = a["per_frame"][who]
     return " / ".join(str(d.get(k, 0)) for k in ("correct", "partial", "wrong_body", "lost_but_visible")) + f" of {a['frames']}"
 
+
+# ---- ground truth (hand labels scored by tools/eval_ground_truth.py) ----
+if ge:
+    gA, gB = ge["athletes"]["A"], ge["athletes"]["B"]
+    gt_bullet = (f"* **Ground truth** (hand-labelled boxes on {ge['regular_frames']} regularly sampled frames, every 7th): the track sits on the right person "
+                 f"for A on {gA['right_person']}/{gA['decided']} visible frames ({pct(gA['right_person_rate'])}, 95% CI {ci(gA['right_person_ci95'])}) and "
+                 f"for B on {gB['right_person']}/{gB['decided']} ({pct(gB['right_person_rate'])}, {ci(gB['right_person_ci95'])}); "
+                 f"wrong-body A {gA['counts']['wrong_body']}, B {gB['counts']['wrong_body']}; box covering both A {gA['counts']['covers_both']}, B {gB['counts']['covers_both']}; identity swaps on {len(ge['swap_frames'])} frame{'' if len(ge['swap_frames']) == 1 else 's'}. "
+                 f"Box quality (IoU >= 0.5 with the labelled box): A {pct(gA['correct_rate'])}, B {pct(gB['correct_rate'])}. Details in the Ground truth section.")
+else:
+    gt_bullet = (f"* There is **no ground truth** for this clip (`{gt}` is absent; label it with `tools/gt_label.py`), "
+                 "so none of the checks below is a ground-truth check.")
 
 # ---- verdict bullets about audits ----
 if final:
@@ -80,8 +101,8 @@ Clip: `{args.clip}`, {n} frames, ~{fps:.1f} fps, {n / fps:.1f}s. Identity labels
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~{colour_pct:.0f}% of the clip each athlete's box is
   **not a detection**: it is the bounding box of that athlete's gi-coloured pixels inside a person mask. These boxes are
   low-confidence (capped at 0.40), often too small, and sometimes wrap around the other athlete.
-* Identity during contact rests on **gi colour alone**. There is **no ground truth** (`ground_truth.md`
-  {'exists' if gt.exists() else 'is not in the repo'}), so none of the checks below is a ground-truth check.
+* Identity during contact rests on **gi colour alone**.
+{gt_bullet}
 {audit_bullets}* Pose is partial: {s['pose']['A']}/{n} frames carry a skeleton for A and {s['pose']['B']}/{n} for B. On colour-derived frames only
   keypoints whose own pixels carry that athlete's gi colour and that lie inside the athlete's box are kept, so skeletons are fragments.
 
@@ -116,6 +137,48 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 
 Pose: A {s['pose']['A']} frames ({s['pose_shared']['A']} from colour-filtered shared detections), B {s['pose']['B']} frames ({s['pose_shared']['B']}).
 """]
+
+# ---- ground-truth section (only if labels have been scored) ----
+if ge:
+    from tools.eval_ground_truth import ID_MARGIN, VERDICTS as VERD
+    L.append(f"""## Ground truth (hand labels)
+
+A person drew a box around each athlete's whole visible body, or marked them hidden, on the raw frames (never seeing the tracker's output), using
+`tools/gt_label.py`. `tools/eval_ground_truth.py` scores each track box by IoU with that athlete's box ("own") and the other athlete's ("other"):
+correct = own IoU >= 0.5; partial = right person, poor box (0 < own IoU < 0.5, own >= other); wrong_body = other IoU > own IoU; off_target = on
+neither athlete; lost_but_visible = no track box for a visible athlete; hidden_ok / box_on_hidden = athlete labelled hidden, without / with a track box.
+When the athletes are tangled their labelled boxes overlap heavily and IoU cannot say which one a track box is on, so wherever the box touches both
+and favours its own by less than {ID_MARGIN} IoU, a person answered which athlete it is on (`tools/gt_identity.py`, which does show the track box):
+right keeps the IoU verdict, wrong = wrong_body, both = covers_both; unanswered = undecided, left out of the rates.
+Colour-derived track boxes cover gi pixels only, so they score lower IoU than a whole-body label even on the right person: *partial* is their expected verdict.
+
+Regular sample: {ge['regular_frames']} frames (every 7th){'; unusable frames skipped: ' + ', '.join(map(str, ge['unusable_frames'])) if ge['unusable_frames'] else ''}. One labeller, no second-labeller agreement check.
+
+| verdict | A (white) | B (blue) |
+|---|---|---|""")
+    for v in VERD:
+        L.append(f"| {v} | {gA['counts'][v]} | {gB['counts'][v]} |")
+    L.append(f"""
+Identity checked by a person: A {gA['id_checked']}, B {gB['id_checked']} of the regular frames; undecided (left out of the rates): A {gA['counts']['undecided']}, B {gB['counts']['undecided']}.
+
+| on visible, decided frames | A | B |
+|---|---|---|
+| right person (correct + partial) | {gA['right_person']}/{gA['decided']} ({pct(gA['right_person_rate'])}, CI {ci(gA['right_person_ci95'])}) | {gB['right_person']}/{gB['decided']} ({pct(gB['right_person_rate'])}, CI {ci(gB['right_person_ci95'])}) |
+| correct box (IoU >= 0.5) | {pct(gA['correct_rate'])} (CI {ci(gA['correct_ci95'])}) | {pct(gB['correct_rate'])} (CI {ci(gB['correct_ci95'])}) |
+| box covers both athletes | {pct(gA['covers_both_rate'])} | {pct(gB['covers_both_rate'])} |
+| wrong body | {pct(gA['wrong_body_rate'])} (CI {ci(gA['wrong_body_ci95'])}) | {pct(gB['wrong_body_rate'])} (CI {ci(gB['wrong_body_ci95'])}) |
+| mean IoU (all visible frames) | {gA['mean_iou_visible']:.2f} | {gB['mean_iou_visible']:.2f} |""")
+    for g, name in (("detected", "direct detections"), ("colour", "colour-derived boxes")):
+        a, b = gA["by_status"][g], gB["by_status"][g]
+        L.append(f"| {name}: right person / correct / mean IoU | {a['right_person']}/{a['n']} / {a['correct']}/{a['n']} / {'-' if a['mean_iou'] is None else format(a['mean_iou'], '.2f')} "
+                 f"| {b['right_person']}/{b['n']} / {b['correct']}/{b['n']} / {'-' if b['mean_iou'] is None else format(b['mean_iou'], '.2f')} |")
+    errs = "; ".join(f"{w}: " + (", ".join(f"{e['frame']} {e['verdict']}" + (" (targeted)" if e['kind'] == 'targeted' else "")
+                                          for e in ge["errors"][w]) or "none") for w in "AB")
+    L.append(f"\n**Errors on labelled frames:** {errs}. **Identity swaps:** {', '.join(map(str, ge['swap_frames'])) or 'none'}.")
+    if ge["targeted"]:
+        L.append("**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): "
+                 + ", ".join(f"{t['frame']} A {t['A']} / B {t['B']}" for t in ge["targeted"]) + ".")
+    L.append("")
 
 # ---- audits section (only if audits exist) ----
 if aud:
@@ -188,14 +251,14 @@ L.append(f"""
 * No swaps in clear segments: passes, but covers only the {s['clear_n']} clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate ({100 * s['two_athlete_frac']:.0f}% of frames) and colour-box quality ({s.get('colour_box_bad', '?')}/{s.get('colour_box_total', '?')} bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.
-* Ground truth: {'present' if gt.exists() else 'ground_truth.md not found; the test is skipped, not passed'}.
+* Ground truth: {'labels in `' + str(gt) + '` are checked for completeness and scored; the numbers are measurements, with no pass/fail floor yet' if ge else '`' + str(gt) + '` not found; the test is skipped, not passed'}.
 
 ## Outputs
 
 * `{OUT}/annotated.mp4`: A red, B green. Solid box = detected, dashed = colour-derived. HUD shows each athlete's status every frame.
 * `{OUT}/tracks.json`: per frame, per athlete: status, box, confidence, 17 keypoints (name, x, y, conf) or null, pose source, note.
 * `{OUT}/stats.json` (and `audit_summary.json`, `audit*_results.json` where audits were run): the numbers and evidence used here.
-* Regenerate: `python run_pipeline.py --clip {args.clip} --out {OUT} && python tools/summarise_audits.py --out {OUT} && python make_report.py --clip {args.clip} --out {OUT} --report {args.report}`.
+* Regenerate: `python run_pipeline.py --clip {args.clip} --out {OUT} && python tools/summarise_audits.py --out {OUT} && python tools/eval_ground_truth.py --out {OUT} && python make_report.py --clip {args.clip} --out {OUT} --report {args.report}`.
 """)
 Path(args.report).write_text("\n".join(L))
 print(args.report, "written", len("\n".join(L)))

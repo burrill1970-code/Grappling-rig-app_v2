@@ -11,8 +11,8 @@ Results and their limits are in the reports. Read them before trusting any outpu
 * `outputs/clip2/report.md`: clip 2 (`test_clips/clip2.mp4`, Paris Grand Slam 2026 highlights, 453 frames)
 * `outputs/marker_study/REPORT.md`: which visual cues identify a person (gradients, texture, pose, re-ID, …)
 
-There is **no ground truth** for either clip. Quality figures in the reports come from vision audits by
-language-model reviewers, not from measured accuracy.
+Both clips have hand-labelled ground truth on a sample of frames (see below); the reports also keep the earlier vision
+audits by language-model reviewers.
 
 ## Setup
 
@@ -35,7 +35,7 @@ python -m pytest tests        # about 1 minute
 ```
 
 The tests run on the committed outputs and model caches, so no model is run. Expected result: everything passes
-except one skipped test (`ground_truth.md` is absent) and 9 expected failures (`xfail`). The xfails pin a known,
+except 9 expected failures (`xfail`). The xfails pin a known,
 unfixed bug: on clip 2, athlete B is lost on 9 frames while visible.
 
 ## Run the pipeline
@@ -90,6 +90,26 @@ the output folder:
 5. Run `make_report.py`.
 6. Add the new folder to `CASES` in `tests/test_generic.py` so the generic checks run on it.
 
+## Ground truth (hand labels)
+
+```bash
+python tools/gt_label.py                               # draw boxes; open http://localhost:8765
+python tools/gt_identity.py                            # then answer which athlete each tangled box is on
+python tools/eval_ground_truth.py --out outputs        # and --out outputs/clip2
+python make_report.py                                  # the report gains a Ground truth section
+```
+
+* The page shows the raw frames, never the tracker's output, so the labels are not biased by it.
+* Draw a box around each athlete's whole visible body, or mark them hidden. Keys are listed on the page.
+* Frames: every 7th frame of each clip (an unbiased sample, used for the rates) plus frames that audits or tests
+  flagged as failures (listed separately, not turned into rates). About 150 frames for both clips.
+* Labels save to `<out>/ground_truth.json` after every frame, so you can stop and resume.
+* When the athletes are tangled, their boxes overlap so much that overlap alone cannot say which athlete a track
+  box is on. `gt_identity.py` asks a person about just those boxes (right / wrong / covers both) and saves to
+  `<out>/identity_check.json`. After the tracker changes, rerun it: new boxes may need answers, and the tests say so.
+* `tests/test_ground_truth.py` checks labels and answers are complete, `gt_eval.json` is up to date, and the scores
+  stay at or above the floors measured from the first labels.
+
 ## Vision audits (optional; needs Claude Code)
 
 An audit has reviewer agents judge contact sheets of the annotated video. Every serious finding is then checked
@@ -139,7 +159,7 @@ grappling/            the library
   report.py           failure-range analysis for stats.json
 run_pipeline.py       end-to-end run for one clip
 make_report.py        report generator
-tools/                audit sheets, audit summary, marker study, Claude Code workflow scripts
+tools/                ground-truth labelling and scoring, audit sheets, audit summary, marker study, workflow scripts
 tests/                milestone tests, generic per-clip checks, regressions pinned from audits
 test_clips/           the two input clips
 outputs/              clip 1 outputs (top level), outputs/clip2/, outputs/marker_study/
@@ -156,4 +176,4 @@ These are summarised here. The reports give frame ranges and evidence.
 * **Partial poses.** Skeletons on tangled bodies are fragments.
 * **Hidden athlete.** An athlete hidden behind the other can be lost. Clip 2 frames 137, 439-443 and 450-452 are examples, because the segmenter does not see that athlete.
 * **Fixed colours.** Gi colours are fixed to white vs blue. A referee dressed in white would not be excluded.
-* **No ground truth.** The `ground_truth.md` check is skipped, not passed.
+* **Ground truth is a sample.** About 1 frame in 7 is hand-labelled, by one person, with no second-labeller check.

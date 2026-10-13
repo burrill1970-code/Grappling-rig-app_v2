@@ -10,8 +10,8 @@ Clip: `test_clips/clip2.mp4`, 453 frames, ~32.6 fps, 13.9s. Identity labels: **A
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~67% of the clip each athlete's box is
   **not a detection**: it is the bounding box of that athlete's gi-coloured pixels inside a person mask. These boxes are
   low-confidence (capped at 0.40), often too small, and sometimes wrap around the other athlete.
-* Identity during contact rests on **gi colour alone**. There is **no ground truth** (`ground_truth.md`
-  is not in the repo), so none of the checks below is a ground-truth check.
+* Identity during contact rests on **gi colour alone**.
+* **Ground truth** (hand-labelled boxes on 65 regularly sampled frames, every 7th): the track sits on the right person for A on 61/65 visible frames (94%, 95% CI 85-98%) and for B on 63/65 (97%, 89-99%); wrong-body A 0, B 1; box covering both A 4, B 0; identity swaps on 0 frames. Box quality (IoU >= 0.5 with the labelled box): A 55%, B 55%. Details in the Ground truth section.
 * The evidence for quality is **vision audits**: model reviewers judged contact sheets of the annotated video and a second round of skeptic reviewers tried to refute every serious finding. That is an independent look, not ground truth, and the reviewers are language models. Results are in the Audits section.
 * Latest random-sample audit (2, 170 of 453 frames sampled; the table below says which build it measured, and later targeted re-checks are in the audit notes): 2 wrong_body verdicts; A judged correct on 164 and B on 156 of 170 frames (96% / 92%); the remaining verdicts are partial boxes (3 A, 5 B), lost-but-visible (0 A, 9 B) and unclear (1 A, 0 B). Sampling means this is an estimate, not a count over all frames.
 * Pose is partial: 390/453 frames carry a skeleton for A and 347/453 for B. On colour-derived frames only
@@ -52,6 +52,46 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 | lost | 0 | 9 | nothing usable; box and keypoints are null |
 
 Pose: A 390 frames (241 from colour-filtered shared detections), B 347 frames (198).
+
+## Ground truth (hand labels)
+
+A person drew a box around each athlete's whole visible body, or marked them hidden, on the raw frames (never seeing the tracker's output), using
+`tools/gt_label.py`. `tools/eval_ground_truth.py` scores each track box by IoU with that athlete's box ("own") and the other athlete's ("other"):
+correct = own IoU >= 0.5; partial = right person, poor box (0 < own IoU < 0.5, own >= other); wrong_body = other IoU > own IoU; off_target = on
+neither athlete; lost_but_visible = no track box for a visible athlete; hidden_ok / box_on_hidden = athlete labelled hidden, without / with a track box.
+When the athletes are tangled their labelled boxes overlap heavily and IoU cannot say which one a track box is on, so wherever the box touches both
+and favours its own by less than 0.15 IoU, a person answered which athlete it is on (`tools/gt_identity.py`, which does show the track box):
+right keeps the IoU verdict, wrong = wrong_body, both = covers_both; unanswered = undecided, left out of the rates.
+Colour-derived track boxes cover gi pixels only, so they score lower IoU than a whole-body label even on the right person: *partial* is their expected verdict.
+
+Regular sample: 65 frames (every 7th). One labeller, no second-labeller agreement check.
+
+| verdict | A (white) | B (blue) |
+|---|---|---|
+| correct | 36 | 36 |
+| partial | 25 | 27 |
+| wrong_body | 0 | 1 |
+| off_target | 0 | 0 |
+| covers_both | 4 | 0 |
+| undecided | 0 | 0 |
+| lost_but_visible | 0 | 1 |
+| hidden_ok | 0 | 0 |
+| box_on_hidden | 0 | 0 |
+
+Identity checked by a person: A 30, B 27 of the regular frames; undecided (left out of the rates): A 0, B 0.
+
+| on visible, decided frames | A | B |
+|---|---|---|
+| right person (correct + partial) | 61/65 (94%, CI 85-98%) | 63/65 (97%, CI 89-99%) |
+| correct box (IoU >= 0.5) | 55% (CI 43-67%) | 55% (CI 43-67%) |
+| box covers both athletes | 6% | 0% |
+| wrong body | 0% (CI 0-6%) | 2% (CI 0-8%) |
+| mean IoU (all visible frames) | 0.58 | 0.54 |
+| direct detections: right person / correct / mean IoU | 22/22 / 21/22 / 0.78 | 21/22 / 21/22 / 0.75 |
+| colour-derived boxes: right person / correct / mean IoU | 39/43 / 15/43 / 0.48 | 42/42 / 15/42 / 0.44 |
+
+**Errors on labelled frames:** A: 73 covers_both, 374 covers_both, 381 covers_both, 388 covers_both; B: 137 lost_but_visible (targeted), 395 wrong_body, 439 lost_but_visible (targeted), 440 lost_but_visible (targeted), 441 lost_but_visible (targeted), 442 lost_but_visible (targeted), 443 lost_but_visible (targeted), 450 lost_but_visible (targeted), 451 lost_but_visible, 452 lost_but_visible (targeted). **Identity swaps:** none.
+**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): 137 A correct / B lost_but_visible, 439 A partial / B lost_but_visible, 440 A partial / B lost_but_visible, 441 A partial / B lost_but_visible, 442 A correct / B lost_but_visible, 443 A correct / B lost_but_visible, 450 A correct / B lost_but_visible, 452 A correct / B lost_but_visible.
 
 ## Audits (vision, model-based; not ground truth)
 
@@ -119,11 +159,11 @@ Of these 1 frames, the latest audit sampled 1 and judged 0 wrong-body (none). Th
 * No swaps in clear segments: passes, but covers only the 22 clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate (74% of frames) and colour-box quality (30/118 bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.
-* Ground truth: ground_truth.md not found; the test is skipped, not passed.
+* Ground truth: labels in `outputs/clip2/ground_truth.json` are checked for completeness and scored; the numbers are measurements, with no pass/fail floor yet.
 
 ## Outputs
 
 * `outputs/clip2/annotated.mp4`: A red, B green. Solid box = detected, dashed = colour-derived. HUD shows each athlete's status every frame.
 * `outputs/clip2/tracks.json`: per frame, per athlete: status, box, confidence, 17 keypoints (name, x, y, conf) or null, pose source, note.
 * `outputs/clip2/stats.json` (and `audit_summary.json`, `audit*_results.json` where audits were run): the numbers and evidence used here.
-* Regenerate: `python run_pipeline.py --clip test_clips/clip2.mp4 --out outputs/clip2 && python tools/summarise_audits.py --out outputs/clip2 && python make_report.py --clip test_clips/clip2.mp4 --out outputs/clip2 --report outputs/clip2/report.md`.
+* Regenerate: `python run_pipeline.py --clip test_clips/clip2.mp4 --out outputs/clip2 && python tools/summarise_audits.py --out outputs/clip2 && python tools/eval_ground_truth.py --out outputs/clip2 && python make_report.py --clip test_clips/clip2.mp4 --out outputs/clip2 --report outputs/clip2/report.md`.

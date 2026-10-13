@@ -10,8 +10,8 @@ Clip: `test_clips/clip.mp4`, 535 frames, ~31.6 fps, 16.9s. Identity labels: **A 
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~73% of the clip each athlete's box is
   **not a detection**: it is the bounding box of that athlete's gi-coloured pixels inside a person mask. These boxes are
   low-confidence (capped at 0.40), often too small, and sometimes wrap around the other athlete.
-* Identity during contact rests on **gi colour alone**. There is **no ground truth** (`ground_truth.md`
-  is not in the repo), so none of the checks below is a ground-truth check.
+* Identity during contact rests on **gi colour alone**.
+* **Ground truth** (hand-labelled boxes on 76 regularly sampled frames, every 7th): the track sits on the right person for A on 76/76 visible frames (100%, 95% CI 95-100%) and for B on 75/76 (99%, 93-100%); wrong-body A 0, B 1; box covering both A 0, B 0; identity swaps on 0 frames. Box quality (IoU >= 0.5 with the labelled box): A 49%, B 49%. Details in the Ground truth section.
 * The evidence for quality is **vision audits**: model reviewers judged contact sheets of the annotated video and a second round of skeptic reviewers tried to refute every serious finding. That is an independent look, not ground truth, and the reviewers are language models. Results are in the Audits section.
 * Latest random-sample audit (3, 210 of 535 frames sampled; the table below says which build it measured, and later targeted re-checks are in the audit notes): 0 wrong_body verdicts; A judged correct on 199 and B on 199 of 210 frames (95% / 95%); the remaining verdicts are partial boxes (8 A, 11 B), lost-but-visible (3 A, 0 B) and unclear (0 A, 0 B). Sampling means this is an estimate, not a count over all frames.
 * Pose is partial: 371/535 frames carry a skeleton for A and 424/535 for B. On colour-derived frames only
@@ -50,6 +50,46 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 | lost | 0 | 0 | nothing usable; box and keypoints are null |
 
 Pose: A 371 frames (224 from colour-filtered shared detections), B 424 frames (289).
+
+## Ground truth (hand labels)
+
+A person drew a box around each athlete's whole visible body, or marked them hidden, on the raw frames (never seeing the tracker's output), using
+`tools/gt_label.py`. `tools/eval_ground_truth.py` scores each track box by IoU with that athlete's box ("own") and the other athlete's ("other"):
+correct = own IoU >= 0.5; partial = right person, poor box (0 < own IoU < 0.5, own >= other); wrong_body = other IoU > own IoU; off_target = on
+neither athlete; lost_but_visible = no track box for a visible athlete; hidden_ok / box_on_hidden = athlete labelled hidden, without / with a track box.
+When the athletes are tangled their labelled boxes overlap heavily and IoU cannot say which one a track box is on, so wherever the box touches both
+and favours its own by less than 0.15 IoU, a person answered which athlete it is on (`tools/gt_identity.py`, which does show the track box):
+right keeps the IoU verdict, wrong = wrong_body, both = covers_both; unanswered = undecided, left out of the rates.
+Colour-derived track boxes cover gi pixels only, so they score lower IoU than a whole-body label even on the right person: *partial* is their expected verdict.
+
+Regular sample: 76 frames (every 7th). One labeller, no second-labeller agreement check.
+
+| verdict | A (white) | B (blue) |
+|---|---|---|
+| correct | 37 | 37 |
+| partial | 39 | 38 |
+| wrong_body | 0 | 1 |
+| off_target | 0 | 0 |
+| covers_both | 0 | 0 |
+| undecided | 0 | 0 |
+| lost_but_visible | 0 | 0 |
+| hidden_ok | 0 | 0 |
+| box_on_hidden | 0 | 0 |
+
+Identity checked by a person: A 18, B 16 of the regular frames; undecided (left out of the rates): A 0, B 0.
+
+| on visible, decided frames | A | B |
+|---|---|---|
+| right person (correct + partial) | 76/76 (100%, CI 95-100%) | 75/76 (99%, CI 93-100%) |
+| correct box (IoU >= 0.5) | 49% (CI 38-60%) | 49% (CI 38-60%) |
+| box covers both athletes | 0% | 0% |
+| wrong body | 0% (CI 0-5%) | 1% (CI 0-7%) |
+| mean IoU (all visible frames) | 0.49 | 0.52 |
+| direct detections: right person / correct / mean IoU | 20/20 / 20/20 / 0.73 | 19/19 / 19/19 / 0.78 |
+| colour-derived boxes: right person / correct / mean IoU | 56/56 / 17/56 / 0.40 | 56/57 / 18/57 / 0.44 |
+
+**Errors on labelled frames:** A: none; B: 227 wrong_body. **Identity swaps:** none.
+**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): 140 A partial / B correct, 142 A partial / B correct, 308 A partial / B partial.
 
 ## Audits (vision, model-based; not ground truth)
 
@@ -110,11 +150,11 @@ Of these 8 frames, the latest audit sampled 8 and judged 0 wrong-body (none). Th
 * No swaps in clear segments: passes, but covers only the 77 clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate (59% of frames) and colour-box quality (14/156 bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.
-* Ground truth: ground_truth.md not found; the test is skipped, not passed.
+* Ground truth: labels in `outputs/ground_truth.json` are checked for completeness and scored; the numbers are measurements, with no pass/fail floor yet.
 
 ## Outputs
 
 * `outputs/annotated.mp4`: A red, B green. Solid box = detected, dashed = colour-derived. HUD shows each athlete's status every frame.
 * `outputs/tracks.json`: per frame, per athlete: status, box, confidence, 17 keypoints (name, x, y, conf) or null, pose source, note.
 * `outputs/stats.json` (and `audit_summary.json`, `audit*_results.json` where audits were run): the numbers and evidence used here.
-* Regenerate: `python run_pipeline.py --clip test_clips/clip.mp4 --out outputs && python tools/summarise_audits.py --out outputs && python make_report.py --clip test_clips/clip.mp4 --out outputs --report report.md`.
+* Regenerate: `python run_pipeline.py --clip test_clips/clip.mp4 --out outputs && python tools/summarise_audits.py --out outputs && python tools/eval_ground_truth.py --out outputs && python make_report.py --clip test_clips/clip.mp4 --out outputs --report report.md`.

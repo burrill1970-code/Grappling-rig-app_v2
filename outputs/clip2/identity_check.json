@@ -1,0 +1,172 @@
+{
+ "video": "test_clips/clip2.mp4",
+ "question": "is this track box on the named athlete?",
+ "answers": {
+  "right": "on that athlete",
+  "wrong": "on the other athlete",
+  "both": "covers both about equally"
+ },
+ "frames": {
+  "38": {
+   "B": "right"
+  },
+  "45": {
+   "B": "right"
+  },
+  "52": {
+   "B": "right"
+  },
+  "59": {
+   "A": "right"
+  },
+  "66": {
+   "A": "right"
+  },
+  "73": {
+   "A": "both"
+  },
+  "136": {
+   "A": "right",
+   "B": "right"
+  },
+  "137": {
+   "A": "right"
+  },
+  "178": {
+   "B": "right"
+  },
+  "185": {
+   "A": "right",
+   "B": "right"
+  },
+  "192": {
+   "B": "right"
+  },
+  "199": {
+   "A": "right",
+   "B": "right"
+  },
+  "206": {
+   "A": "right"
+  },
+  "213": {
+   "B": "right"
+  },
+  "220": {
+   "A": "right",
+   "B": "right"
+  },
+  "227": {
+   "A": "right"
+  },
+  "234": {
+   "A": "right",
+   "B": "right"
+  },
+  "241": {
+   "A": "right",
+   "B": "right"
+  },
+  "248": {
+   "A": "right"
+  },
+  "283": {
+   "A": "right",
+   "B": "right"
+  },
+  "290": {
+   "A": "right",
+   "B": "right"
+  },
+  "297": {
+   "A": "right"
+  },
+  "304": {
+   "A": "right",
+   "B": "right"
+  },
+  "311": {
+   "A": "right"
+  },
+  "318": {
+   "A": "right"
+  },
+  "325": {
+   "A": "right",
+   "B": "right"
+  },
+  "332": {
+   "A": "right"
+  },
+  "339": {
+   "A": "right",
+   "B": "right"
+  },
+  "353": {
+   "B": "right"
+  },
+  "367": {
+   "A": "right",
+   "B": "right"
+  },
+  "374": {
+   "A": "both",
+   "B": "right"
+  },
+  "381": {
+   "A": "both",
+   "B": "right"
+  },
+  "388": {
+   "A": "both",
+   "B": "right"
+  },
+  "395": {
+   "A": "right",
+   "B": "wrong"
+  },
+  "402": {
+   "A": "right"
+  },
+  "409": {
+   "A": "right"
+  },
+  "416": {
+   "B": "right"
+  },
+  "423": {
+   "B": "right"
+  },
+  "430": {
+   "B": "right"
+  },
+  "439": {
+   "A": "right"
+  },
+  "440": {
+   "A": "right"
+  },
+  "441": {
+   "A": "right"
+  },
+  "442": {
+   "A": "right"
+  },
+  "443": {
+   "A": "right"
+  },
+  "444": {
+   "A": "right",
+   "B": "right"
+  },
+  "450": {
+   "A": "right"
+  },
+  "451": {
+   "A": "right"
+  },
+  "452": {
+   "A": "right"
+  }
+ }
+}

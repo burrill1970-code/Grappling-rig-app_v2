@@ -55,12 +55,5 @@ def test_every_long_gap_is_reported(tracked):
 
 def test_report_states_failures():
     text = Path("report.md").read_text().lower()
-    for needle in ("clear", "colour", "lost", "ground_truth.md", "failures"):
+    for needle in ("clear", "colour", "lost", "ground_truth", "failures"):
         assert needle in text
-
-
-def test_ground_truth_if_present():
-    gt = Path("ground_truth.md")
-    if not gt.exists():
-        pytest.skip("ground_truth.md not present: nothing to check (reported as skipped, not passed)")
-    pytest.fail("ground_truth.md exists but its format is undefined; parser not written")
