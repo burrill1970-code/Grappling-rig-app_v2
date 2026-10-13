@@ -99,8 +99,9 @@ Clip: `{args.clip}`, {n} frames, ~{fps:.1f} fps, {n / fps:.1f}s. Identity labels
   Only {s['clear_n']} frames ({100 * s['clear_n'] / n:.0f}%) are *clear* (both athletes directly detected and not overlapping):
   frames {fmt(s['clear'])}. **Only on those frames is identity independently verifiable by separation.**
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~{colour_pct:.0f}% of the clip each athlete's box is
-  **not a detection**: it is the bounding box of that athlete's gi-coloured pixels inside a person mask. These boxes are
-  low-confidence (capped at 0.40), often too small, and sometimes wrap around the other athlete.
+  **not a detection**: it is built from that athlete's gi-coloured pixels inside a person mask, then grown over the rest of the
+  body (head, hands, feet) by the person-mask pixels nearer that gi than the other one. These boxes are low-confidence (capped at 0.40);
+  when the athletes are wrapped together they often cover both, and the growth can overreach onto the other athlete.
 * Identity during contact rests on **gi colour alone**.
 {gt_bullet}
 {audit_bullets}* Pose is partial: {s['pose']['A']}/{n} frames carry a skeleton for A and {s['pose']['B']}/{n} for B. On colour-derived frames only
@@ -121,7 +122,9 @@ Per frame, athlete candidates are matched to A/B by Hungarian assignment. Primar
 reference plus a white/blue class prior (class taken from all gi pixels in the box). Secondary cost: distance to the constant-velocity predicted
 box. Motion state resets at shot cuts. When one box covers both athletes, or an athlete is missed, that athlete's box is the bounding box of its
 gi colour inside the person mask (referee's upper body removed; colour boxes must sit on the mat and be at least 40x30 px). If the segmenter
-missed a person, the detector box stands in for the mask. The search widens in steps (near last box, other athlete's surroundings, whole mat); white blobs wholly enclosed by the blue gi (back patches) are not counted as A, and a last fallback unions all blobs of an athlete's colour in the region.
+missed a person, the detector box stands in for the mask. The reported box is then grown from that gi box over the athlete's skin, hair and
+limbs: person-mask pixels nearer this athlete's gi than the other's, within half the gi box's longer side (setting chosen on clip 1, checked once on
+clip 2). Tracking itself still runs on the gi box, which `tracks.json` keeps as `gi_box`. The search widens in steps (near last box, other athlete's surroundings, whole mat); white blobs wholly enclosed by the blue gi (back patches) are not counted as A, and a last fallback unions all blobs of an athlete's colour in the region.
 The referee is a third, hidden identity: his appearance is learned online from strict-dark detections and any candidate that matches that gallery clearly better than A or B is set aside before assignment.
 Appearance markers beyond colour (gradients/HOG, texture, colour profile, part-based colour, pose shape, a pretrained re-ID embedding, motion/context) were evaluated and none beat the colour histogram; see `outputs/marker_study/REPORT.md`.
 This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly two athletes and a colour cue it was simpler to constrain directly.
@@ -131,8 +134,8 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 | status | A (white) | B (blue) | meaning |
 |---|---|---|---|
 | detected | {c['A']['detected']} | {c['B']['detected']} | own detector box and pose |
-| color_split | {c['A']['color_split']} | {c['B']['color_split']} | detector merged the pair; box from gi-colour pixels (conf <= 0.40) |
-| color_recovered | {c['A']['color_recovered']} | {c['B']['color_recovered']} | detector missed the athlete; box from gi-colour pixels (conf <= 0.40) |
+| color_split | {c['A']['color_split']} | {c['B']['color_split']} | detector merged the pair; box from gi-colour pixels, grown over the body (conf <= 0.40) |
+| color_recovered | {c['A']['color_recovered']} | {c['B']['color_recovered']} | detector missed the athlete; box from gi-colour pixels, grown over the body (conf <= 0.40) |
 | lost | {c['A']['lost']} | {c['B']['lost']} | nothing usable; box and keypoints are null |
 
 Pose: A {s['pose']['A']} frames ({s['pose_shared']['A']} from colour-filtered shared detections), B {s['pose']['B']} frames ({s['pose_shared']['B']}).
@@ -237,7 +240,7 @@ L.append(f"""
 ## Known failures and limits (not fixed)
 
 1. The detector merges tangled athletes into one box on most contact frames (only {c['A']['detected']} A / {c['B']['detected']} B frames are direct detections; two athlete-like detector boxes exist on {100 * s['two_athlete_frac']:.0f}% of frames, and some of those are duplicate boxes on the same pair).
-2. Colour-derived boxes are bounding boxes of gi pixels. They miss heads, limbs and skin and can wrap around the other athlete: {s.get('colour_box_bad', '?')} of {s.get('colour_box_total', '?')} sampled colour boxes ({100 * s.get('colour_box_bad', 0) / max(s.get('colour_box_total', 1), 1):.0f}%) contain more of the other athlete's colour than their own.
+2. Colour-derived boxes start from gi pixels and are grown over the body by distance to each athlete's gi; where the athletes are wrapped together the grown box often covers both, and it can overreach onto the other athlete where a limb of one lies nearer the other's gi (see the ground-truth errors). The underlying gi box can wrap around the other athlete: {s.get('colour_box_bad', '?')} of {s.get('colour_box_total', '?')} sampled gi boxes ({100 * s.get('colour_box_bad', 0) / max(s.get('colour_box_total', 1), 1):.0f}%) contain more of the other athlete's colour than their own.
 3. Poses on tangled bodies are poor and fragmentary; the colour filter only drops keypoints it can attribute, it does not make the rest correct.
 4. The colour classes assume white gi vs blue gi. Shadowed or blurred white falls back to looser thresholds (S<80), used only inside a person mask. A blue gi's white patches (collar, back label) can look like A. White ad boards and logos are rejected only by the person mask.
 5. Cuts are found by a colour-histogram jump (threshold 0.6); soft cuts are missed and motion state would carry over them. Colour does not identify *people* across cuts.

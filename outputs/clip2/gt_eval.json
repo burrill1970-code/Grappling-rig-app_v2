@@ -7,11 +7,11 @@
   "athletes": {
    "A": {
     "counts": {
-     "correct": 36,
-     "partial": 25,
+     "correct": 52,
+     "partial": 4,
      "wrong_body": 0,
      "off_target": 0,
-     "covers_both": 4,
+     "covers_both": 9,
      "undecided": 0,
      "lost_but_visible": 0,
      "hidden_ok": 0,
@@ -19,25 +19,25 @@
     },
     "visible": 65,
     "decided": 65,
-    "right_person": 61,
-    "right_person_rate": 0.9385,
+    "right_person": 56,
+    "right_person_rate": 0.8615,
     "right_person_ci95": [
-     0.8522,
-     0.9758
+     0.7573,
+     0.9254
     ],
-    "correct_rate": 0.5538,
+    "correct_rate": 0.8,
     "correct_ci95": [
-     0.4334,
-     0.6683
+     0.6873,
+     0.8792
     ],
     "wrong_body_rate": 0.0,
     "wrong_body_ci95": [
      0.0,
      0.0558
     ],
-    "covers_both_rate": 0.0615,
-    "id_checked": 30,
-    "mean_iou_visible": 0.5837,
+    "covers_both_rate": 0.1385,
+    "id_checked": 16,
+    "mean_iou_visible": 0.7088,
     "by_status": {
      "detected": {
       "n": 22,
@@ -47,20 +47,20 @@
      },
      "colour": {
       "n": 43,
-      "correct": 15,
-      "right_person": 39,
-      "mean_iou": 0.483
+      "correct": 31,
+      "right_person": 34,
+      "mean_iou": 0.6721
      }
     },
     "unsure": 0
    },
    "B": {
     "counts": {
-     "correct": 36,
-     "partial": 27,
-     "wrong_body": 1,
+     "correct": 51,
+     "partial": 11,
+     "wrong_body": 0,
      "off_target": 0,
-     "covers_both": 0,
+     "covers_both": 2,
      "undecided": 0,
      "lost_but_visible": 1,
      "hidden_ok": 0,
@@ -68,37 +68,37 @@
     },
     "visible": 65,
     "decided": 65,
-    "right_person": 63,
-    "right_person_rate": 0.9692,
+    "right_person": 62,
+    "right_person_rate": 0.9538,
     "right_person_ci95": [
-     0.8946,
-     0.9915
+     0.8729,
+     0.9842
     ],
-    "correct_rate": 0.5538,
+    "correct_rate": 0.7846,
     "correct_ci95": [
-     0.4334,
-     0.6683
+     0.6703,
+     0.8671
     ],
-    "wrong_body_rate": 0.0154,
+    "wrong_body_rate": 0.0,
     "wrong_body_ci95": [
-     0.0027,
-     0.0821
+     0.0,
+     0.0558
     ],
-    "covers_both_rate": 0.0,
-    "id_checked": 27,
-    "mean_iou_visible": 0.5419,
+    "covers_both_rate": 0.0308,
+    "id_checked": 12,
+    "mean_iou_visible": 0.6371,
     "by_status": {
      "detected": {
       "n": 22,
       "correct": 21,
-      "right_person": 21,
+      "right_person": 22,
       "mean_iou": 0.7534
      },
      "colour": {
       "n": 42,
-      "correct": 15,
-      "right_person": 42,
-      "mean_iou": 0.4441
+      "correct": 30,
+      "right_person": 40,
+      "mean_iou": 0.5913
      }
     },
     "unsure": 0
@@ -108,11 +108,61 @@
   "errors": {
    "A": [
     {
+     "frame": 59,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.5532,
+     "iou_other": 0.6171,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 66,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.5325,
+     "iou_other": 0.437,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
      "frame": 73,
      "kind": "regular",
      "verdict": "covers_both",
-     "iou": 0.3776,
-     "iou_other": 0.4318,
+     "iou": 0.5167,
+     "iou_other": 0.5509,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 136,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.6517,
+     "iou_other": 0.6636,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 137,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.6656,
+     "iou_other": 0.6397,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 220,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.4709,
+     "iou_other": 0.3878,
      "status": "color_split",
      "unsure": false,
      "id_checked": "both"
@@ -121,18 +171,8 @@
      "frame": 374,
      "kind": "regular",
      "verdict": "covers_both",
-     "iou": 0.5843,
-     "iou_other": 0.655,
-     "status": "color_split",
-     "unsure": false,
-     "id_checked": "both"
-    },
-    {
-     "frame": 381,
-     "kind": "regular",
-     "verdict": "covers_both",
-     "iou": 0.5147,
-     "iou_other": 0.4347,
+     "iou": 0.6604,
+     "iou_other": 0.7645,
      "status": "color_split",
      "unsure": false,
      "id_checked": "both"
@@ -141,14 +181,104 @@
      "frame": 388,
      "kind": "regular",
      "verdict": "covers_both",
-     "iou": 0.5311,
-     "iou_other": 0.5081,
+     "iou": 0.5554,
+     "iou_other": 0.5926,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 440,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.7882,
+     "iou_other": 0.642,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 441,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.8706,
+     "iou_other": 0.8473,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 442,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.7096,
+     "iou_other": 0.7393,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 443,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.7104,
+     "iou_other": 0.6647,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 444,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.7597,
+     "iou_other": 0.7823,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 450,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.7369,
+     "iou_other": 0.6314,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 451,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.6596,
+     "iou_other": 0.6226,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
+    {
+     "frame": 452,
+     "kind": "targeted",
+     "verdict": "covers_both",
+     "iou": 0.7576,
+     "iou_other": 0.6554,
      "status": "color_split",
      "unsure": false,
      "id_checked": "both"
     }
    ],
    "B": [
+    {
+     "frame": 38,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.6305,
+     "iou_other": 0.664,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
+    },
     {
      "frame": 137,
      "kind": "targeted",
@@ -160,14 +290,14 @@
      "id_checked": null
     },
     {
-     "frame": 395,
+     "frame": 192,
      "kind": "regular",
-     "verdict": "wrong_body",
-     "iou": 0.4042,
-     "iou_other": 0.4618,
-     "status": "detected",
+     "verdict": "covers_both",
+     "iou": 0.7089,
+     "iou_other": 0.5939,
+     "status": "color_split",
      "unsure": false,
-     "id_checked": "wrong"
+     "id_checked": "both"
     },
     {
      "frame": 439,
@@ -255,42 +385,42 @@
   "targeted": [
    {
     "frame": 137,
-    "A": "correct",
+    "A": "covers_both",
     "B": "lost_but_visible"
    },
    {
     "frame": 439,
-    "A": "partial",
+    "A": "correct",
     "B": "lost_but_visible"
    },
    {
     "frame": 440,
-    "A": "partial",
+    "A": "covers_both",
     "B": "lost_but_visible"
    },
    {
     "frame": 441,
-    "A": "partial",
+    "A": "covers_both",
     "B": "lost_but_visible"
    },
    {
     "frame": 442,
-    "A": "correct",
+    "A": "covers_both",
     "B": "lost_but_visible"
    },
    {
     "frame": 443,
-    "A": "correct",
+    "A": "covers_both",
     "B": "lost_but_visible"
    },
    {
     "frame": 450,
-    "A": "correct",
+    "A": "covers_both",
     "B": "lost_but_visible"
    },
    {
     "frame": 452,
-    "A": "correct",
+    "A": "covers_both",
     "B": "lost_but_visible"
    }
   ]
@@ -367,17 +497,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4204,
-    "iou_other": 0.0208,
+    "verdict": "correct",
+    "iou": 0.808,
+    "iou_other": 0.0791,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4716,
-    "iou_other": 0.1771,
+    "verdict": "correct",
+    "iou": 0.5355,
+    "iou_other": 0.2348,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -389,17 +519,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.2799,
-    "iou_other": 0.0065,
+    "verdict": "correct",
+    "iou": 0.5228,
+    "iou_other": 0.1064,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4662,
-    "iou_other": 0.2292,
+    "verdict": "correct",
+    "iou": 0.6349,
+    "iou_other": 0.3171,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -412,19 +542,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6607,
-    "iou_other": 0.3957,
+    "iou": 0.7368,
+    "iou_other": 0.5391,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4181,
-    "iou_other": 0.4401,
+    "verdict": "covers_both",
+    "iou": 0.6305,
+    "iou_other": 0.664,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "swap": false
   },
@@ -434,16 +564,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.58,
-    "iou_other": 0.3249,
+    "iou": 0.65,
+    "iou_other": 0.3975,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5738,
-    "iou_other": 0.6737,
+    "iou": 0.7074,
+    "iou_other": 0.6859,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -455,20 +585,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4961,
-    "iou_other": 0.2932,
+    "verdict": "correct",
+    "iou": 0.6277,
+    "iou_other": 0.3549,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.522,
-    "iou_other": 0.4783,
+    "iou": 0.7206,
+    "iou_other": 0.5576,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -477,17 +607,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4773,
-    "iou_other": 0.5464,
+    "verdict": "covers_both",
+    "iou": 0.5532,
+    "iou_other": 0.6171,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5862,
-    "iou_other": 0.301,
+    "iou": 0.7039,
+    "iou_other": 0.2894,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -499,17 +629,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4122,
-    "iou_other": 0.4437,
+    "verdict": "covers_both",
+    "iou": 0.5325,
+    "iou_other": 0.437,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5092,
-    "iou_other": 0.2597,
+    "iou": 0.5484,
+    "iou_other": 0.2696,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -522,16 +652,16 @@
    "unusable": false,
    "A": {
     "verdict": "covers_both",
-    "iou": 0.3776,
-    "iou_other": 0.4318,
+    "iou": 0.5167,
+    "iou_other": 0.5509,
     "status": "color_split",
     "unsure": false,
     "id_checked": "both"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6365,
-    "iou_other": 0.2111,
+    "iou": 0.8267,
+    "iou_other": 0.2594,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -565,17 +695,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3439,
-    "iou_other": 0.0496,
+    "verdict": "correct",
+    "iou": 0.6845,
+    "iou_other": 0.1505,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3707,
-    "iou_other": 0.0519,
+    "verdict": "correct",
+    "iou": 0.5497,
+    "iou_other": 0.0809,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -719,20 +849,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4124,
-    "iou_other": 0.4903,
+    "verdict": "covers_both",
+    "iou": 0.6517,
+    "iou_other": 0.6636,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.3549,
-    "iou_other": 0.2234,
+    "iou": 0.4631,
+    "iou_other": 0.2916,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -741,12 +871,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5399,
-    "iou_other": 0.6349,
+    "verdict": "covers_both",
+    "iou": 0.6656,
+    "iou_other": 0.6397,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -874,19 +1004,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6669,
-    "iou_other": 0.3581,
+    "iou": 0.7997,
+    "iou_other": 0.4472,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4651,
-    "iou_other": 0.4846,
+    "verdict": "correct",
+    "iou": 0.6749,
+    "iou_other": 0.5057,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -895,20 +1025,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4515,
-    "iou_other": 0.313,
+    "verdict": "correct",
+    "iou": 0.7553,
+    "iou_other": 0.418,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6655,
-    "iou_other": 0.5235,
+    "iou": 0.7731,
+    "iou_other": 0.5536,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -917,20 +1047,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4388,
-    "iou_other": 0.2817,
+    "verdict": "correct",
+    "iou": 0.6605,
+    "iou_other": 0.4265,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "correct",
-    "iou": 0.6179,
-    "iou_other": 0.5907,
+    "verdict": "covers_both",
+    "iou": 0.7089,
+    "iou_other": 0.5939,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "swap": false
   },
@@ -939,20 +1069,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4278,
-    "iou_other": 0.2866,
+    "verdict": "correct",
+    "iou": 0.7031,
+    "iou_other": 0.398,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.607,
-    "iou_other": 0.4572,
+    "iou": 0.7306,
+    "iou_other": 0.546,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -962,16 +1092,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1551,
-    "iou_other": 0.0867,
+    "iou": 0.346,
+    "iou_other": 0.1543,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6027,
-    "iou_other": 0.4148,
+    "iou": 0.7024,
+    "iou_other": 0.4693,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -984,19 +1114,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.7407,
-    "iou_other": 0.4021,
+    "iou": 0.7754,
+    "iou_other": 0.4912,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6148,
-    "iou_other": 0.6372,
+    "iou": 0.8237,
+    "iou_other": 0.614,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1005,17 +1135,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3969,
-    "iou_other": 0.3932,
+    "verdict": "covers_both",
+    "iou": 0.4709,
+    "iou_other": 0.3878,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5838,
-    "iou_other": 0.5739,
+    "iou": 0.6366,
+    "iou_other": 0.606,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1028,16 +1158,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6227,
-    "iou_other": 0.618,
+    "iou": 0.6536,
+    "iou_other": 0.6783,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6307,
-    "iou_other": 0.4319,
+    "iou": 0.6967,
+    "iou_other": 0.4391,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1050,16 +1180,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.565,
-    "iou_other": 0.4914,
+    "iou": 0.7307,
+    "iou_other": 0.6259,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5215,
-    "iou_other": 0.4316,
+    "iou": 0.6155,
+    "iou_other": 0.4725,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1071,20 +1201,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4607,
-    "iou_other": 0.5906,
+    "verdict": "correct",
+    "iou": 0.5144,
+    "iou_other": 0.6651,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3916,
-    "iou_other": 0.2736,
+    "verdict": "correct",
+    "iou": 0.5513,
+    "iou_other": 0.3192,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1094,16 +1224,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.3193,
-    "iou_other": 0.5184,
+    "iou": 0.4457,
+    "iou_other": 0.5972,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4617,
-    "iou_other": 0.2666,
+    "verdict": "correct",
+    "iou": 0.5803,
+    "iou_other": 0.3327,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1204,19 +1334,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5647,
-    "iou_other": 0.4793,
+    "iou": 0.7831,
+    "iou_other": 0.6325,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.301,
-    "iou_other": 0.1654,
+    "iou": 0.3311,
+    "iou_other": 0.1802,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1226,19 +1356,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6001,
-    "iou_other": 0.4566,
+    "iou": 0.8093,
+    "iou_other": 0.6086,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3472,
-    "iou_other": 0.2435,
+    "verdict": "correct",
+    "iou": 0.5686,
+    "iou_other": 0.2892,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1247,17 +1377,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.476,
-    "iou_other": 0.4037,
+    "verdict": "correct",
+    "iou": 0.6355,
+    "iou_other": 0.4307,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.4356,
-    "iou_other": 0.2107,
+    "iou": 0.4965,
+    "iou_other": 0.2469,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1269,17 +1399,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3824,
-    "iou_other": 0.4291,
+    "verdict": "correct",
+    "iou": 0.6204,
+    "iou_other": 0.548,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.3033,
-    "iou_other": 0.1999,
+    "iou": 0.3848,
+    "iou_other": 0.3552,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1292,16 +1422,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5584,
-    "iou_other": 0.5825,
+    "iou": 0.9157,
+    "iou_other": 0.629,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5097,
-    "iou_other": 0.3112,
+    "iou": 0.7557,
+    "iou_other": 0.5216,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1314,16 +1444,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5085,
-    "iou_other": 0.4873,
+    "iou": 0.782,
+    "iou_other": 0.5732,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4285,
-    "iou_other": 0.2606,
+    "verdict": "correct",
+    "iou": 0.7092,
+    "iou_other": 0.4313,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1335,20 +1465,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4378,
-    "iou_other": 0.5593,
+    "verdict": "correct",
+    "iou": 0.7906,
+    "iou_other": 0.6345,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4184,
-    "iou_other": 0.2732,
+    "verdict": "correct",
+    "iou": 0.6043,
+    "iou_other": 0.3946,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1357,17 +1487,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4535,
-    "iou_other": 0.5195,
+    "verdict": "correct",
+    "iou": 0.7382,
+    "iou_other": 0.5656,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6015,
-    "iou_other": 0.3375,
+    "iou": 0.74,
+    "iou_other": 0.3696,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1380,19 +1510,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5362,
-    "iou_other": 0.4687,
+    "iou": 0.8371,
+    "iou_other": 0.5433,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.2751,
-    "iou_other": 0.1936,
+    "iou": 0.4956,
+    "iou_other": 0.2784,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1424,16 +1554,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6671,
-    "iou_other": 0.3233,
+    "iou": 0.8955,
+    "iou_other": 0.4498,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.217,
-    "iou_other": 0.3551,
+    "iou": 0.2879,
+    "iou_other": 0.3883,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": "right"
@@ -1446,16 +1576,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5623,
-    "iou_other": 0.3413,
+    "iou": 0.7788,
+    "iou_other": 0.3284,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.496,
-    "iou_other": 0.2563,
+    "verdict": "correct",
+    "iou": 0.7675,
+    "iou_other": 0.2357,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1467,20 +1597,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4678,
-    "iou_other": 0.4031,
+    "verdict": "correct",
+    "iou": 0.644,
+    "iou_other": 0.4331,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4811,
-    "iou_other": 0.3417,
+    "verdict": "correct",
+    "iou": 0.6488,
+    "iou_other": 0.4608,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1490,16 +1620,16 @@
    "unusable": false,
    "A": {
     "verdict": "covers_both",
-    "iou": 0.5843,
-    "iou_other": 0.655,
+    "iou": 0.6604,
+    "iou_other": 0.7645,
     "status": "color_split",
     "unsure": false,
     "id_checked": "both"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.3439,
-    "iou_other": 0.2869,
+    "iou": 0.4588,
+    "iou_other": 0.3828,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1511,20 +1641,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "covers_both",
-    "iou": 0.5147,
-    "iou_other": 0.4347,
+    "verdict": "correct",
+    "iou": 0.6575,
+    "iou_other": 0.452,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "both"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3863,
-    "iou_other": 0.2882,
+    "verdict": "correct",
+    "iou": 0.5062,
+    "iou_other": 0.3463,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1534,16 +1664,16 @@
    "unusable": false,
    "A": {
     "verdict": "covers_both",
-    "iou": 0.5311,
-    "iou_other": 0.5081,
+    "iou": 0.5554,
+    "iou_other": 0.5926,
     "status": "color_split",
     "unsure": false,
     "id_checked": "both"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.306,
-    "iou_other": 0.2718,
+    "iou": 0.4407,
+    "iou_other": 0.3491,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1563,12 +1693,12 @@
     "id_checked": "right"
    },
    "B": {
-    "verdict": "wrong_body",
+    "verdict": "partial",
     "iou": 0.4042,
     "iou_other": 0.4618,
     "status": "detected",
     "unsure": false,
-    "id_checked": "wrong"
+    "id_checked": "right"
    },
    "swap": false
   },
@@ -1577,17 +1707,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3988,
-    "iou_other": 0.4061,
+    "verdict": "correct",
+    "iou": 0.8504,
+    "iou_other": 0.3579,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3452,
-    "iou_other": 0.1265,
+    "verdict": "correct",
+    "iou": 0.5,
+    "iou_other": 0.1832,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1599,17 +1729,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3712,
-    "iou_other": 0.4941,
+    "verdict": "correct",
+    "iou": 0.6653,
+    "iou_other": 0.5867,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.2805,
-    "iou_other": 0.1267,
+    "iou": 0.4808,
+    "iou_other": 0.2891,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1621,17 +1751,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4992,
-    "iou_other": 0.2101,
+    "verdict": "correct",
+    "iou": 0.6628,
+    "iou_other": 0.248,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3047,
-    "iou_other": 0.2808,
+    "verdict": "correct",
+    "iou": 0.581,
+    "iou_other": 0.4395,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1644,19 +1774,19 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.3255,
-    "iou_other": 0.1104,
+    "iou": 0.4508,
+    "iou_other": 0.1302,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3338,
-    "iou_other": 0.1916,
+    "verdict": "correct",
+    "iou": 0.6211,
+    "iou_other": 0.334,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1666,19 +1796,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5606,
-    "iou_other": 0.2545,
+    "iou": 0.6091,
+    "iou_other": 0.3589,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3978,
-    "iou_other": 0.2564,
+    "verdict": "correct",
+    "iou": 0.5614,
+    "iou_other": 0.3838,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1709,12 +1839,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4461,
-    "iou_other": 0.348,
+    "verdict": "correct",
+    "iou": 0.8143,
+    "iou_other": 0.6396,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1731,12 +1861,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4253,
-    "iou_other": 0.3655,
+    "verdict": "covers_both",
+    "iou": 0.7882,
+    "iou_other": 0.642,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1753,12 +1883,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4477,
-    "iou_other": 0.4708,
+    "verdict": "covers_both",
+    "iou": 0.8706,
+    "iou_other": 0.8473,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1775,12 +1905,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5706,
-    "iou_other": 0.5144,
+    "verdict": "covers_both",
+    "iou": 0.7096,
+    "iou_other": 0.7393,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1797,12 +1927,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5702,
-    "iou_other": 0.5954,
+    "verdict": "covers_both",
+    "iou": 0.7104,
+    "iou_other": 0.6647,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1819,17 +1949,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4674,
-    "iou_other": 0.4941,
+    "verdict": "covers_both",
+    "iou": 0.7597,
+    "iou_other": 0.7823,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.0664,
-    "iou_other": 0.0628,
+    "iou": 0.0808,
+    "iou_other": 0.0765,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1841,12 +1971,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5787,
-    "iou_other": 0.6191,
+    "verdict": "covers_both",
+    "iou": 0.7369,
+    "iou_other": 0.6314,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1863,12 +1993,12 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5953,
-    "iou_other": 0.5706,
+    "verdict": "covers_both",
+    "iou": 0.6596,
+    "iou_other": 0.6226,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",
@@ -1885,12 +2015,12 @@
    "kind": "targeted",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5689,
-    "iou_other": 0.6301,
+    "verdict": "covers_both",
+    "iou": 0.7576,
+    "iou_other": 0.6554,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
     "verdict": "lost_but_visible",

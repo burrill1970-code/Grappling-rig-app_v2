@@ -5,7 +5,8 @@
 Asked only for the boxes tools/eval_ground_truth.py marks as needing it (the box touches both labelled athletes
 and favours its own by less than ID_MARGIN IoU). Unlike tools/gt_label.py this page shows the tracker's box: the
 question is a yes/no check of that box, not a label drawn from scratch. One box per question, so the other
-athlete's box cannot sway the answer. Answers save to <out>/identity_check.json after every question.
+athlete's box cannot sway the answer. Answers save to <out>/identity_check.json after every question, each with the box it is about: if the tracker
+later changes that box, the answer no longer applies and the box is asked about again.
 """
 import argparse
 import json
@@ -16,7 +17,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from tools.eval_ground_truth import evaluate, needs_id_check  # noqa: E402
+from tools.eval_ground_truth import answer_for, evaluate, needs_id_check  # noqa: E402
 from tools.gt_label import CLIPS, CONTEXT, read_jpgs  # noqa: E402
 
 GI = {"A": "WHITE", "B": "BLUE"}
@@ -74,7 +75,7 @@ def make_handler(clips):
                     for t in c["tasks"]:
                         ctx = [t["frame"] + d for d in CONTEXT if (t["frame"] + d) in c["jpgs"]]
                         tasks.append(dict(t, clip=ci, video=c["video"], gi=GI[t["athlete"]], context=ctx,
-                                          answer=ans.get(str(t["frame"]), {}).get(t["athlete"])))
+                                          answer=answer_for(ans, t["frame"], t["athlete"], t["box"])))
                 return self.send(json.dumps(tasks).encode(), "application/json")
             if self.path.startswith("/img/"):
                 try:
@@ -92,7 +93,8 @@ def make_handler(clips):
                 return self.send(b"bad answer", "text/plain", 400)
             c = clips[int(body["clip"])]
             data = read_answers(c)
-            data["frames"].setdefault(str(int(body["frame"])), {})[body["athlete"]] = body["answer"]
+            task = next(t for t in c["tasks"] if t["frame"] == int(body["frame"]) and t["athlete"] == body["athlete"])
+            data["frames"].setdefault(str(task["frame"]), {})[task["athlete"]] = dict(answer=body["answer"], box=task["box"])
             p = answers_path(c)
             tmp = p.with_suffix(".json.tmp")
             tmp.write_text(json.dumps(data, indent=1))

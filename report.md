@@ -8,13 +8,14 @@ Clip: `test_clips/clip.mp4`, 535 frames, ~31.6 fps, 16.9s. Identity labels: **A 
   Only 77 frames (14%) are *clear* (both athletes directly detected and not overlapping):
   frames 0-11, 17-80, 145. **Only on those frames is identity independently verifiable by separation.**
 * Outside the clear frames the athletes overlap or the detector merges them into one box, so for ~73% of the clip each athlete's box is
-  **not a detection**: it is the bounding box of that athlete's gi-coloured pixels inside a person mask. These boxes are
-  low-confidence (capped at 0.40), often too small, and sometimes wrap around the other athlete.
+  **not a detection**: it is built from that athlete's gi-coloured pixels inside a person mask, then grown over the rest of the
+  body (head, hands, feet) by the person-mask pixels nearer that gi than the other one. These boxes are low-confidence (capped at 0.40);
+  when the athletes are wrapped together they often cover both, and the growth can overreach onto the other athlete.
 * Identity during contact rests on **gi colour alone**.
-* **Ground truth** (hand-labelled boxes on 76 regularly sampled frames, every 7th): the track sits on the right person for A on 76/76 visible frames (100%, 95% CI 95-100%) and for B on 75/76 (99%, 93-100%); wrong-body A 0, B 1; box covering both A 0, B 0; identity swaps on 0 frames. Box quality (IoU >= 0.5 with the labelled box): A 49%, B 49%. Details in the Ground truth section.
+* **Ground truth** (hand-labelled boxes on 76 regularly sampled frames, every 7th): the track sits on the right person for A on 74/76 visible frames (97%, 95% CI 91-99%) and for B on 76/76 (100%, 95-100%); wrong-body A 0, B 0; box covering both A 2, B 0; identity swaps on 0 frames. Box quality (IoU >= 0.5 with the labelled box): A 83%, B 91%. Details in the Ground truth section.
 * The evidence for quality is **vision audits**: model reviewers judged contact sheets of the annotated video and a second round of skeptic reviewers tried to refute every serious finding. That is an independent look, not ground truth, and the reviewers are language models. Results are in the Audits section.
 * Latest random-sample audit (3, 210 of 535 frames sampled; the table below says which build it measured, and later targeted re-checks are in the audit notes): 0 wrong_body verdicts; A judged correct on 199 and B on 199 of 210 frames (95% / 95%); the remaining verdicts are partial boxes (8 A, 11 B), lost-but-visible (3 A, 0 B) and unclear (0 A, 0 B). Sampling means this is an estimate, not a count over all frames.
-* Pose is partial: 371/535 frames carry a skeleton for A and 424/535 for B. On colour-derived frames only
+* Pose is partial: 373/535 frames carry a skeleton for A and 424/535 for B. On colour-derived frames only
   keypoints whose own pixels carry that athlete's gi colour and that lie inside the athlete's box are kept, so skeletons are fragments.
 
 ## Clip notes (affect results)
@@ -35,7 +36,9 @@ Per frame, athlete candidates are matched to A/B by Hungarian assignment. Primar
 reference plus a white/blue class prior (class taken from all gi pixels in the box). Secondary cost: distance to the constant-velocity predicted
 box. Motion state resets at shot cuts. When one box covers both athletes, or an athlete is missed, that athlete's box is the bounding box of its
 gi colour inside the person mask (referee's upper body removed; colour boxes must sit on the mat and be at least 40x30 px). If the segmenter
-missed a person, the detector box stands in for the mask. The search widens in steps (near last box, other athlete's surroundings, whole mat); white blobs wholly enclosed by the blue gi (back patches) are not counted as A, and a last fallback unions all blobs of an athlete's colour in the region.
+missed a person, the detector box stands in for the mask. The reported box is then grown from that gi box over the athlete's skin, hair and
+limbs: person-mask pixels nearer this athlete's gi than the other's, within half the gi box's longer side (setting chosen on clip 1, checked once on
+clip 2). Tracking itself still runs on the gi box, which `tracks.json` keeps as `gi_box`. The search widens in steps (near last box, other athlete's surroundings, whole mat); white blobs wholly enclosed by the blue gi (back patches) are not counted as A, and a last fallback unions all blobs of an athlete's colour in the region.
 The referee is a third, hidden identity: his appearance is learned online from strict-dark detections and any candidate that matches that gallery clearly better than A or B is set aside before assignment.
 Appearance markers beyond colour (gradients/HOG, texture, colour profile, part-based colour, pose shape, a pretrained re-ID embedding, motion/context) were evaluated and none beat the colour histogram; see `outputs/marker_study/REPORT.md`.
 This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly two athletes and a colour cue it was simpler to constrain directly.
@@ -44,12 +47,12 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 
 | status | A (white) | B (blue) | meaning |
 |---|---|---|---|
-| detected | 147 | 135 | own detector box and pose |
-| color_split | 373 | 374 | detector merged the pair; box from gi-colour pixels (conf <= 0.40) |
-| color_recovered | 15 | 26 | detector missed the athlete; box from gi-colour pixels (conf <= 0.40) |
+| detected | 147 | 137 | own detector box and pose |
+| color_split | 371 | 372 | detector merged the pair; box from gi-colour pixels, grown over the body (conf <= 0.40) |
+| color_recovered | 17 | 26 | detector missed the athlete; box from gi-colour pixels, grown over the body (conf <= 0.40) |
 | lost | 0 | 0 | nothing usable; box and keypoints are null |
 
-Pose: A 371 frames (224 from colour-filtered shared detections), B 424 frames (289).
+Pose: A 373 frames (226 from colour-filtered shared detections), B 424 frames (287).
 
 ## Ground truth (hand labels)
 
@@ -66,30 +69,30 @@ Regular sample: 76 frames (every 7th). One labeller, no second-labeller agreemen
 
 | verdict | A (white) | B (blue) |
 |---|---|---|
-| correct | 37 | 37 |
-| partial | 39 | 38 |
-| wrong_body | 0 | 1 |
+| correct | 63 | 69 |
+| partial | 11 | 7 |
+| wrong_body | 0 | 0 |
 | off_target | 0 | 0 |
-| covers_both | 0 | 0 |
+| covers_both | 2 | 0 |
 | undecided | 0 | 0 |
 | lost_but_visible | 0 | 0 |
 | hidden_ok | 0 | 0 |
 | box_on_hidden | 0 | 0 |
 
-Identity checked by a person: A 18, B 16 of the regular frames; undecided (left out of the rates): A 0, B 0.
+Identity checked by a person: A 7, B 4 of the regular frames; undecided (left out of the rates): A 0, B 0.
 
 | on visible, decided frames | A | B |
 |---|---|---|
-| right person (correct + partial) | 76/76 (100%, CI 95-100%) | 75/76 (99%, CI 93-100%) |
-| correct box (IoU >= 0.5) | 49% (CI 38-60%) | 49% (CI 38-60%) |
-| box covers both athletes | 0% | 0% |
-| wrong body | 0% (CI 0-5%) | 1% (CI 0-7%) |
-| mean IoU (all visible frames) | 0.49 | 0.52 |
-| direct detections: right person / correct / mean IoU | 20/20 / 20/20 / 0.73 | 19/19 / 19/19 / 0.78 |
-| colour-derived boxes: right person / correct / mean IoU | 56/56 / 17/56 / 0.40 | 56/57 / 18/57 / 0.44 |
+| right person (correct + partial) | 74/76 (97%, CI 91-99%) | 76/76 (100%, CI 95-100%) |
+| correct box (IoU >= 0.5) | 83% (CI 73-90%) | 91% (CI 82-95%) |
+| box covers both athletes | 3% | 0% |
+| wrong body | 0% (CI 0-5%) | 0% (CI 0-5%) |
+| mean IoU (all visible frames) | 0.65 | 0.67 |
+| direct detections: right person / correct / mean IoU | 20/20 / 20/20 / 0.73 | 20/20 / 20/20 / 0.77 |
+| colour-derived boxes: right person / correct / mean IoU | 54/56 / 43/56 / 0.63 | 56/56 / 49/56 / 0.63 |
 
-**Errors on labelled frames:** A: none; B: 227 wrong_body. **Identity swaps:** none.
-**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): 140 A partial / B correct, 142 A partial / B correct, 308 A partial / B partial.
+**Errors on labelled frames:** A: 262 covers_both, 283 covers_both; B: none. **Identity swaps:** none.
+**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): 140 A partial / B correct, 142 A partial / B correct, 308 A partial / B correct.
 
 ## Audits (vision, model-based; not ground truth)
 
@@ -124,7 +127,7 @@ Bugs the audits found that I had missed by eye, now fixed and pinned by `tests/t
 
 **Identity from colour only (`color_split` / `color_recovered`).**
 * A: 90-91, 95, 98, 102-118, 120-129, 131-144, 152-153, 156-160, 162-181, 185, 188, 191-309, 311-344, 346-397, 399-412, 421-434, 439-443, 445-462, 465-472, 482, 484-488, 490-502, 504-534
-* B: 90-91, 95, 98, 102-118, 120-129, 131-144, 152-153, 156-160, 162-181, 185, 188, 191-344, 346-397, 399-412, 415-416, 419-434, 439-443, 445-450, 453-462, 464-474, 476-482, 484-488, 490-502, 504-534
+* B: 90-91, 95, 98, 102-118, 120-129, 131-142, 152-153, 156-160, 162-181, 185, 188, 191-344, 346-397, 399-412, 415-416, 419-434, 439-443, 445-450, 453-462, 464-474, 476-482, 484-488, 490-502, 504-534
 
 **Confidence dropped (direct detections with detector confidence < 0.5).**
 * A: 84-85, 145, 147, 154-155, 184, 186-187, 189-190, 310, 413, 416-417, 436-438, 463-464, 473-474, 479, 481, 483, 503
@@ -135,8 +138,8 @@ Of these 8 frames, the latest audit sampled 8 and judged 0 wrong-body (none). Th
 
 ## Known failures and limits (not fixed)
 
-1. The detector merges tangled athletes into one box on most contact frames (only 147 A / 135 B frames are direct detections; two athlete-like detector boxes exist on 59% of frames, and some of those are duplicate boxes on the same pair).
-2. Colour-derived boxes are bounding boxes of gi pixels. They miss heads, limbs and skin and can wrap around the other athlete: 14 of 156 sampled colour boxes (9%) contain more of the other athlete's colour than their own.
+1. The detector merges tangled athletes into one box on most contact frames (only 147 A / 137 B frames are direct detections; two athlete-like detector boxes exist on 59% of frames, and some of those are duplicate boxes on the same pair).
+2. Colour-derived boxes start from gi pixels and are grown over the body by distance to each athlete's gi; where the athletes are wrapped together the grown box often covers both, and it can overreach onto the other athlete where a limb of one lies nearer the other's gi (see the ground-truth errors). The underlying gi box can wrap around the other athlete: 14 of 156 sampled gi boxes (9%) contain more of the other athlete's colour than their own.
 3. Poses on tangled bodies are poor and fragmentary; the colour filter only drops keypoints it can attribute, it does not make the rest correct.
 4. The colour classes assume white gi vs blue gi. Shadowed or blurred white falls back to looser thresholds (S<80), used only inside a person mask. A blue gi's white patches (collar, back label) can look like A. White ad boards and logos are rejected only by the person mask.
 5. Cuts are found by a colour-histogram jump (threshold 0.6); soft cuts are missed and motion state would carry over them. Colour does not identify *people* across cuts.

@@ -16,7 +16,7 @@ audits by language-model reviewers.
 
 ## Setup
 
-Python 3.11. A GPU is not needed.
+Python 3.11. A GPU is not needed. `ffmpeg` is optional: without it the annotated video is saved in OpenCV's larger mp4v format.
 
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
@@ -48,7 +48,7 @@ python run_pipeline.py --clip test_clips/clip2.mp4 --out outputs/clip2   # any c
 Each run writes these files to the output folder:
 
 * `annotated.mp4`: A in red, B in green. A solid box is a direct detection, a dashed box is derived from gi colour. The status of each athlete is shown in the top-left corner on every frame.
-* `tracks.json`: per frame and per athlete: status, box, confidence, 17 COCO keypoints (or null) and pose source.
+* `tracks.json`: per frame and per athlete: status, box, `gi_box` (the gi-colour box a colour-derived box grew from), confidence, 17 COCO keypoints (or null) and pose source.
 * `stats.json`: lost, low-confidence and colour-only frame ranges, plus counts.
 * Caches: `raw_dets.npz`, `person_masks.npz` and `person_masks_x.npz`. When they exist, the models are not re-run. Delete them to recompute.
 
@@ -153,7 +153,7 @@ grappling/            the library
   color.py            torso region and colour histograms
   athletes.py         athlete candidates (drops crowd and referee), colour class per box
   tracker.py          two-athlete tracker, merged-box handling, colour recovery, referee identity
-  occlusion.py        gi-colour boxes when the detector merges or misses an athlete
+  occlusion.py        gi-colour boxes when the detector merges or misses an athlete, grown over the whole body
   pose.py             keypoints per athlete (own detection, or colour-attributed fragments)
   render.py           annotated video
   report.py           failure-range analysis for stats.json
@@ -172,7 +172,7 @@ outputs/              clip 1 outputs (top level), outputs/clip2/, outputs/marker
 
 These are summarised here. The reports give frame ranges and evidence.
 
-* **Contact frames.** When the athletes touch, which is most of both clips, the detector often returns one box for both. Each athlete's box is then derived from gi-colour pixels, so it is low-confidence and often partial.
+* **Contact frames.** When the athletes touch, which is most of both clips, the detector often returns one box for both. Each athlete's box is then derived from gi-colour pixels and grown over the body, so it is low-confidence. When the athletes are wrapped together it often covers both, and it can overreach onto the other athlete.
 * **Partial poses.** Skeletons on tangled bodies are fragments.
 * **Hidden athlete.** An athlete hidden behind the other can be lost. Clip 2 frames 137, 439-443 and 450-452 are examples, because the segmenter does not see that athlete.
 * **Fixed colours.** Gi colours are fixed to white vs blue. A referee dressed in white would not be excluded.

@@ -64,7 +64,7 @@ def analyse(results, frames, raw_dets, cuts, person_masks=None):
                 r = results[f][i]
                 if r["status"] not in ("color_split", "color_recovered"):
                     continue
-                x1, y1, x2, y2 = [int(v) for v in r["box"]]
+                x1, y1, x2, y2 = [int(v) for v in (r.get("gi_box") or r["box"])]  # the colour evidence, not the body fit
                 w, b = colour_masks(cv2.cvtColor(frames[f][y1:y2, x1:x2], cv2.COLOR_BGR2HSV), white_v=SHADOW_WHITE_V)
                 pm = person_masks[f][y1:y2, x1:x2]
                 nw, nb = int((w.astype(bool) & pm).sum()), int((b.astype(bool) & pm).sum())

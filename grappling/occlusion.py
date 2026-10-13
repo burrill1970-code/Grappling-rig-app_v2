@@ -206,3 +206,41 @@ def keypoint_owners(frame, kp, person, patch=5, min_share=0.75):
         tot = cw + cb
         owners.append(None if tot < 8 else "A" if cw / tot >= min_share else "B" if cb / tot >= min_share else None)
     return owners
+
+
+FIT_REACH = 0.5    # how far beyond its gi a body part may reach, as a fraction of the gi box's longer side
+
+
+def fit_body(frame, person, ident, gi_box, reach=None):
+    """Grow a gi-colour box over the rest of that athlete's body (head, hands, feet, limbs: no gi colour).
+
+    Person-mask pixels near the box are split between the two athletes by distance to each one's gi pixels; the
+    box grows over the pixels that are closer to its own gi and within `reach` of it. Returns a box that always
+    contains `gi_box`. The other athlete's gi is searched in the same region, so where the two touch the split
+    runs between them."""
+    if person is None:
+        return gi_box
+    H, W = frame.shape[:2]
+    x1, y1, x2, y2 = (int(v) for v in gi_box)
+    r = int((FIT_REACH if reach is None else reach) * max(x2 - x1, y2 - y1))
+    rx1, ry1, rx2, ry2 = max(0, x1 - r), max(0, y1 - r), min(W, x2 + r), min(H, y2 + r)
+    hsv = cv2.cvtColor(frame[ry1:ry2, rx1:rx2], cv2.COLOR_BGR2HSV)
+    white, blue = colour_masks(hsv, white_v=SHADOW_WHITE_V)
+    pm = person[ry1:ry2, rx1:rx2].astype(np.uint8)
+    own, other = (white, blue) if ident == "A" else (blue, white)
+    seed = np.zeros_like(pm)
+    seed[y1 - ry1:y2 - ry1, x1 - rx1:x2 - rx1] = 1
+    seed &= own & pm
+    if int(seed.sum()) < MIN_PX // 4:
+        return gi_box
+    d_own = cv2.distanceTransform(1 - seed, cv2.DIST_L2, 5)
+    rival = other & pm
+    d_other = cv2.distanceTransform(1 - rival, cv2.DIST_L2, 5) if rival.any() else np.full_like(d_own, np.inf)
+    body = (pm.astype(bool) & (d_own < d_other) & (d_own <= r)).astype(np.uint8)
+    body |= seed
+    n, lab = cv2.connectedComponents(body, connectivity=8)
+    touching = np.unique(lab[seed.astype(bool)])
+    body = np.isin(lab, touching[touching > 0])
+    ys, xs = np.nonzero(body)
+    return (min(x1, int(xs.min()) + rx1), min(y1, int(ys.min()) + ry1),
+            max(x2, int(xs.max()) + 1 + rx1), max(y2, int(ys.max()) + 1 + ry1))

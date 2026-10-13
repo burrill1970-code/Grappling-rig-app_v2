@@ -71,11 +71,13 @@ def test_labels(video, out, targeted):
     assert ev == before, f"{committed} is stale: rerun tools/eval_ground_truth.py --out {out}"
 
 
-# Floors measured from the first hand labels + identity check (2026-10-12): a change that scores below them on the
-# regular sample has made the tracker worse. Mean IoU gets 0.02 of slack for small box changes.
+# Floors measured on the regular sample (hand labels + identity check), reset 2026-10-12 when colour boxes were grown
+# over the whole body: mean IoU rose 0.49-0.58 -> 0.64-0.71, while right_person fell slightly (clip 2 A 61 -> 56)
+# because a whole-body box of two wrapped-together athletes is often judged to cover both; accepted by Tim.
+# A change that scores below them has made the tracker worse. Mean IoU gets 0.02 of slack for small box changes.
 FLOORS = {
-    "outputs": {"A": dict(right_person=76, mean_iou=0.4887), "B": dict(right_person=75, mean_iou=0.5223)},
-    "outputs/clip2": {"A": dict(right_person=61, mean_iou=0.5837), "B": dict(right_person=63, mean_iou=0.5419)},
+    "outputs": {"A": dict(right_person=74, mean_iou=0.6537), "B": dict(right_person=76, mean_iou=0.6702)},
+    "outputs/clip2": {"A": dict(right_person=56, mean_iou=0.7088), "B": dict(right_person=62, mean_iou=0.6371)},
 }
 
 

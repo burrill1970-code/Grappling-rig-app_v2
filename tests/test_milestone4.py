@@ -35,7 +35,7 @@ def test_colour_boxes_sit_on_the_right_gi_colour(tracked, frames, person_masks):
             r = res[fi][i]
             if r["status"] not in ("color_split", "color_recovered"):
                 continue
-            x1, y1, x2, y2 = [int(v) for v in r["box"]]
+            x1, y1, x2, y2 = [int(v) for v in (r.get("gi_box") or r["box"])]
             hsv = cv2.cvtColor(frames[fi][y1:y2, x1:x2], cv2.COLOR_BGR2HSV)
             w, b = colour_masks(hsv, white_v=SHADOW_WHITE_V)
             pm = person_masks[fi][y1:y2, x1:x2]

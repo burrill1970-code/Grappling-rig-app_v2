@@ -22,7 +22,9 @@ Identity check: when the athletes are tangled their labelled boxes overlap heavi
 both about equally, so IoU cannot say which athlete it is on (the wrong-body count swung from 12 to 1 on clip 2 as
 an arbitrary margin went from 0 to 0.15). Wherever own IoU minus other IoU is below ID_MARGIN and the box touches
 both, the identity comes from a person instead: tools/gt_identity.py shows the track box and records right / wrong /
-both in <out>/identity_check.json. "right" keeps the IoU box-quality verdict (correct or partial).
+both in <out>/identity_check.json, with the box each answer was given for. An answer holds only while the track box
+is unchanged: when the tracker changes a box, its old answer is ignored and that box is undecided until re-checked.
+"right" keeps the IoU box-quality verdict (correct or partial).
 
 Rates are quoted only for the "regular" frames (every 7th frame, an unbiased sample), with Wilson 95% intervals.
 "Targeted" frames were chosen because they failed before, so they are listed, not turned into rates.
@@ -78,6 +80,16 @@ def verdict(track_box, own, other, answer=None):
     return "off_target"
 
 
+def same_box(a, b, tol=0.05):
+    return a is not None and b is not None and all(abs(x - y) <= tol for x, y in zip(a, b))
+
+
+def answer_for(answers, frame, who, box):
+    """The person's identity answer for this exact box, or None (never asked, or asked about a different box)."""
+    a = answers.get(str(frame), {}).get(who)
+    return a["answer"] if a and same_box(a["box"], box) else None
+
+
 def wilson(k, n, z=1.96):
     if n == 0:
         return None
@@ -109,7 +121,7 @@ def evaluate(out, write=True):
         for who, oth in (("A", "B"), ("B", "A")):
             own, other = lab[who]["box"], lab[oth]["box"]
             tb = trk[who]["box"]
-            ans = answers.get(key, {}).get(who)
+            ans = answer_for(answers, f, who, tb)
             row[who] = dict(verdict=verdict(tb, own, other, ans), iou=round(iou(tb, own), 4),
                             iou_other=round(iou(tb, other), 4), status=trk[who]["status"],
                             unsure=bool(lab[who].get("unsure")), id_checked=ans)

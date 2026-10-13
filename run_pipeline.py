@@ -6,6 +6,7 @@
 import argparse
 import json
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -38,9 +39,13 @@ res = attach_keypoints(track_video(frames, raw, cuts, pm), raw, frames, pm)
 
 tmp = OUT / "_tmp_annotated.mp4"
 write_video(tmp, frames, res, set(cuts), fps)
-subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(tmp), "-c:v", "libx264",
-                "-pix_fmt", "yuv420p", "-crf", "23", str(OUT / "annotated.mp4")], check=True)
-os.remove(tmp)
+if shutil.which("ffmpeg"):
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(tmp), "-c:v", "libx264",
+                    "-pix_fmt", "yuv420p", "-crf", "23", str(OUT / "annotated.mp4")], check=True)
+    os.remove(tmp)
+else:  # no ffmpeg: keep OpenCV's own file (larger, mp4v instead of H.264, but plays in common players)
+    print("ffmpeg not found: annotated.mp4 left as OpenCV's mp4v encoding")
+    os.replace(tmp, OUT / "annotated.mp4")
 
 shot = np.searchsorted(cuts, np.arange(len(res)), side="right")
 out = dict(
@@ -52,6 +57,9 @@ out = dict(
                                  color_split="detector merged both athletes; box from gi-colour pixels (low conf)",
                                  color_recovered="detector missed athlete; box from gi-colour pixels near last position (low conf)",
                                  lost="no usable evidence; box and keypoints are null"),
+              boxes=dict(box="the athlete's box; for color_split/color_recovered it is grown from the gi colour over the "
+                             "rest of the body (head, hands, feet) by person-mask pixels nearer this athlete's gi",
+                         gi_box="color_split/color_recovered only: bounding box of the gi-colour pixels the box grew from"),
               keypoint_names=KP_NAMES),
     frames=[])
 for fi, rec in enumerate(res):
@@ -60,6 +68,7 @@ for fi, rec in enumerate(res):
         kp = None if r["kp"] is None else [dict(name=KP_NAMES[k], x=round(x, 1), y=round(y, 1), conf=round(c, 3))
                                            for k, (x, y, c) in enumerate(r["kp"])]
         ath[i] = dict(status=r["status"], box=None if r["box"] is None else [round(v, 1) for v in r["box"]],
+                      gi_box=[round(v, 1) for v in r["gi_box"]] if r.get("gi_box") else None,
                       confidence=round(r["conf"], 3), keypoints=kp, pose_conf=round(r["pose_conf"], 3),
                       pose_source=r["pose_source"], note=r.get("note"))
     out["frames"].append(dict(frame=fi, t=round(fi / fps, 3), shot=int(shot[fi]), athletes=ath))

@@ -7,8 +7,57 @@
   "athletes": {
    "A": {
     "counts": {
-     "correct": 37,
-     "partial": 39,
+     "correct": 63,
+     "partial": 11,
+     "wrong_body": 0,
+     "off_target": 0,
+     "covers_both": 2,
+     "undecided": 0,
+     "lost_but_visible": 0,
+     "hidden_ok": 0,
+     "box_on_hidden": 0
+    },
+    "visible": 76,
+    "decided": 76,
+    "right_person": 74,
+    "right_person_rate": 0.9737,
+    "right_person_ci95": [
+     0.909,
+     0.9928
+    ],
+    "correct_rate": 0.8289,
+    "correct_ci95": [
+     0.729,
+     0.8972
+    ],
+    "wrong_body_rate": 0.0,
+    "wrong_body_ci95": [
+     0.0,
+     0.0481
+    ],
+    "covers_both_rate": 0.0263,
+    "id_checked": 7,
+    "mean_iou_visible": 0.6537,
+    "by_status": {
+     "detected": {
+      "n": 20,
+      "correct": 20,
+      "right_person": 20,
+      "mean_iou": 0.7329
+     },
+     "colour": {
+      "n": 56,
+      "correct": 43,
+      "right_person": 54,
+      "mean_iou": 0.6255
+     }
+    },
+    "unsure": 0
+   },
+   "B": {
+    "counts": {
+     "correct": 69,
+     "partial": 7,
      "wrong_body": 0,
      "off_target": 0,
      "covers_both": 0,
@@ -25,10 +74,10 @@
      0.9519,
      1.0
     ],
-    "correct_rate": 0.4868,
+    "correct_rate": 0.9079,
     "correct_ci95": [
-     0.3778,
-     0.5971
+     0.8219,
+     0.9547
     ],
     "wrong_body_rate": 0.0,
     "wrong_body_ci95": [
@@ -36,69 +85,20 @@
      0.0481
     ],
     "covers_both_rate": 0.0,
-    "id_checked": 18,
-    "mean_iou_visible": 0.4887,
+    "id_checked": 4,
+    "mean_iou_visible": 0.6702,
     "by_status": {
      "detected": {
       "n": 20,
       "correct": 20,
       "right_person": 20,
-      "mean_iou": 0.7329
+      "mean_iou": 0.7705
      },
      "colour": {
       "n": 56,
-      "correct": 17,
+      "correct": 49,
       "right_person": 56,
-      "mean_iou": 0.4015
-     }
-    },
-    "unsure": 0
-   },
-   "B": {
-    "counts": {
-     "correct": 37,
-     "partial": 38,
-     "wrong_body": 1,
-     "off_target": 0,
-     "covers_both": 0,
-     "undecided": 0,
-     "lost_but_visible": 0,
-     "hidden_ok": 0,
-     "box_on_hidden": 0
-    },
-    "visible": 76,
-    "decided": 76,
-    "right_person": 75,
-    "right_person_rate": 0.9868,
-    "right_person_ci95": [
-     0.9292,
-     0.9977
-    ],
-    "correct_rate": 0.4868,
-    "correct_ci95": [
-     0.3778,
-     0.5971
-    ],
-    "wrong_body_rate": 0.0132,
-    "wrong_body_ci95": [
-     0.0023,
-     0.0708
-    ],
-    "covers_both_rate": 0.0,
-    "id_checked": 16,
-    "mean_iou_visible": 0.5223,
-    "by_status": {
-     "detected": {
-      "n": 19,
-      "correct": 19,
-      "right_person": 19,
-      "mean_iou": 0.7759
-     },
-     "colour": {
-      "n": 57,
-      "correct": 18,
-      "right_person": 56,
-      "mean_iou": 0.4377
+      "mean_iou": 0.6344
      }
     },
     "unsure": 0
@@ -106,19 +106,29 @@
   },
   "swap_frames": [],
   "errors": {
-   "A": [],
-   "B": [
+   "A": [
     {
-     "frame": 227,
+     "frame": 262,
      "kind": "regular",
-     "verdict": "wrong_body",
-     "iou": 0.4663,
-     "iou_other": 0.4675,
+     "verdict": "covers_both",
+     "iou": 0.4394,
+     "iou_other": 0.3759,
      "status": "color_split",
      "unsure": false,
-     "id_checked": "wrong"
+     "id_checked": "both"
+    },
+    {
+     "frame": 283,
+     "kind": "regular",
+     "verdict": "covers_both",
+     "iou": 0.5783,
+     "iou_other": 0.7193,
+     "status": "color_split",
+     "unsure": false,
+     "id_checked": "both"
     }
-   ]
+   ],
+   "B": []
   },
   "id_checks_pending": [],
   "targeted": [
@@ -135,7 +145,7 @@
    {
     "frame": 308,
     "A": "partial",
-    "B": "partial"
+    "B": "correct"
    }
   ]
  },
@@ -475,17 +485,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4547,
-    "iou_other": 0.3398,
+    "verdict": "correct",
+    "iou": 0.6867,
+    "iou_other": 0.4736,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4866,
-    "iou_other": 0.3198,
+    "verdict": "correct",
+    "iou": 0.6377,
+    "iou_other": 0.4,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -498,19 +508,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5375,
-    "iou_other": 0.3204,
+    "iou": 0.8239,
+    "iou_other": 0.5282,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4424,
-    "iou_other": 0.3331,
+    "verdict": "correct",
+    "iou": 0.6752,
+    "iou_other": 0.4259,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -520,16 +530,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5099,
-    "iou_other": 0.3202,
+    "iou": 0.7022,
+    "iou_other": 0.6473,
     "status": "color_split",
     "unsure": false,
-    "id_checked": null
+    "id_checked": "right"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5489,
-    "iou_other": 0.3938,
+    "iou": 0.8867,
+    "iou_other": 0.5051,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -541,20 +551,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3718,
-    "iou_other": 0.3401,
+    "verdict": "correct",
+    "iou": 0.6553,
+    "iou_other": 0.5439,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.2008,
-    "iou_other": 0.0574,
+    "iou": 0.3837,
+    "iou_other": 0.1985,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -563,17 +573,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4976,
-    "iou_other": 0.3042,
+    "verdict": "correct",
+    "iou": 0.7111,
+    "iou_other": 0.5344,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5024,
-    "iou_other": 0.3295,
+    "iou": 0.7511,
+    "iou_other": 0.4875,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -586,19 +596,19 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1693,
-    "iou_other": 0.1418,
+    "iou": 0.3363,
+    "iou_other": 0.2817,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5739,
-    "iou_other": 0.4644,
+    "iou": 0.8311,
+    "iou_other": 0.6214,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -608,16 +618,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.3594,
-    "iou_other": 0.4284,
+    "iou": 0.454,
+    "iou_other": 0.2163,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6771,
-    "iou_other": 0.272,
+    "iou": 0.8089,
+    "iou_other": 0.3676,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -629,18 +639,18 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.0592,
-    "iou_other": 0.0417,
-    "status": "color_split",
+    "verdict": "correct",
+    "iou": 0.6002,
+    "iou_other": 0.2375,
+    "status": "color_recovered",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.6395,
-    "iou_other": 0.26,
-    "status": "color_split",
+    "iou": 0.6676,
+    "iou_other": 0.2532,
+    "status": "detected",
     "unsure": false,
     "id_checked": null
    },
@@ -673,17 +683,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4209,
-    "iou_other": 0.2248,
+    "verdict": "correct",
+    "iou": 0.6052,
+    "iou_other": 0.2606,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5368,
-    "iou_other": 0.2249,
+    "iou": 0.8039,
+    "iou_other": 0.3375,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -696,16 +706,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1454,
-    "iou_other": 0.0906,
+    "iou": 0.3163,
+    "iou_other": 0.1906,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5996,
-    "iou_other": 0.4186,
+    "iou": 0.6877,
+    "iou_other": 0.43,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -718,16 +728,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.17,
-    "iou_other": 0.0709,
+    "iou": 0.345,
+    "iou_other": 0.1439,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5205,
-    "iou_other": 0.3701,
+    "iou": 0.74,
+    "iou_other": 0.3748,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -740,16 +750,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5674,
-    "iou_other": 0.2,
+    "iou": 0.6989,
+    "iou_other": 0.2249,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3782,
-    "iou_other": 0.2198,
+    "verdict": "correct",
+    "iou": 0.6039,
+    "iou_other": 0.2204,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -761,17 +771,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3792,
-    "iou_other": 0.1684,
+    "verdict": "correct",
+    "iou": 0.5839,
+    "iou_other": 0.173,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4573,
-    "iou_other": 0.2871,
+    "verdict": "correct",
+    "iou": 0.6986,
+    "iou_other": 0.252,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -784,16 +794,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5128,
-    "iou_other": 0.2843,
+    "iou": 0.5825,
+    "iou_other": 0.3728,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4522,
-    "iou_other": 0.2309,
+    "verdict": "correct",
+    "iou": 0.7424,
+    "iou_other": 0.2219,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -805,20 +815,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4263,
-    "iou_other": 0.1554,
+    "verdict": "correct",
+    "iou": 0.7072,
+    "iou_other": 0.2402,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4831,
-    "iou_other": 0.3605,
+    "verdict": "correct",
+    "iou": 0.7094,
+    "iou_other": 0.3679,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -828,16 +838,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6592,
-    "iou_other": 0.2499,
+    "iou": 0.7877,
+    "iou_other": 0.4158,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4684,
-    "iou_other": 0.2744,
+    "verdict": "correct",
+    "iou": 0.6067,
+    "iou_other": 0.2579,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -849,17 +859,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3711,
-    "iou_other": 0.1224,
+    "verdict": "correct",
+    "iou": 0.5403,
+    "iou_other": 0.1835,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5236,
-    "iou_other": 0.3336,
+    "iou": 0.6979,
+    "iou_other": 0.432,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -872,19 +882,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5057,
-    "iou_other": 0.2516,
+    "iou": 0.7443,
+    "iou_other": 0.3704,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5156,
-    "iou_other": 0.4493,
+    "iou": 0.6949,
+    "iou_other": 0.5295,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -894,19 +904,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5524,
-    "iou_other": 0.3442,
+    "iou": 0.7373,
+    "iou_other": 0.4479,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "wrong_body",
-    "iou": 0.4663,
-    "iou_other": 0.4675,
+    "verdict": "correct",
+    "iou": 0.8195,
+    "iou_other": 0.5591,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "wrong"
+    "id_checked": null
    },
    "swap": false
   },
@@ -916,16 +926,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5747,
-    "iou_other": 0.305,
+    "iou": 0.6676,
+    "iou_other": 0.466,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4219,
-    "iou_other": 0.2513,
+    "verdict": "correct",
+    "iou": 0.6243,
+    "iou_other": 0.3446,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -938,19 +948,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6432,
-    "iou_other": 0.2782,
+    "iou": 0.7012,
+    "iou_other": 0.4364,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.383,
-    "iou_other": 0.236,
+    "verdict": "correct",
+    "iou": 0.5215,
+    "iou_other": 0.2588,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -960,16 +970,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1896,
-    "iou_other": 0.1462,
+    "iou": 0.3047,
+    "iou_other": 0.235,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4786,
-    "iou_other": 0.3201,
+    "verdict": "correct",
+    "iou": 0.7138,
+    "iou_other": 0.4048,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -982,19 +992,19 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6039,
-    "iou_other": 0.3803,
+    "iou": 0.8015,
+    "iou_other": 0.4699,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4826,
-    "iou_other": 0.3375,
+    "verdict": "correct",
+    "iou": 0.7053,
+    "iou_other": 0.3976,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1003,20 +1013,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.1773,
-    "iou_other": 0.2618,
+    "verdict": "covers_both",
+    "iou": 0.4394,
+    "iou_other": 0.3759,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3894,
-    "iou_other": 0.2444,
+    "verdict": "correct",
+    "iou": 0.5933,
+    "iou_other": 0.3724,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1026,16 +1036,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5958,
-    "iou_other": 0.4477,
+    "iou": 0.8682,
+    "iou_other": 0.6573,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5427,
-    "iou_other": 0.4428,
+    "iou": 0.648,
+    "iou_other": 0.5302,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1048,16 +1058,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.648,
-    "iou_other": 0.4949,
+    "iou": 0.8777,
+    "iou_other": 0.6313,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5298,
-    "iou_other": 0.4414,
+    "iou": 0.6531,
+    "iou_other": 0.6191,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1069,17 +1079,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "correct",
-    "iou": 0.5127,
-    "iou_other": 0.6169,
+    "verdict": "covers_both",
+    "iou": 0.5783,
+    "iou_other": 0.7193,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": "both"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4694,
-    "iou_other": 0.3743,
+    "verdict": "correct",
+    "iou": 0.5637,
+    "iou_other": 0.4535,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1092,16 +1102,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6147,
-    "iou_other": 0.4619,
+    "iou": 0.6486,
+    "iou_other": 0.4396,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.3115,
-    "iou_other": 0.2333,
+    "iou": 0.4482,
+    "iou_other": 0.3253,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
@@ -1114,19 +1124,19 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.3109,
-    "iou_other": 0.2437,
+    "iou": 0.4888,
+    "iou_other": 0.2128,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4173,
-    "iou_other": 0.3002,
+    "verdict": "correct",
+    "iou": 0.6507,
+    "iou_other": 0.3608,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1136,16 +1146,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.3502,
-    "iou_other": 0.2807,
+    "iou": 0.4671,
+    "iou_other": 0.4017,
     "status": "color_split",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4527,
-    "iou_other": 0.1842,
+    "verdict": "correct",
+    "iou": 0.8364,
+    "iou_other": 0.2682,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1158,16 +1168,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.051,
-    "iou_other": 0.0379,
+    "iou": 0.202,
+    "iou_other": 0.1042,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": "right"
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4298,
-    "iou_other": 0.0953,
+    "verdict": "correct",
+    "iou": 0.6278,
+    "iou_other": 0.2446,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1179,17 +1189,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.2618,
-    "iou_other": 0.0205,
+    "verdict": "correct",
+    "iou": 0.5121,
+    "iou_other": 0.1234,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.2697,
-    "iou_other": 0.1022,
+    "verdict": "correct",
+    "iou": 0.6493,
+    "iou_other": 0.2512,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1202,16 +1212,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1938,
-    "iou_other": 0.0329,
+    "iou": 0.4825,
+    "iou_other": 0.118,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3329,
-    "iou_other": 0.1314,
+    "verdict": "correct",
+    "iou": 0.8258,
+    "iou_other": 0.3421,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1223,17 +1233,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4474,
-    "iou_other": 0.2976,
+    "verdict": "correct",
+    "iou": 0.6661,
+    "iou_other": 0.3592,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.552,
-    "iou_other": 0.2848,
+    "iou": 0.8238,
+    "iou_other": 0.3261,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1246,16 +1256,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.2128,
-    "iou_other": 0.068,
+    "iou": 0.4265,
+    "iou_other": 0.0964,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5166,
-    "iou_other": 0.2837,
+    "iou": 0.6921,
+    "iou_other": 0.2792,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1267,17 +1277,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.402,
-    "iou_other": 0.3049,
+    "verdict": "correct",
+    "iou": 0.5798,
+    "iou_other": 0.2818,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4114,
-    "iou_other": 0.244,
+    "verdict": "correct",
+    "iou": 0.6413,
+    "iou_other": 0.317,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1290,16 +1300,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.2083,
-    "iou_other": 0.0703,
+    "iou": 0.4079,
+    "iou_other": 0.0837,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4812,
-    "iou_other": 0.2571,
+    "verdict": "correct",
+    "iou": 0.6564,
+    "iou_other": 0.3001,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1311,17 +1321,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3857,
-    "iou_other": 0.2096,
+    "verdict": "correct",
+    "iou": 0.7363,
+    "iou_other": 0.3369,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4674,
-    "iou_other": 0.2631,
+    "verdict": "correct",
+    "iou": 0.5625,
+    "iou_other": 0.3094,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1334,16 +1344,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1773,
-    "iou_other": 0.0956,
+    "iou": 0.3547,
+    "iou_other": 0.1353,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5251,
-    "iou_other": 0.2482,
+    "iou": 0.6818,
+    "iou_other": 0.3365,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1355,17 +1365,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.2314,
-    "iou_other": 0.0748,
+    "verdict": "correct",
+    "iou": 0.526,
+    "iou_other": 0.1146,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.473,
-    "iou_other": 0.213,
+    "verdict": "correct",
+    "iou": 0.6213,
+    "iou_other": 0.2192,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1378,16 +1388,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.1904,
-    "iou_other": 0.1159,
+    "iou": 0.4416,
+    "iou_other": 0.1631,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5335,
-    "iou_other": 0.2966,
+    "iou": 0.7071,
+    "iou_other": 0.2948,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1399,17 +1409,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.2393,
-    "iou_other": 0.1057,
+    "verdict": "correct",
+    "iou": 0.5146,
+    "iou_other": 0.1605,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3716,
-    "iou_other": 0.1272,
+    "verdict": "correct",
+    "iou": 0.5753,
+    "iou_other": 0.2401,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1421,17 +1431,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3907,
-    "iou_other": 0.0394,
+    "verdict": "correct",
+    "iou": 0.6212,
+    "iou_other": 0.0895,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3392,
-    "iou_other": 0.0972,
+    "verdict": "correct",
+    "iou": 0.6345,
+    "iou_other": 0.1641,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1443,17 +1453,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3629,
-    "iou_other": 0.0388,
+    "verdict": "correct",
+    "iou": 0.6037,
+    "iou_other": 0.0484,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5384,
-    "iou_other": 0.1253,
+    "iou": 0.6982,
+    "iou_other": 0.1365,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1465,17 +1475,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3101,
-    "iou_other": 0.0475,
+    "verdict": "correct",
+    "iou": 0.6421,
+    "iou_other": 0.0675,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.4766,
-    "iou_other": 0.1466,
+    "verdict": "correct",
+    "iou": 0.6251,
+    "iou_other": 0.1646,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1488,16 +1498,16 @@
    "unusable": false,
    "A": {
     "verdict": "partial",
-    "iou": 0.2298,
-    "iou_other": 0.064,
+    "iou": 0.4624,
+    "iou_other": 0.0886,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5636,
-    "iou_other": 0.2537,
+    "iou": 0.7276,
+    "iou_other": 0.2767,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1517,9 +1527,9 @@
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3723,
-    "iou_other": 0.0922,
+    "verdict": "correct",
+    "iou": 0.6149,
+    "iou_other": 0.1463,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": null
@@ -1531,17 +1541,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4874,
-    "iou_other": 0.1401,
+    "verdict": "correct",
+    "iou": 0.6874,
+    "iou_other": 0.1551,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3832,
-    "iou_other": 0.0703,
+    "verdict": "correct",
+    "iou": 0.5071,
+    "iou_other": 0.0996,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1553,17 +1563,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4414,
-    "iou_other": 0.1255,
+    "verdict": "correct",
+    "iou": 0.7488,
+    "iou_other": 0.1598,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3101,
-    "iou_other": 0.1015,
+    "verdict": "correct",
+    "iou": 0.6127,
+    "iou_other": 0.1488,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": null
@@ -1620,8 +1630,8 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5745,
-    "iou_other": 0.1188,
+    "iou": 0.9037,
+    "iou_other": 0.1283,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": null
@@ -1642,16 +1652,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.6117,
-    "iou_other": 0.1002,
+    "iou": 0.8006,
+    "iou_other": 0.128,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.485,
-    "iou_other": 0.0989,
+    "verdict": "correct",
+    "iou": 0.6532,
+    "iou_other": 0.1352,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1663,20 +1673,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4508,
-    "iou_other": 0.1325,
+    "verdict": "correct",
+    "iou": 0.769,
+    "iou_other": 0.1484,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.1706,
-    "iou_other": 0.143,
+    "iou": 0.3336,
+    "iou_other": 0.138,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1685,17 +1695,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4888,
-    "iou_other": 0.168,
+    "verdict": "correct",
+    "iou": 0.8144,
+    "iou_other": 0.1897,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.28,
-    "iou_other": 0.1179,
+    "iou": 0.4092,
+    "iou_other": 0.1067,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1715,9 +1725,9 @@
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.471,
-    "iou_other": 0.0848,
+    "verdict": "correct",
+    "iou": 0.6027,
+    "iou_other": 0.0917,
     "status": "color_recovered",
     "unsure": false,
     "id_checked": null
@@ -1730,16 +1740,16 @@
    "unusable": false,
    "A": {
     "verdict": "correct",
-    "iou": 0.5314,
-    "iou_other": 0.0962,
+    "iou": 0.7292,
+    "iou_other": 0.1386,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5625,
-    "iou_other": 0.1278,
+    "iou": 0.6044,
+    "iou_other": 0.1338,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1751,17 +1761,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3433,
-    "iou_other": 0.0224,
+    "verdict": "correct",
+    "iou": 0.7473,
+    "iou_other": 0.0721,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3485,
-    "iou_other": 0.0,
+    "verdict": "correct",
+    "iou": 0.5831,
+    "iou_other": 0.0262,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1773,17 +1783,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3386,
-    "iou_other": 0.057,
+    "verdict": "correct",
+    "iou": 0.6827,
+    "iou_other": 0.1026,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
-    "verdict": "partial",
-    "iou": 0.3082,
-    "iou_other": 0.1136,
+    "verdict": "correct",
+    "iou": 0.5369,
+    "iou_other": 0.1835,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1795,20 +1805,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4285,
-    "iou_other": 0.1158,
+    "verdict": "correct",
+    "iou": 0.6873,
+    "iou_other": 0.1788,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.1357,
-    "iou_other": 0.1192,
+    "iou": 0.3327,
+    "iou_other": 0.167,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1817,20 +1827,20 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.4414,
-    "iou_other": 0.1481,
+    "verdict": "correct",
+    "iou": 0.7495,
+    "iou_other": 0.14,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.2464,
-    "iou_other": 0.1332,
+    "iou": 0.4469,
+    "iou_other": 0.1303,
     "status": "color_split",
     "unsure": false,
-    "id_checked": "right"
+    "id_checked": null
    },
    "swap": false
   },
@@ -1839,17 +1849,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3651,
-    "iou_other": 0.099,
+    "verdict": "correct",
+    "iou": 0.5376,
+    "iou_other": 0.1947,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "correct",
-    "iou": 0.5591,
-    "iou_other": 0.0305,
+    "iou": 0.6003,
+    "iou_other": 0.0463,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
@@ -1861,17 +1871,17 @@
    "kind": "regular",
    "unusable": false,
    "A": {
-    "verdict": "partial",
-    "iou": 0.3732,
-    "iou_other": 0.1615,
+    "verdict": "correct",
+    "iou": 0.5198,
+    "iou_other": 0.2462,
     "status": "color_split",
     "unsure": false,
     "id_checked": null
    },
    "B": {
     "verdict": "partial",
-    "iou": 0.3625,
-    "iou_other": 0.0996,
+    "iou": 0.4703,
+    "iou_other": 0.1867,
     "status": "color_split",
     "unsure": false,
     "id_checked": null

@@ -47,8 +47,9 @@ def attach_keypoints(results, raw_dets, frames=None, person_masks=None):
                 kp = keypoints_of(d)
                 own = np.array([o == ident for o in keypoint_owners(frames[fi], kp, pm)])
                 # the other gi has white/blue patches too (collar, back label): a keypoint also has to lie inside
-                # this athlete's own colour box (grown 25%)
-                x1, y1, x2, y2 = r["box"]
+                # this athlete's own gi-colour box (grown 25%); not the body-fitted box, whose extra reach is
+                # exactly where the other athlete's limbs can be
+                x1, y1, x2, y2 = r.get("gi_box") or r["box"]
                 gw, gh = 0.25 * (x2 - x1), 0.25 * (y2 - y1)
                 own &= (kp[:, 0] >= x1 - gw) & (kp[:, 0] <= x2 + gw) & (kp[:, 1] >= y1 - gh) & (kp[:, 1] <= y2 + gh)
                 if own.sum() < MIN_OWNED_KP:

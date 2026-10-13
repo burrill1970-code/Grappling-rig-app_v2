@@ -19,8 +19,13 @@ def test_no_athlete_box_is_in_the_crowd_or_scoreboard(tracked):
     res, _ = tracked
     for fi, i, b in _boxes(res):
         assert b[3] >= 0.5 * H, f"frame {fi} {i}: box bottom {b[3]:.0f} is above the mat"
-    for fi, i, b in _boxes(res, ("color_split", "color_recovered")):
-        assert b[1] >= 0.25 * H, f"frame {fi} {i}: colour box top {b[1]:.0f} reaches the crowd/scoreboard"
+    # the gi-colour evidence must stay off the crowd/scoreboard; the body-fitted box may rise above it (a standing
+    # athlete's head does, and so do the hand labels)
+    for fi, r in enumerate(res):
+        for i in ("A", "B"):
+            if r[i]["status"] in ("color_split", "color_recovered"):
+                g = r[i]["gi_box"]
+                assert g[1] >= 0.25 * H, f"frame {fi} {i}: gi-colour box top {g[1]:.0f} reaches the crowd/scoreboard"
 
 
 def test_no_athlete_label_on_the_referee(tracked, frames, raw_dets):

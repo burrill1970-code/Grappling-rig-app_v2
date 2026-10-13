@@ -61,8 +61,8 @@ def test_boxes_are_on_the_mat_not_the_crowd(case):
             if a["box"] is None:
                 continue
             assert a["box"][3] >= 0.5 * h, f"frame {f['frame']} {i}: box bottom above the mat"
-            if a["status"] in ("color_split", "color_recovered"):
-                assert a["box"][1] >= 0.25 * h, f"frame {f['frame']} {i}: colour box reaches the crowd"
+            if a["status"] in ("color_split", "color_recovered"):  # gi-colour evidence; the body fit may rise above
+                assert a["gi_box"][1] >= 0.25 * h, f"frame {f['frame']} {i}: gi-colour box reaches the crowd"
 
 
 def test_poses_sit_on_their_own_athlete(case):

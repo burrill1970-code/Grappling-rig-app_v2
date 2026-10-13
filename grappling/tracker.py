@@ -15,7 +15,7 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 from .athletes import candidates, referee_boxes, referee_candidates
 from .color import bhatta
-from .occlusion import locate, grow, region_of, MIN_PX
+from .occlusion import fit_body, locate, grow, region_of, MIN_PX
 
 IDS = ("A", "B")
 REF_MARGIN = 0.10   # a candidate is referee-like if it matches the referee gallery this much better than both athletes
@@ -24,6 +24,7 @@ CLS_OF = {"A": "white", "B": "blue"}
 W_MOTION = 0.25
 GATE = 0.95
 EMA = 0.1
+FIT_BODY = True  # report colour-derived boxes grown over the athlete's whole body (tracking still uses the gi box)
 
 
 def iou(a, b):
@@ -227,6 +228,11 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                         rec[i] = dict(status="color_recovered", box=[float(v) for v in box],
                                       conf=(0.4 if note is None else 0.3 if note == "widened search" else 0.25 if note == "mat-wide search" else 0.2) * min(1.0, px / 3000), cand=None, px=px, note=note)
                         t.update(np.array(box, float), fi)
+        if FIT_BODY and pm_nr is not None:
+            for i in IDS:
+                if rec[i]["status"] in ("color_split", "color_recovered"):
+                    rec[i]["gi_box"] = rec[i]["box"]
+                    rec[i]["box"] = [float(v) for v in fit_body(frame, pm_nr, i, rec[i]["box"])]
         results.append(rec)
     return results
 
