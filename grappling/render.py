@@ -5,7 +5,8 @@ from .pose import SKELETON
 
 COLORS = {"A": (40, 40, 255), "B": (60, 200, 40)}  # BGR: A red, B green (fixed for the whole clip)
 NAMES = {"A": "A (white gi)", "B": "B (blue gi)"}
-SHORT = {"detected": "detected", "color_split": "colour-split", "color_recovered": "colour-recovered", "lost": "LOST"}
+SHORT = {"detected": "detected", "color_split": "colour-split", "color_recovered": "colour-recovered",
+         "occluded": "hidden (last box)", "lost": "LOST"}
 
 
 def _dashed_rect(img, b, col, th=2, dash=12):

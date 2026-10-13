@@ -11,7 +11,7 @@ import pytest
 
 CASES = [("test_clips/clip.mp4", "outputs"), ("test_clips/clip2.mp4", "outputs/clip2")]
 CASES = [c for c in CASES if (Path(c[1]) / "tracks.json").exists()]
-STATUSES = {"detected", "color_split", "color_recovered", "lost"}
+STATUSES = {"detected", "color_split", "color_recovered", "occluded", "lost"}
 
 
 def _frames(path):

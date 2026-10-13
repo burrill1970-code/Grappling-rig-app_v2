@@ -23,7 +23,7 @@ def test_json_has_both_athletes_every_frame():
     for f in d["frames"]:
         assert set(f["athletes"]) == {"A", "B"}
         for a in f["athletes"].values():
-            assert a["status"] in ("detected", "color_split", "color_recovered", "lost")
+            assert a["status"] in ("detected", "color_split", "color_recovered", "occluded", "lost")
             assert 0 <= a["confidence"] <= 1
             if a["status"] == "lost":
                 assert a["box"] is None and a["keypoints"] is None

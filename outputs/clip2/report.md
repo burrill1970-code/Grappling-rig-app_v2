@@ -12,7 +12,7 @@ Clip: `test_clips/clip2.mp4`, 453 frames, ~32.6 fps, 13.9s. Identity labels: **A
   body (head, hands, feet) by the person-mask pixels nearer that gi than the other one. These boxes are low-confidence (capped at 0.40);
   when the athletes are wrapped together they often cover both, and the growth can overreach onto the other athlete.
 * Identity during contact rests on **gi colour alone**.
-* **Ground truth** (hand-labelled boxes on 65 regularly sampled frames, every 7th): the track sits on the right person for A on 56/65 visible frames (86%, 95% CI 76-93%) and for B on 62/65 (95%, 87-98%); wrong-body A 0, B 0; box covering both A 9, B 2; identity swaps on 0 frames. Box quality (IoU >= 0.5 with the labelled box): A 80%, B 78%. Details in the Ground truth section.
+* **Ground truth** (hand-labelled boxes on 65 regularly sampled frames, every 7th): the track sits on the right person for A on 58/65 visible frames (89%, 95% CI 79-95%) and for B on 63/65 (97%, 89-99%); wrong-body A 0, B 0; box covering both A 7, B 2; identity swaps on 0 frames. Box quality (IoU >= 0.5 with the labelled box): A 83%, B 78%. Details in the Ground truth section.
 * The evidence for quality is **vision audits**: model reviewers judged contact sheets of the annotated video and a second round of skeptic reviewers tried to refute every serious finding. That is an independent look, not ground truth, and the reviewers are language models. Results are in the Audits section.
 * Latest random-sample audit (2, 170 of 453 frames sampled; the table below says which build it measured, and later targeted re-checks are in the audit notes): 2 wrong_body verdicts; A judged correct on 164 and B on 156 of 170 frames (96% / 92%); the remaining verdicts are partial boxes (3 A, 5 B), lost-but-visible (0 A, 9 B) and unclear (1 A, 0 B). Sampling means this is an estimate, not a count over all frames.
 * Pose is partial: 391/453 frames carry a skeleton for A and 348/453 for B. On colour-derived frames only
@@ -52,7 +52,8 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 | detected | 149 | 149 | own detector box and pose |
 | color_split | 298 | 288 | detector merged the pair; box from gi-colour pixels, grown over the body (conf <= 0.40) |
 | color_recovered | 6 | 7 | detector missed the athlete; box from gi-colour pixels, grown over the body (conf <= 0.40) |
-| lost | 0 | 9 | nothing usable; box and keypoints are null |
+| occluded | 0 | 9 | hidden behind the other athlete: no evidence, last box carried (up to 10 frames, conf 0.05) |
+| lost | 0 | 0 | nothing usable; box and keypoints are null |
 
 Pose: A 391 frames (242 from colour-filtered shared detections), B 348 frames (199).
 
@@ -71,30 +72,30 @@ Regular sample: 65 frames (every 7th). One labeller, no second-labeller agreemen
 
 | verdict | A (white) | B (blue) |
 |---|---|---|
-| correct | 52 | 51 |
-| partial | 4 | 11 |
+| correct | 54 | 51 |
+| partial | 4 | 12 |
 | wrong_body | 0 | 0 |
 | off_target | 0 | 0 |
-| covers_both | 9 | 2 |
+| covers_both | 7 | 2 |
 | undecided | 0 | 0 |
-| lost_but_visible | 0 | 1 |
+| lost_but_visible | 0 | 0 |
 | hidden_ok | 0 | 0 |
 | box_on_hidden | 0 | 0 |
 
-Identity checked by a person: A 16, B 12 of the regular frames; undecided (left out of the rates): A 0, B 0.
+Identity checked by a person: A 16, B 13 of the regular frames; undecided (left out of the rates): A 0, B 0.
 
 | on visible, decided frames | A | B |
 |---|---|---|
-| right person (correct + partial) | 56/65 (86%, CI 76-93%) | 62/65 (95%, CI 87-98%) |
-| correct box (IoU >= 0.5) | 80% (CI 69-88%) | 78% (CI 67-87%) |
-| box covers both athletes | 14% | 3% |
+| right person (correct + partial) | 58/65 (89%, CI 79-95%) | 63/65 (97%, CI 89-99%) |
+| correct box (IoU >= 0.5) | 83% (CI 72-90%) | 78% (CI 67-87%) |
+| box covers both athletes | 11% | 3% |
 | wrong body | 0% (CI 0-6%) | 0% (CI 0-6%) |
 | mean IoU (all visible frames) | 0.71 | 0.64 |
 | direct detections: right person / correct / mean IoU | 22/22 / 21/22 / 0.78 | 22/22 / 21/22 / 0.75 |
-| colour-derived boxes: right person / correct / mean IoU | 34/43 / 31/43 / 0.67 | 40/42 / 30/42 / 0.59 |
+| colour-derived boxes: right person / correct / mean IoU | 36/43 / 33/43 / 0.67 | 41/43 / 30/43 / 0.58 |
 
-**Errors on labelled frames:** A: 59 covers_both, 66 covers_both, 73 covers_both, 136 covers_both, 137 covers_both (targeted), 220 covers_both, 374 covers_both, 388 covers_both, 440 covers_both (targeted), 441 covers_both (targeted), 442 covers_both (targeted), 443 covers_both (targeted), 444 covers_both, 450 covers_both (targeted), 451 covers_both, 452 covers_both (targeted); B: 38 covers_both, 137 lost_but_visible (targeted), 192 covers_both, 439 lost_but_visible (targeted), 440 lost_but_visible (targeted), 441 lost_but_visible (targeted), 442 lost_but_visible (targeted), 443 lost_but_visible (targeted), 450 lost_but_visible (targeted), 451 lost_but_visible, 452 lost_but_visible (targeted). **Identity swaps:** none.
-**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): 137 A covers_both / B lost_but_visible, 439 A correct / B lost_but_visible, 440 A covers_both / B lost_but_visible, 441 A covers_both / B lost_but_visible, 442 A covers_both / B lost_but_visible, 443 A covers_both / B lost_but_visible, 450 A covers_both / B lost_but_visible, 452 A covers_both / B lost_but_visible.
+**Errors on labelled frames:** A: 59 covers_both, 66 covers_both, 73 covers_both, 136 covers_both, 137 covers_both (targeted), 220 covers_both, 374 covers_both, 388 covers_both; B: 38 covers_both, 192 covers_both. **Identity swaps:** none.
+**Targeted frames** (chosen because audits or tests found failures there; not a sample, no rate): 137 A covers_both / B partial, 439 A correct / B partial, 440 A correct / B partial, 441 A correct / B partial, 442 A correct / B partial, 443 A correct / B partial, 450 A correct / B partial, 452 A correct / B partial.
 
 ## Audits (vision, model-based; not ground truth)
 
@@ -119,7 +120,7 @@ Audit 1 was a transfer test of the clip-1 tuned build (no clip-specific changes)
 
 **Change after audit 2:** the A search now drops white blobs that sit wholly inside the blue silhouette (the blue gi's "HUN / CAF" back panel), and the blob union has a fallback tier. This changed A or B in 16 athlete-frames. **Targeted re-check (38 frames: the changed frames, previous error frames and flagged frames; not a random sample, no rates):** the eight referee frames are all correct; A at 49-51 improved from wrong-body to partial; **A at 216 is still on the blue athlete's back panel** (the white athlete is hidden); **B is still lost while visible at 137, 439-443, 450-452** (all 10 serious claims confirmed).
 
-**Why B is still lost (diagnosed, not fixed):** in the second match the blue athlete is behind the white one and the person segmenter returns only the white athlete's silhouette, so the blue athlete's trousers and feet are outside the mask. Searching those slivers without a mask would also pick up the navy "HARVEST" lettering on the ad boards behind them.
+**Why B was lost, and the fix (after the audits; checked against the hand labels, not re-audited):** the blue athlete is almost wholly behind the white one. The earlier diagnosis blamed the segmenter, but the person mask covers him on most of these frames; the real problem is that only 300-1200 blue pixels show, in slivers, while the white athlete alone shows up to ~930 stray blue pixels, so no colour threshold can separate them. The tracker now carries a recently seen athlete whose last box lies over the other athlete as `occluded` (last box, conf 0.05, up to 10 frames). All 9 frames now have a B box that the labeller judged to be on the blue athlete, but on 439-443 it is the small sliver last seen at 438 and fits badly (IoU about 0.05).
 
 **Unaudited:** frames outside the samples. Each random audit covered about a third of the frames (165 and 170 of 453) and audit 2 describes the build before the last change; the delivered build was re-checked only on 38 targeted frames.
 
@@ -128,9 +129,11 @@ Audit 1 was a transfer test of the clip-1 tuned build (no clip-specific changes)
 **Possible identity swap (identity not backed by separated detections).** Every frame outside the clear ranges:
 0-101, 112-117, 126-147, 150-162, 164-165, 167-452 (431 frames). On these frames A/B come from colour only.
 
+**Hidden behind the other athlete (`occluded`: box carried from the last sighting, not observed).** A: none; B: 137, 439-443, 450-452.
+
 **Track lost (box null), listed in full.**
 * A: none (0 frames)
-* B: 137, 439-443, 450-452 (9 frames)
+* B: none (0 frames)
 * Runs longer than N=5 frames: A none, B none. Every lost frame carries status `lost` in the JSON and the video HUD.
 * A frame listed as lost can still show the athlete (colour not found, e.g. blur or shadow): it is a tracker failure, not proof of occlusion.
 
@@ -158,7 +161,7 @@ Of these 1 frames, the latest audit sampled 1 and judged 0 wrong-body (none). Th
 ## Tests
 
 `python -m pytest tests`: what they do and do not prove:
-* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Every clip also runs the generic checks in `tests/test_generic.py` (counts, `lost` flagging, boxes on the mat, poses inside their box), which cannot see a referee being tracked as an athlete. Known open failures are pinned as strict-xfail tests (clip 2: `tests/test_clip2_known_failures.py`).
+* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Every clip also runs the generic checks in `tests/test_generic.py` (counts, `lost` flagging, boxes on the mat, poses inside their box), which cannot see a referee being tracked as an athlete. Failures found by audits are pinned in `tests/test_audit_regressions.py` and `tests/test_clip2_regressions.py` (clip 2's B-lost-while-visible frames now carry an `occluded` box).
 * No swaps in clear segments: passes, but covers only the 22 clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate (74% of frames) and colour-box quality (31/118 bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.

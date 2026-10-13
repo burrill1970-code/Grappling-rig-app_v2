@@ -16,7 +16,7 @@ def _runs(res, ident, status):
 def test_occlusion_frames_are_labelled_not_hidden(tracked):
     res, _ = tracked
     counts = {st: sum(r[i]["status"] == st for r in res for i in IDS)
-              for st in ("detected", "color_split", "color_recovered", "lost")}
+              for st in ("detected", "color_split", "color_recovered", "occluded", "lost")}
     assert counts["color_split"] > 300, counts  # the detector merges the pair for most of the ground phase
     assert sum(counts.values()) == 2 * len(res)
 

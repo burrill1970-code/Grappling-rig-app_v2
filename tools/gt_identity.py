@@ -139,7 +139,9 @@ function draw(){const b=tasks[i].box,lw=Math.max(3,cv.width/250);cx.drawImage(im
  cx.lineWidth=lw;cx.strokeStyle='#ff2bd6';cx.strokeRect(b[0],b[1],b[2]-b[0],b[3]-b[1])}
 async function answer(a){const t=tasks[i];t.answer=a;
  await fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({clip:t.clip,frame:t.frame,athlete:t.athlete,answer:a})});
- if(i<tasks.length-1){i++;show()}else{show();alert('All answered. You can close this page.')}}
+ // go to the next UNANSWERED question: stepping onto an answered one invites re-answering it by accident
+ const j=tasks.findIndex((t,k)=>k>i&&!t.answer),k=j>=0?j:tasks.findIndex(t=>!t.answer);
+ if(k>=0){i=k;show()}else{show();alert('All answered. You can close this page.')}}
 document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>answer(b.dataset.a));
 $('prev').onclick=()=>{if(i>0){i--;show()}};
 window.onkeydown=e=>{const k=e.key.toLowerCase();if(k==='r')answer('right');else if(k==='w')answer('wrong');else if(k==='b')answer('both');

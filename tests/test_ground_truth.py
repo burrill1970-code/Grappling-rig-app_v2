@@ -77,7 +77,8 @@ def test_labels(video, out, targeted):
 # A change that scores below them has made the tracker worse. Mean IoU gets 0.02 of slack for small box changes.
 FLOORS = {
     "outputs": {"A": dict(right_person=74, mean_iou=0.6537), "B": dict(right_person=76, mean_iou=0.6702)},
-    "outputs/clip2": {"A": dict(right_person=56, mean_iou=0.7088), "B": dict(right_person=62, mean_iou=0.6371)},
+    # clip 2 raised after the occluded-B fix (B 62 -> 63) and Tim's re-answer of A on 444/451 ("both" -> "right")
+    "outputs/clip2": {"A": dict(right_person=58, mean_iou=0.7088), "B": dict(right_person=63, mean_iou=0.6402)},
 }
 
 

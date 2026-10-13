@@ -50,6 +50,7 @@ This is a purpose-built two-target tracker, not ByteTrack/DeepSORT: with exactly
 | detected | 147 | 137 | own detector box and pose |
 | color_split | 371 | 372 | detector merged the pair; box from gi-colour pixels, grown over the body (conf <= 0.40) |
 | color_recovered | 17 | 26 | detector missed the athlete; box from gi-colour pixels, grown over the body (conf <= 0.40) |
+| occluded | 0 | 0 | hidden behind the other athlete: no evidence, last box carried (up to 10 frames, conf 0.05) |
 | lost | 0 | 0 | nothing usable; box and keypoints are null |
 
 Pose: A 373 frames (226 from colour-filtered shared detections), B 424 frames (287).
@@ -119,6 +120,8 @@ Bugs the audits found that I had missed by eye, now fixed and pinned by `tests/t
 **Possible identity swap (identity not backed by separated detections).** Every frame outside the clear ranges:
 12-16, 81-144, 146-534 (458 frames). On these frames A/B come from colour only.
 
+**Hidden behind the other athlete (`occluded`: box carried from the last sighting, not observed).** A: none; B: none.
+
 **Track lost (box null), listed in full.**
 * A: none (0 frames)
 * B: none (0 frames)
@@ -149,7 +152,7 @@ Of these 8 frames, the latest audit sampled 8 and judged 0 wrong-body (none). Th
 ## Tests
 
 `python -m pytest tests`: what they do and do not prove:
-* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Every clip also runs the generic checks in `tests/test_generic.py` (counts, `lost` flagging, boxes on the mat, poses inside their box), which cannot see a referee being tracked as an athlete. Known open failures are pinned as strict-xfail tests (clip 2: `tests/test_clip2_known_failures.py`).
+* Clip 1: exactly 2 tracks on every frame, every missing track flagged `lost`, no athlete box in the crowd or on the referee, poses inside their athlete's box, and audit-found errors pinned to specific frames: pass. Every clip also runs the generic checks in `tests/test_generic.py` (counts, `lost` flagging, boxes on the mat, poses inside their box), which cannot see a referee being tracked as an athlete. Failures found by audits are pinned in `tests/test_audit_regressions.py` and `tests/test_clip2_regressions.py` (clip 2's B-lost-while-visible frames now carry an `occluded` box).
 * No swaps in clear segments: passes, but covers only the 77 clear frames above.
 * Colour re-identification after occlusion: detections right after non-detected stretches must match their gi colour (<=10% disagreement allowed).
 * Two-athlete-box rate (59% of frames) and colour-box quality (14/156 bad) are **measured numbers; clip 1 has regression floors on them, not success claims**.

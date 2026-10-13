@@ -56,6 +56,7 @@ out = dict(
               status_legend=dict(detected="own detector box+pose",
                                  color_split="detector merged both athletes; box from gi-colour pixels (low conf)",
                                  color_recovered="detector missed athlete; box from gi-colour pixels near last position (low conf)",
+                                 occluded="hidden behind the other athlete: no evidence, last box carried for up to 10 frames (very low conf)",
                                  lost="no usable evidence; box and keypoints are null"),
               boxes=dict(box="the athlete's box; for color_split/color_recovered it is grown from the gi colour over the "
                              "rest of the body (head, hands, feet) by person-mask pixels nearer this athlete's gi",

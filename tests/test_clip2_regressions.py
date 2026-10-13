@@ -50,14 +50,18 @@ def test_referee_is_not_tracked_as_an_athlete(data, frame, who):
             assert _iou(box, d[:4]) < 0.8, f"frame {frame}: {who} box is the standing dark-suited person"
 
 
-# --- open failure, pinned as strict xfail -----------------------------------------------------------------------
-# B is lost while the blue athlete is clearly visible (audit-confirmed twice, targeted re-check included). In the second
-# match he is behind the white athlete and the person segmenter returns only the white athlete's silhouette.
+# --- fixed: B lost while visible --------------------------------------------------------------------------------
+# B was lost while the blue athlete was visible (audit-confirmed twice, and by the hand labels). He is almost wholly
+# behind the white athlete: only 300-1200 blue pixels show, in slivers, while the white athlete alone shows up to ~930
+# (patches, shadows), so no colour threshold separates them. (The earlier note blamed the segmenter; the person mask
+# does cover him on most of these frames.) Fixed by continuity: a recently seen athlete whose last box lies over the
+# other athlete is carried as `occluded` for up to COAST_MAX frames. Pinned as strict xfail while open.
 B_LOST_WHILE_VISIBLE = [137, 439, 440, 441, 442, 443, 450, 451, 452]
 
 
-@pytest.mark.xfail(strict=True, reason="open bug: B lost while visible, hidden athlete not segmented (audit-confirmed)")
 @pytest.mark.parametrize("frame", B_LOST_WHILE_VISIBLE)
 def test_b_is_not_lost_while_visible(data, frame):
     _, _, tracks = data
-    assert tracks[frame]["athletes"]["B"]["box"] is not None
+    b = tracks[frame]["athletes"]["B"]
+    assert b["box"] is not None
+    assert b["status"] == "occluded"

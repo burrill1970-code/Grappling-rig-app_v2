@@ -27,7 +27,8 @@ def analyse(results, frames, raw_dets, cuts, person_masks=None):
     out["colour_only"] = {i: runs(np.isin(st[i], ["color_split", "color_recovered"])) for i in IDS}
     out["low_conf"] = {i: runs(np.array([(r[i]["status"] == "detected" and r[i]["conf"] < LOW_CONF) for r in results]))
                        for i in IDS}
-    out["counts"] = {i: {s: int((st[i] == s).sum()) for s in ("detected", "color_split", "color_recovered", "lost")}
+    out["occluded"] = {i: runs(st[i] == "occluded") for i in IDS}
+    out["counts"] = {i: {s: int((st[i] == s).sum()) for s in ("detected", "color_split", "color_recovered", "occluded", "lost")}
                      for i in IDS}
     out["pose"] = {i: int(sum(r[i]["kp"] is not None for r in results)) for i in IDS}
     out["pose_shared"] = {i: int(sum(r[i]["pose_source"] == "colour_assigned_shared_detection" for r in results))

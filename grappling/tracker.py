@@ -9,6 +9,10 @@ Statuses per athlete per frame:
   detected  own box, matched by colour+motion
   color_split      one detection covers both athletes; box = that athlete's gi-colour pixels (low conf)
   color_recovered  detector missed this athlete; box = gi-colour pixels near its last position (low conf)
+  occluded         no evidence, but the athlete was seen within COAST_MAX frames with its box over the other athlete's
+                   current box: it is hidden behind them. Box = its last box, carried unchanged (very low conf).
+                   A few hundred blue pixels can show around a hidden athlete, but the white athlete alone shows as many
+                   (patches, shadows), so colour cannot decide here; continuity can.
   lost             nothing usable for this identity
 """
 import numpy as np
@@ -24,6 +28,10 @@ CLS_OF = {"A": "white", "B": "blue"}
 W_MOTION = 0.25
 GATE = 0.95
 EMA = 0.1
+COAST_MAX = 10       # frames (~0.3 s) an athlete hidden behind the other keeps its last box
+COAST_OVERLAP = 0.5  # share of the last box that must lie inside the other athlete's current box ...
+COAST_SLACK = 0.10   # ... widened by this fraction: box edges jitter tens of px frame to frame (clip 2 439: A's right
+                     # edge moved 611 -> 586 and left B's last sliver 45% inside)
 FIT_BODY = True  # report colour-derived boxes grown over the athlete's whole body (tracking still uses the gi box)
 
 
@@ -233,6 +241,15 @@ def track_video(frames, raw_dets, cuts=(), person_masks=None):
                 if rec[i]["status"] in ("color_split", "color_recovered"):
                     rec[i]["gi_box"] = rec[i]["box"]
                     rec[i]["box"] = [float(v) for v in fit_body(frame, pm_nr, i, rec[i]["box"])]
+        # after the body fit: "behind the other athlete" means inside the other's whole-body box, and the carried box
+        # is the athlete's last reported (whole-body) box, not the tracker's internal gi box
+        for i, o in (("A", "B"), ("B", "A")):
+            t, other = tracks[i], rec[o]["box"]
+            if rec[i]["status"] == "lost" and t.box is not None and other is not None and fi - t.last_seen <= COAST_MAX:
+                last = results[t.last_seen][i]["box"] if 0 <= t.last_seen < fi else None
+                if last is not None and containment(last, grow(other, frame.shape, COAST_SLACK, 0.0)) >= COAST_OVERLAP:
+                    rec[i] = dict(status="occluded", box=list(last), conf=0.05, cand=None,
+                                  note=f"hidden behind {o}: box carried from frame {t.last_seen}")
         results.append(rec)
     return results
 

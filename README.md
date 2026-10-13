@@ -34,9 +34,7 @@ from its GitHub releases the first time the pipeline runs, into the working dire
 python -m pytest tests        # about 1 minute
 ```
 
-The tests run on the committed outputs and model caches, so no model is run. Expected result: everything passes
-except 9 expected failures (`xfail`). The xfails pin a known,
-unfixed bug: on clip 2, athlete B is lost on 9 frames while visible.
+The tests run on the committed outputs and model caches, so no model is run. Expected result: everything passes.
 
 ## Run the pipeline
 
@@ -174,6 +172,6 @@ These are summarised here. The reports give frame ranges and evidence.
 
 * **Contact frames.** When the athletes touch, which is most of both clips, the detector often returns one box for both. Each athlete's box is then derived from gi-colour pixels and grown over the body, so it is low-confidence. When the athletes are wrapped together it often covers both, and it can overreach onto the other athlete.
 * **Partial poses.** Skeletons on tangled bodies are fragments.
-* **Hidden athlete.** An athlete hidden behind the other can be lost. Clip 2 frames 137, 439-443 and 450-452 are examples, because the segmenter does not see that athlete.
+* **Hidden athlete.** An athlete almost wholly behind the other shows too little gi colour to find (no more than the stray blue on the white athlete alone). If they were seen within the last 10 frames with their box over the other athlete, their last box is carried as `occluded` (clip 2 frames 137, 439-443, 450-452); that box is a guess, not an observation, and can fit badly (on 439-443 it is the small sliver last seen at 438). Hidden for longer, they are `lost`.
 * **Fixed colours.** Gi colours are fixed to white vs blue. A referee dressed in white would not be excluded.
 * **Ground truth is a sample.** About 1 frame in 7 is hand-labelled, by one person, with no second-labeller check.
